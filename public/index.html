@@ -319,11 +319,13 @@ ul{list-style:none;}
 .price-card .body{padding:24px 28px;}
 .price-row{
   display:flex;justify-content:space-between;align-items:center;
-  padding:12px 4px;font-size:19px;
+  padding:12px 4px;font-size:19px;gap:16px;
   border-bottom:1px dashed #d8e2ee;
 }
 .price-row:last-child{border-bottom:0;}
-.price-row b{color:var(--blue-dark);font-weight:900;font-size:22px;}
+.price-row b{color:var(--blue-dark);font-weight:900;font-size:22px;flex-shrink:0;white-space:nowrap;}
+.price-row .pr-text{display:flex;flex-direction:column;gap:4px;}
+.price-row .pr-text small{font-size:14px;font-weight:500;color:var(--muted);line-height:1.6;}
 .price-card.pink .price-row{border-bottom-color:#f0d4dd;}
 .price-card .more{
   display:flex;justify-content:center;margin-top:18px;
@@ -659,14 +661,14 @@ footer a:hover{color:var(--blue);}
       <div class="price-card">
         <div class="hd">ICTサポート料金（AI活用支援含む）</div>
         <div class="body">
-          <div class="price-row"><span>Wi-Fiルーター設定・PC初期設定・メール等</span><b>6,000円〜</b></div>
-          <div class="price-row"><span>スマートホーム化サポート（ネットワークカメラ・人感センサー・スマートロック等）</span><b>10,000円〜</b></div>
-          <div class="price-row"><span>PC修理・ネットワーク構築・HP作成</span><b>要見積</b></div>
-          <div class="price-row"><span>DX化・AI導入</span><b>要見積</b></div>
-          <div class="price-row"><span>SNS運用・ライブ配信サポート</span><b>要見積</b></div>
-          <div class="price-row"><span>建設業電子納品作成</span><b>要見積</b></div>
-          <div class="price-row"><span>プライバシーマーク取得支援</span><b>要見積</b></div>
-          <div class="price-row"><span>イベント開催支援</span><b>要見積</b></div>
+          <div class="price-row"><div class="pr-text"><span>Wi-Fiルーター設定・PC/スマホ初期設定・メール等</span><small>インターネット接続設定/変更サポート・Wi-Fi設定/機種変更/速度改善・PCスマホ各種設定/操作サポートなど</small></div><b>6,000円〜</b></div>
+          <div class="price-row"><div class="pr-text"><span>デジタル家電設置/設定・スマートホーム化サポート</span><small>ネットワークカメラ・人感センサー設置/設定・家電遠隔操作・スマートロックなど</small></div><b>10,000円〜</b></div>
+          <div class="price-row"><div class="pr-text"><span>PC修理・ネットワーク構築・HP作成</span><small>部品交換/修理・社内ネットワーク構築/VPN構築・HP/ECサイト作成など</small></div><b>要見積</b></div>
+          <div class="price-row"><div class="pr-text"><span>DX化・AI導入</span><small>業務効率化サポート/システム構築・クラウド化サポート・AI導入/操作サポートなど</small></div><b>要見積</b></div>
+          <div class="price-row"><div class="pr-text"><span>公式LINE構築/運用サポート・SNS運用サポート・ライブ配信サポート</span></div><b>要見積</b></div>
+          <div class="price-row"><div class="pr-text"><span>建設業電子納品作成</span></div><b>要見積</b></div>
+          <div class="price-row"><div class="pr-text"><span>プライバシーマーク取得支援</span></div><b>要見積</b></div>
+          <div class="price-row"><div class="pr-text"><span>イベント開催支援</span><small>音響/ライブ配信等機材一式、準備、オペレーション対応</small></div><b>要見積</b></div>
           <p class="note">※修理・技術・部材は費用別。</p>
           <div class="more"><a href="ict-support.html" class="btn-img" aria-label="詳細はこちら"><img src="assets/btn-detail-blue.png" alt="詳細はこちら"></a></div>
         </div>
