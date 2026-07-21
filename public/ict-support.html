@@ -88,33 +88,27 @@ ul{list-style:none;}
 /* ===== Detail hero ===== */
 .detail-hero{
   position:relative;overflow:hidden;
-  background:linear-gradient(135deg,#0c2749 0%,#123a6b 45%,#1f5fbf 100%);
-  padding:52px 0 64px;
-}
-.detail-hero::before{
-  content:"";position:absolute;top:-140px;right:-120px;width:420px;height:420px;border-radius:50%;
-  background:radial-gradient(circle,rgba(255,255,255,.16),transparent 70%);
-}
-.detail-hero::after{
-  content:"";position:absolute;bottom:-180px;left:-110px;width:380px;height:380px;border-radius:50%;
-  background:radial-gradient(circle,rgba(56,189,248,.22),transparent 70%);
+  background:#dcedfc url('assets/ict-hero.png') no-repeat right center;
+  background-size:contain;
+  padding:66px 0;
 }
 .detail-hero-wrap{
-  position:relative;z-index:1;
-  display:grid;grid-template-columns:1fr 260px;gap:36px;align-items:center;
+  position:relative;z-index:1;display:block;
 }
-.crumb{font-size:13px;color:rgba(255,255,255,.65);margin-bottom:18px;}
-.crumb a{color:rgba(255,255,255,.85);}
-.crumb a:hover{color:#fff;text-decoration:underline;}
-.crumb .sep{margin:0 8px;color:rgba(255,255,255,.4);}
+.detail-hero-text{max-width:46%;}
+.crumb{font-size:13px;color:#3f5a7d;margin-bottom:18px;}
+.crumb a{color:#1f5fbf;}
+.crumb a:hover{color:#0c2749;text-decoration:underline;}
+.crumb .sep{margin:0 8px;color:#9db3cf;}
 .detail-hero h1{
-  color:#fff;font-size:40px;font-weight:900;line-height:1.3;margin-bottom:16px;
+  color:#0c2749;font-size:40px;font-weight:900;line-height:1.3;margin-bottom:16px;
 }
-.detail-hero h1 .div{color:rgba(255,255,255,.45);margin:0 10px;font-weight:400;}
-.detail-hero-lead{color:rgba(255,255,255,.88);font-size:16px;line-height:1.9;margin-bottom:28px;max-width:520px;}
+.detail-hero h1 .div{color:rgba(12,39,73,.4);margin:0 10px;font-weight:400;}
+.detail-hero-lead{color:#20395c;font-size:16px;line-height:1.9;margin-bottom:28px;max-width:520px;}
 .detail-hero-cta{display:flex;gap:12px;flex-wrap:wrap;}
-.detail-hero-img{display:flex;justify-content:center;}
-.detail-hero-img img{width:100%;max-width:210px;filter:drop-shadow(0 16px 26px rgba(0,0,0,.35));}
+.detail-hero .btn-outline{border:2px solid #1f5fbf;color:#1f5fbf;background:transparent;}
+.detail-hero .btn-outline:hover{background:rgba(31,95,191,.1);}
+.detail-hero-img{display:none;}
 
 /* ===== Features ===== */
 .detail-features{padding:60px 0;background:#fafbfd;}
@@ -204,11 +198,13 @@ footer a:hover{color:var(--blue);}
 
 /* ===== Responsive ===== */
 @media (max-width:960px){
-  .detail-hero-wrap{grid-template-columns:1fr;text-align:center;}
+  .detail-hero{background-image:none;background-color:#dcedfc;padding:40px 0 0;}
+  .detail-hero-wrap{text-align:center;}
+  .detail-hero-text{max-width:100%;}
   .detail-hero-lead{margin-left:auto;margin-right:auto;}
   .detail-hero-cta{justify-content:center;}
-  .detail-hero-img{order:-1;}
-  .detail-hero-img img{max-width:150px;}
+  .detail-hero-img{display:block;margin-top:28px;}
+  .detail-hero-img img{width:100%;max-width:none;border-radius:14px 14px 0 0;filter:none;display:block;}
   .feature-grid{grid-template-columns:1fr;}
   .contact .grid{grid-template-columns:1fr;}
 }
@@ -244,7 +240,7 @@ footer a:hover{color:var(--blue);}
         <a href="#" class="btn btn-outline">LINEで無料相談</a>
       </div>
     </div>
-    <div class="detail-hero-img"><img src="assets/robot-mascot.png" alt="AI活用支援イメージ"></div>
+    <div class="detail-hero-img"><img src="assets/ict-hero.png" alt="ICTサポート・AI活用支援イメージ"></div>
   </div>
 </section>
 
