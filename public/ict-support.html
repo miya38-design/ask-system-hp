@@ -162,6 +162,9 @@ ul{list-style:none;}
 .contact .grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;}
 .contact .card{background:#fff;border-radius:12px;border:1px solid var(--line);padding:20px;text-align:center;}
 .contact .card.line-card{background:#e8f8eb;border-color:#bfe6c4;}
+.line-qr-wrap{display:flex;flex-direction:column;align-items:center;gap:6px;margin-top:16px;}
+.line-qr{width:132px;height:132px;background:#fff;padding:6px;border-radius:10px;box-shadow:0 4px 12px rgba(0,0,0,.08);}
+.line-qr-cap{font-size:13px;color:#2b7a3b;font-weight:700;}
 .contact .card h3{font-size:19px;font-weight:900;margin-bottom:6px;}
 .contact .card p{font-size:15px;color:var(--muted);margin-bottom:14px;}
 .contact .card .btn-row{display:flex;flex-direction:column;gap:8px;}
@@ -237,7 +240,7 @@ footer a:hover{color:var(--blue);}
       <p class="detail-hero-lead">パソコン・Wi-Fi・スマートホーム化から、DX化・AI導入、SNS運用まで。<br>ご家庭のICTから企業のIT課題まで、まるごとサポートします。</p>
       <div class="detail-hero-cta">
         <a href="#price" class="btn btn-pink">料金を見る</a>
-        <a href="#" class="btn btn-outline">LINEで無料相談</a>
+        <a href="https://lin.ee/nnTSbq1" target="_blank" rel="noopener" class="btn btn-outline">LINEで無料相談</a>
       </div>
     </div>
     <div class="detail-hero-img"><img src="assets/ict-hero.png" alt="ICTサポート・AI活用支援イメージ"></div>
@@ -337,25 +340,29 @@ footer a:hover{color:var(--blue);}
         <h3>まずはLINEで相談！</h3>
         <p>24時間受付中！お気軽にご連絡ください。</p>
         <div class="btn-row">
-          <a href="#" class="btn-img btn-img-line" aria-label="ICTサポートLINE 無料相談">
+          <a href="https://lin.ee/nnTSbq1" target="_blank" rel="noopener" class="btn-img btn-img-line" aria-label="ICTサポートLINE 無料相談">
             <span class="btn-img-label"><b>ICTサポートLINE</b><small>（無料相談はこちら）</small></span>
             <img src="assets/btn-line-free-consult.png" alt="">
           </a>
         </div>
+        <div class="line-qr-wrap">
+          <img class="line-qr" src="assets/line-qr.png" alt="LINE友だち追加QRコード">
+          <span class="line-qr-cap">QRコードで友だち追加</span>
+        </div>
       </div>
       <div class="card tel-card">
         <h3>お電話でのお問い合わせ</h3>
-        <div class="tel-num">0965-00-1234</div>
+        <div class="tel-num">0966-63-4253</div>
         <div class="tel-meta">受付時間 9:00〜18:00（年中無休）</div>
         <div class="btn-row">
-          <a href="tel:0965001234" class="btn-img" aria-label="電話する"><img src="assets/btn-tel-call.png" alt="電話する"></a>
+          <a href="tel:0966634253" class="btn-img" aria-label="電話する"><img src="assets/btn-tel-call.png" alt="電話する"></a>
         </div>
       </div>
       <div class="card">
         <h3>お問い合わせフォーム</h3>
         <p>24時間受付中！</p>
         <div class="btn-row">
-          <a href="mailto:info@example.com" class="btn-img" aria-label="フォームで相談"><img src="assets/btn-form-consult.png" alt="フォームで相談"></a>
+          <a href="mailto:info@ask-system.net" class="btn-img" aria-label="フォームで相談"><img src="assets/btn-form-consult.png" alt="フォームで相談"></a>
         </div>
       </div>
     </div>
@@ -373,15 +380,15 @@ footer a:hover{color:var(--blue);}
 
 <!-- Floating right CTA -->
 <aside class="floating-cta">
-  <a href="#" aria-label="LINE 無料相談"><img src="assets/btn-line-floating.png" alt="LINE 無料相談"></a>
-  <a href="tel:0965001234" aria-label="電話する"><img src="assets/btn-tel-floating.png" alt="電話する"></a>
+  <a href="#line" aria-label="LINE 無料相談"><img src="assets/btn-line-floating.png" alt="LINE 無料相談"></a>
+  <a href="tel:0966634253" aria-label="電話する"><img src="assets/btn-tel-floating.png" alt="電話する"></a>
   <a href="#contact" aria-label="お問い合わせ"><img src="assets/btn-mail-floating.png" alt="お問い合わせ"></a>
 </aside>
 
 <!-- Mobile sticky -->
 <div class="mobile-cta">
-  <a href="#" class="m-cta-btn" aria-label="LINEで相談"><img src="assets/btn-line-floating.png" alt="LINEで相談"></a>
-  <a href="tel:0965001234" class="m-cta-btn" aria-label="電話する"><img src="assets/btn-tel-floating.png" alt="電話する"></a>
+  <a href="#line" class="m-cta-btn" aria-label="LINEで相談"><img src="assets/btn-line-floating.png" alt="LINEで相談"></a>
+  <a href="tel:0966634253" class="m-cta-btn" aria-label="電話する"><img src="assets/btn-tel-floating.png" alt="電話する"></a>
   <a href="#contact" class="m-cta-btn" aria-label="お問い合わせ"><img src="assets/btn-mail-floating.png" alt="お問い合わせ"></a>
 </div>
 
