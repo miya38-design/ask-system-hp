@@ -354,10 +354,10 @@ ul{list-style:none;}
 }
 .area-note{font-size:15px;color:var(--muted);text-align:center;margin-top:10px;}
 
-.owner{display:flex;gap:12px;align-items:flex-start;}
-.owner-photo{width:90px;height:120px;border-radius:8px;background:#eef2f7 url('assets/manager-portrait.png') center/cover no-repeat;flex-shrink:0;}
+.owner{display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center;}
+.owner-photo{width:100%;max-width:220px;aspect-ratio:5/6;border-radius:10px;background:#eef2f7 url('assets/keiji.jpg') center top/cover no-repeat;box-shadow:0 4px 14px rgba(0,0,0,.12);}
 .owner-info p{font-size:16px;color:#4a5568;line-height:1.7;}
-.owner-info .name{font-weight:800;color:var(--ink);font-size:18px;margin-bottom:4px;}
+.owner-info .name{font-weight:800;color:var(--ink);font-size:20px;margin:0;}
 .owner-info .label{display:inline-block;background:#eef5fc;color:var(--blue);font-size:14px;font-weight:700;padding:1px 8px;border-radius:4px;margin-right:6px;}
 
 .mission .body{
@@ -700,9 +700,7 @@ footer a:hover{color:var(--blue);}
           <div class="owner">
             <div class="owner-photo" role="img" aria-label="代表者写真"></div>
             <div class="owner-info">
-              <p><span class="label">屋号</span>アスクシステム</p>
-              <p class="name"><span class="label">代表</span>アスク 太郎</p>
-              <p>長年、IT業界でシステム開発・サポートに従事。地域の皆さまのICT活用を支え、わかりやすく丁寧なサポートを心がけています。</p>
+              <p class="name">代表　中村慶治</p>
             </div>
           </div>
         </div>
