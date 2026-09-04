@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>経営理念｜アスクシステム</title>
+<meta name="description" content="アスクシステムの経営理念。自己依存・自己挑戦・自己責任・自己評価・他者支援の5つの信条を掲げ、地域のICT活用を支えます。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Noto+Serif+JP:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a1020;
+  --bg-2:#0e1730;
+  --panel:#111c34;
+  --ink:#eef3fc;
+  --ink-soft:#c6d2e6;
+  --muted:#8496b6;
+  --line:rgba(255,255,255,.10);
+  --line-soft:rgba(255,255,255,.06);
+  --blue:#4f8cff;
+  --cyan:#3fd8d0;
+  --accent:linear-gradient(135deg,#5b9bff 0%,#39d6cf 100%);
+  --green:#2bb24c;
+  --orange:#f08222;
+  --serif:"Noto Serif JP",serif;
+  --sans:"Noto Sans JP",-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:var(--sans);
+  color:var(--ink);
+  background:var(--bg);
+  line-height:1.9;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+img{display:block;max-width:100%;height:auto;}
+a{color:inherit;text-decoration:none;}
+.container{max-width:1080px;margin:0 auto;padding:0 24px;}
+
+/* ===== Header ===== */
+.p-header{
+  position:sticky;top:0;z-index:50;
+  background:rgba(10,16,32,.72);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);
+}
+.p-header .inner{
+  max-width:1200px;margin:0 auto;padding:14px 24px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+}
+.brand{display:flex;align-items:center;gap:10px;}
+.brand img{width:38px;height:38px;}
+.brand span{font-weight:900;font-size:19px;letter-spacing:.02em;color:#fff;}
+.back-link{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:14px;font-weight:700;color:var(--ink-soft);
+  border:1px solid var(--line);border-radius:999px;padding:9px 18px;
+  transition:background .2s,border-color .2s,color .2s;
+}
+.back-link:hover{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.3);color:#fff;}
+
+/* ===== Hero ===== */
+.p-hero{
+  position:relative;overflow:hidden;
+  padding:120px 0 96px;
+  background:
+    radial-gradient(1100px 520px at 78% -10%,rgba(63,216,208,.16),transparent 60%),
+    radial-gradient(900px 480px at 12% 8%,rgba(91,155,255,.20),transparent 62%),
+    linear-gradient(180deg,var(--bg-2) 0%,var(--bg) 100%);
+  border-bottom:1px solid var(--line-soft);
+}
+.p-hero::before{
+  content:"";position:absolute;inset:0;
+  background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);
+  background-size:56px 56px;
+  -webkit-mask-image:radial-gradient(circle at 50% 30%,#000 0%,transparent 72%);
+  mask-image:radial-gradient(circle at 50% 30%,#000 0%,transparent 72%);
+  pointer-events:none;
+}
+.p-hero::after{
+  content:"";position:absolute;left:50%;top:-30%;width:120vw;height:120vw;transform:translateX(-50%);
+  background:conic-gradient(from 0deg,transparent 0deg,rgba(91,155,255,.10) 90deg,transparent 200deg,rgba(63,216,208,.10) 300deg,transparent 360deg);
+  animation:spin 40s linear infinite;pointer-events:none;opacity:.7;
+}
+@keyframes spin{to{transform:translateX(-50%) rotate(360deg);}}
+.p-hero .container{position:relative;z-index:1;text-align:center;}
+.p-kicker{
+  display:inline-flex;align-items:center;gap:10px;
+  font-size:12px;font-weight:700;letter-spacing:.34em;text-transform:uppercase;
+  color:var(--cyan);
+  padding:8px 18px;border:1px solid var(--line);border-radius:999px;
+  background:rgba(255,255,255,.03);margin-bottom:30px;
+}
+.p-kicker .dot{width:6px;height:6px;border-radius:50%;background:var(--accent);}
+.p-hero h1{
+  font-family:var(--serif);
+  font-size:clamp(40px,7vw,74px);font-weight:700;line-height:1.18;letter-spacing:.06em;
+  margin-bottom:26px;
+}
+.p-hero h1 .grad{
+  background:var(--accent);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+}
+.p-hero-lead{
+  max-width:640px;margin:0 auto;
+  font-size:clamp(15px,2.2vw,19px);color:var(--ink-soft);font-weight:500;letter-spacing:.04em;line-height:2;
+}
+.p-hero-keys{
+  display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:36px;
+}
+.p-hero-keys span{
+  font-size:13px;font-weight:700;letter-spacing:.08em;color:var(--ink-soft);
+  padding:7px 16px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.02);
+}
+
+/* ===== Principles ===== */
+.principles{padding:40px 0 80px;}
+.principle{
+  display:grid;grid-template-columns:minmax(200px,260px) 1fr;gap:48px;
+  padding:64px 0;border-top:1px solid var(--line-soft);align-items:start;
+}
+.principle:first-child{border-top:0;}
+.p-index{position:sticky;top:96px;}
+.p-num{
+  font-family:var(--serif);font-weight:700;line-height:.9;
+  font-size:clamp(64px,9vw,116px);letter-spacing:.02em;
+  background:var(--accent);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+}
+.p-en{
+  display:block;margin-top:10px;
+  font-size:12px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:var(--muted);
+}
+.p-jp{
+  display:flex;align-items:center;gap:14px;margin-top:16px;
+  font-family:var(--serif);font-size:clamp(26px,3.6vw,34px);font-weight:600;letter-spacing:.08em;color:#fff;
+}
+.p-jp::before{content:"";width:34px;height:2px;background:var(--accent);border-radius:2px;flex-shrink:0;}
+.p-body p{
+  font-size:clamp(15.5px,2vw,18px);color:var(--ink-soft);line-height:2.15;letter-spacing:.02em;
+  padding-left:22px;position:relative;margin-bottom:16px;
+}
+.p-body p::before{
+  content:"";position:absolute;left:0;top:.95em;width:9px;height:9px;border-radius:50%;
+  background:transparent;border:1.5px solid var(--cyan);
+}
+.p-body p:last-child{margin-bottom:0;}
+.p-body p.lead{
+  color:#fff;font-weight:600;
+}
+
+/* ===== Closing ===== */
+.p-closing{
+  position:relative;overflow:hidden;text-align:center;
+  padding:88px 0;border-top:1px solid var(--line);
+  background:radial-gradient(700px 340px at 50% 0%,rgba(91,155,255,.14),transparent 65%);
+}
+.p-closing h2{
+  font-family:var(--serif);font-size:clamp(24px,4vw,38px);font-weight:600;letter-spacing:.08em;line-height:1.6;margin-bottom:28px;
+}
+.p-closing h2 .grad{background:var(--accent);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+.p-cta{display:inline-flex;gap:14px;flex-wrap:wrap;justify-content:center;}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  font-family:inherit;font-weight:700;font-size:16px;letter-spacing:.04em;
+  border-radius:999px;padding:15px 34px;cursor:pointer;border:0;
+  transition:transform .18s,box-shadow .18s,filter .18s,background .18s;
+}
+.btn-primary{color:#06132a;background:linear-gradient(135deg,#7fb0ff,#54e0d8);box-shadow:0 10px 30px rgba(63,216,208,.25);}
+.btn-primary:hover{transform:translateY(-2px);filter:brightness(1.05);box-shadow:0 16px 40px rgba(63,216,208,.34);}
+.btn-ghost{color:var(--ink);border:1px solid var(--line);background:rgba(255,255,255,.03);}
+.btn-ghost:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.3);transform:translateY(-2px);}
+
+/* ===== Footer ===== */
+footer{padding:34px 0;border-top:1px solid var(--line);background:var(--bg);}
+footer .inner{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:14px;color:var(--muted);max-width:1080px;margin:0 auto;padding:0 24px;align-items:center;}
+footer a:hover{color:var(--ink);}
+
+/* ===== Floating / mobile CTA ===== */
+.floating-cta{position:fixed;right:14px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:8px;z-index:40;}
+.floating-cta a img{width:84px;height:auto;display:block;filter:drop-shadow(0 6px 16px rgba(0,0,0,.35));transition:transform .15s,filter .15s;}
+.floating-cta a:hover img{transform:translateX(-2px);filter:drop-shadow(0 8px 18px rgba(0,0,0,.45)) brightness(1.05);}
+.mobile-cta{display:none;position:fixed;bottom:0;left:0;right:0;z-index:60;background:#0d1730;border-top:1px solid var(--line);padding:8px;gap:8px;}
+.mobile-cta .m-cta-btn{flex:1;display:flex;align-items:center;justify-content:center;}
+.mobile-cta .m-cta-btn img{height:46px;width:auto;object-fit:contain;}
+
+/* ===== Reveal ===== */
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .8s ease,transform .8s cubic-bezier(.2,.7,.2,1);}
+.reveal.in{opacity:1;transform:none;}
+@media (prefers-reduced-motion:reduce){
+  .reveal{opacity:1;transform:none;transition:none;}
+  .p-hero::after{animation:none;}
+}
+
+/* ===== Responsive ===== */
+@media (max-width:820px){
+  .principle{grid-template-columns:1fr;gap:22px;padding:48px 0;}
+  .p-index{position:static;}
+  .p-jp{margin-top:12px;}
+}
+@media (max-width:960px){
+  .floating-cta{display:none;}
+  .mobile-cta{display:flex;}
+  body{padding-bottom:70px;}
+}
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="p-header">
+  <div class="inner">
+    <a href="index.html" class="brand">
+      <img src="assets/logo-ask.png" alt="ASK アスクシステム">
+      <span>アスクシステム</span>
+    </a>
+    <a href="index.html" class="back-link">← トップページへ戻る</a>
+  </div>
+</header>
+
+<!-- Hero -->
+<section class="p-hero">
+  <div class="container">
+    <span class="p-kicker"><span class="dot"></span>Management Philosophy</span>
+    <h1>経営<span class="grad">理念</span></h1>
+    <p class="p-hero-lead">自らに期待し、挑み、責を負い、律し、そして与える。<br>私たちが日々の仕事で大切にしている、5つの信条です。</p>
+    <div class="p-hero-keys">
+      <span>自己依存</span><span>自己挑戦</span><span>自己責任</span><span>自己評価</span><span>他者支援</span>
+    </div>
+  </div>
+</section>
+
+<!-- Principles -->
+<section class="principles">
+  <div class="container">
+
+    <article class="principle reveal">
+      <div class="p-index">
+        <div class="p-num">01</div>
+        <span class="p-en">Self-Reliance</span>
+        <h2 class="p-jp">自己依存</h2>
+      </div>
+      <div class="p-body">
+        <p class="lead">周りや状況に期待せず、自分自身に期待すること。</p>
+        <p>自分の可能性を信じ、自分にできることを今、全力でやる。</p>
+        <p>自分が求めていることをいくら周りに期待したところで、期待通りにはならない。</p>
+        <p>自分が目指す目標が達成できるかどうかは、自分次第である。</p>
+        <p>たとえ、周りに支援してくれる人がいなかったとしても、とにかく突き進んでいくと考えることが大切。</p>
+      </div>
+    </article>
+
+    <article class="principle reveal">
+      <div class="p-index">
+        <div class="p-num">02</div>
+        <span class="p-en">Self-Challenge</span>
+        <h2 class="p-jp">自己挑戦</h2>
+      </div>
+      <div class="p-body">
+        <p class="lead">自分の持っている能力や、可能性を最大限に発揮すること。</p>
+        <p>そのためには、自分にとって今まで不可能であったことについても挑戦していく。</p>
+        <p>もし、自分にできることしかやっていないとすれば、自分の可能性を最大限に発揮しているとは言えない。できないからこそ、全力を出し切ることができる。そこに知恵が生まれてくる。</p>
+        <p>この知恵が、新たな道を切り開く大切な要因となる。</p>
+        <p>人は楽をしたいと思えば、自分にできることしかやろうとしなくなる。</p>
+        <p>今までできなかったことに挑戦し、それを成し遂げたときの充実感、満足感は極めて高いものになることは間違いない。</p>
+      </div>
+    </article>
+
+    <article class="principle reveal">
+      <div class="p-index">
+        <div class="p-num">03</div>
+        <span class="p-en">Self-Responsibility</span>
+        <h2 class="p-jp">自己責任</h2>
+      </div>
+      <div class="p-body">
+        <p class="lead">自分の身の周りに起きた出来事の原因は、すべて自分自身にあると考えること。</p>
+        <p>どんな問題が起きたとしても、一切逃げたりしない。</p>
+        <p>どんなに厳しい状況に置かれたとしても、真正面から受け止めて解決していくこと。</p>
+        <p>一つの失敗、経験がノウハウを創り出し、自身の力をつけることにつながることを忘れない。</p>
+      </div>
+    </article>
+
+    <article class="principle reveal">
+      <div class="p-index">
+        <div class="p-num">04</div>
+        <span class="p-en">Self-Evaluation</span>
+        <h2 class="p-jp">自己評価</h2>
+      </div>
+      <div class="p-body">
+        <p class="lead">自分が納得するまであきらめないこと。</p>
+        <p>他人の評価ばかりを意識して生きると、安易に他人に迎合し本来の自分自身を見失ってしまう。</p>
+        <p>自分自身が正しいと思う道を、自分らしく堂々と生きていくこと。</p>
+        <p>他人の目はだませても、自分自身をだますことはできない。</p>
+      </div>
+    </article>
+
+    <article class="principle reveal">
+      <div class="p-index">
+        <div class="p-num">05</div>
+        <span class="p-en">Give &amp; Give</span>
+        <h2 class="p-jp">他者支援</h2>
+      </div>
+      <div class="p-body">
+        <p class="lead">相手を信頼し、相手の満足をはかり、そして支援すること。</p>
+        <p>信頼するというのは、相手の失敗をも受け入れるということ。その上で、自分ができる最大の満足や価値を相手に与えること。</p>
+        <p>他者支援とは、ギブアンドテイクではなく、あくまでギブアンドギブの精神である。</p>
+        <p>「ギブ」とは「相手に何ができるか」と考える人。</p>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- Closing -->
+<section class="p-closing">
+  <div class="container reveal">
+    <h2>ICTで、<span class="grad">地域の可能性</span>を広げる。</h2>
+    <div class="p-cta">
+      <a href="index.html#contact" class="btn btn-primary">お問い合わせ</a>
+      <a href="index.html" class="btn btn-ghost">トップページへ戻る</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="inner">
+    <div><a href="index.html">トップページ</a>　｜　<a href="index.html#services">サービス</a>　｜　<a href="ict-support.html">ICTサポート</a></div>
+    <div>© アスクシステム</div>
+  </div>
+</footer>
+
+<!-- Floating right CTA -->
+<aside class="floating-cta">
+  <a href="index.html#line" aria-label="LINE 無料相談"><img src="assets/btn-line-floating.png" alt="LINE 無料相談"></a>
+  <a href="tel:0966634253" aria-label="電話する"><img src="assets/btn-tel-floating.png" alt="電話する"></a>
+  <a href="index.html#contact" aria-label="お問い合わせ"><img src="assets/btn-mail-floating.png" alt="お問い合わせ"></a>
+</aside>
+
+<!-- Mobile sticky -->
+<div class="mobile-cta">
+  <a href="index.html#line" class="m-cta-btn" aria-label="LINEで相談"><img src="assets/btn-line-floating.png" alt="LINEで相談"></a>
+  <a href="tel:0966634253" class="m-cta-btn" aria-label="電話する"><img src="assets/btn-tel-floating.png" alt="電話する"></a>
+  <a href="index.html#contact" class="m-cta-btn" aria-label="お問い合わせ"><img src="assets/btn-mail-floating.png" alt="お問い合わせ"></a>
+</div>
+
+<script>
+(function(){
+  var els = document.querySelectorAll('.reveal');
+  if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in');});return;}
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } });
+  },{threshold:.14});
+  els.forEach(function(e){io.observe(e);});
+})();
+</script>
+
+</body>
+</html>
