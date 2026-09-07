@@ -26,24 +26,34 @@ jobs:
           FTP_SERVER_DIR: ${{ secrets.FTP_SERVER_DIR }}
           FTP_PORT: ${{ secrets.FTP_PORT }}
         run: |
-          set -euo pipefail
+          set -u
           PORT="${FTP_PORT:-21}"
-          # Credentials via .netrc so no special-char/quoting issues in the command
           umask 077
-          printf 'machine %s\n  login %s\n  password %s\n' "$FTP_SERVER" "$FTP_USERNAME" "$FTP_PASSWORD" > "$HOME/.netrc"
+          printf 'machine %s login %s password %s\n' "$FTP_SERVER" "$FTP_USERNAME" "$FTP_PASSWORD" > "$HOME/.netrc"
           chmod 600 "$HOME/.netrc"
+          set +e
           lftp -c "
             set cmd:fail-exit true;
             set ftp:ssl-allow true;
             set ftp:ssl-force true;
             set ftp:ssl-protect-data true;
             set ssl:verify-certificate no;
+            set ftp:passive-mode true;
             set net:max-retries 2;
-            set net:timeout 20;
+            set net:timeout 25;
             open -p $PORT \"$FTP_SERVER\";
             mirror --reverse --delete --verbose --parallel=2 \
               --exclude-glob config.php \
               --exclude-glob .ftp-deploy-sync-state.json \
               ./public/ \"$FTP_SERVER_DIR\";
-          "
+          " > lftp.out 2>&1
+          code=$?
+          set -e
+          echo "===== lftp output (exit $code) ====="
+          cat lftp.out || true
           rm -f "$HOME/.netrc"
+          if [ "$code" -ne 0 ]; then
+            # Surface the real lftp error as annotations (readable via the API)
+            tail -n 25 lftp.out | while IFS= read -r l; do [ -n "$l" ] && echo "::error::${l}"; done
+            exit 1
+          fi
