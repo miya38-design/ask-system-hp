@@ -270,7 +270,8 @@ document.getElementById('app-rows').addEventListener('click', async e=>{
       alert('アカウントを発行しました。'+mailLine+
         '\n\n【ログインID（共通）】'+c.login_email+
         '\n\n■保護者：'+c.parent_name+'\n　パスワード：'+c.parent_password+
-        '\n\n■生徒：'+c.student_name+'\n　パスワード：'+c.student_password);
+        '\n\n■生徒：'+c.student_name+'\n　パスワード：'+c.student_password+
+        '\n\n※保護者と生徒はパスワードが別です（各自のパスワードでログイン）。');
       loadApplications(); loadUsers();
     } else alert('失敗：'+(d.error||''));
   } else if(b.dataset.act==='reject'){

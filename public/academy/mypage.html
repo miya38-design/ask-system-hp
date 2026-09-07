@@ -50,6 +50,11 @@
   .btn-mini{border:1px solid var(--line);background:#fff;color:var(--blue-dark);font-family:inherit;font-weight:700;font-size:13px;padding:8px 14px;border-radius:999px;cursor:pointer;}
   .btn-mini:hover{background:#eef5fc;}
   .abs-input{width:100%;padding:9px 11px;font-size:15px;font-family:inherit;border:1.5px solid #d3dce6;border-radius:8px;background:#fff;margin-top:4px;}
+  .set-label{display:block;font-size:12px;font-weight:700;color:#33404f;margin:10px 0 4px;}
+  .set-in{width:100%;padding:10px 12px;font-size:15px;font-family:inherit;border:1.5px solid #d3dce6;border-radius:8px;background:#fff;}
+  .set-btn{margin-top:12px;padding:10px 18px;border:0;border-radius:999px;font-family:inherit;font-weight:800;font-size:14px;color:#fff;background:var(--blue);cursor:pointer;}
+  .set-btn:disabled{opacity:.6;}
+  .set-msg{font-size:13px;font-weight:700;margin-top:8px;min-height:1.2em;}
   .foot{margin-top:26px;text-align:center;font-size:13px;}
   .foot a{color:var(--blue);font-weight:700;text-decoration:none;}
   @media(max-width:640px){.grid{grid-template-columns:1fr;}}
@@ -181,6 +186,26 @@ async function render(u){
   if (u.role === 'student') inner += await loadStudent(u);
   else if (u.role === 'parent') inner += await loadParent();
   else inner += loadInstructor();
+  inner += `<div class="grid" style="margin-top:18px;">
+    <div class="card">
+      <h2>メールアドレス変更</h2>
+      <label class="set-label">新しいメールアドレス</label>
+      <input class="set-in" id="ce-email" type="email" placeholder="new@example.com">
+      <label class="set-label">現在のパスワード</label>
+      <input class="set-in" id="ce-cur" type="password" autocomplete="current-password">
+      <button class="set-btn" id="ce-btn" type="button">メールを変更</button>
+      <div class="set-msg" id="ce-msg"></div>
+    </div>
+    <div class="card">
+      <h2>パスワード変更</h2>
+      <label class="set-label">現在のパスワード</label>
+      <input class="set-in" id="cp-cur" type="password" autocomplete="current-password">
+      <label class="set-label">新しいパスワード（8文字以上）</label>
+      <input class="set-in" id="cp-new" type="password" autocomplete="new-password">
+      <button class="set-btn" id="cp-btn" type="button">パスワードを変更</button>
+      <div class="set-msg" id="cp-msg"></div>
+    </div>
+  </div>`;
   inner += `<div class="foot"><a href="index.html">← アカデミートップへ戻る</a></div>`;
   const c = document.getElementById('content');
   c.innerHTML = inner;
@@ -268,6 +293,34 @@ async function render(u){
     const dot = li.querySelector('.dot');
     if (dot){ dot.remove(); try { await api('messages.php?action=mark_read', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({id: li.dataset.id})}); } catch(e){} }
   }));
+
+  // アカウント設定：メール変更
+  const ceBtn = document.getElementById('ce-btn');
+  if (ceBtn) ceBtn.addEventListener('click', async () => {
+    const email = document.getElementById('ce-email').value.trim();
+    const cur = document.getElementById('ce-cur').value;
+    const m = document.getElementById('ce-msg'); m.textContent = '';
+    ceBtn.disabled = true;
+    const d = await api('account.php?action=change_email', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({email, current_password: cur})});
+    ceBtn.disabled = false;
+    m.style.color = d.ok ? '#1f7a37' : '#c93866';
+    m.textContent = d.ok ? 'メールアドレスを変更しました（次回から新しいメールでログイン）' : (d.error || '変更に失敗しました');
+    if (d.ok) document.getElementById('ce-cur').value = '';
+  });
+
+  // アカウント設定：パスワード変更
+  const cpBtn = document.getElementById('cp-btn');
+  if (cpBtn) cpBtn.addEventListener('click', async () => {
+    const cur = document.getElementById('cp-cur').value;
+    const nw = document.getElementById('cp-new').value;
+    const m = document.getElementById('cp-msg'); m.textContent = '';
+    cpBtn.disabled = true;
+    const d = await api('account.php?action=change_password', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({current_password: cur, new_password: nw})});
+    cpBtn.disabled = false;
+    m.style.color = d.ok ? '#1f7a37' : '#c93866';
+    m.textContent = d.ok ? 'パスワードを変更しました' : (d.error || '変更に失敗しました');
+    if (d.ok) { document.getElementById('cp-cur').value=''; document.getElementById('cp-new').value=''; }
+  });
 }
 
 api('auth.php?action=me')
