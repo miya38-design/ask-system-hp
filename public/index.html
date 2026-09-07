@@ -86,15 +86,12 @@ ul{list-style:none;}
 }
 .hero h1 .blue{color:var(--blue);}
 .hero h1 .green{color:#2bb24c;}
+.hero-subband{background:#eef5fc;border-bottom:1px solid #dbe8f6;padding:20px;text-align:center;}
 .hero-sub{
-  font-size:19px;line-height:1.9;color:#1f2735;margin-bottom:22px;
-  font-weight:600;
-  display:inline-block;
-  background:rgba(255,255,255,.55);
-  padding:16px 22px;
-  border-radius:12px;
-  border:1px solid rgba(255,255,255,.75);
-  box-shadow:0 6px 18px rgba(31,95,191,.12);
+  display:inline-block;max-width:900px;margin:0;
+  font-size:19px;line-height:1.9;color:#1f2735;font-weight:600;
+  background:#fff;padding:16px 24px;border-radius:12px;border:1px solid #dbe8f6;
+  box-shadow:0 4px 14px rgba(31,95,191,.10);
 }
 .hero-icons{
   display:flex;gap:14px;flex-wrap:wrap;align-items:flex-start;
@@ -442,9 +439,10 @@ footer a:hover{color:var(--blue);}
   .hamburger.active span:nth-child(2){opacity:0;}
   .hamburger.active span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
   .hamburger span{transition:transform .2s, opacity .2s;}
-  .hero{min-height:auto;background-size:100% auto;background-position:center bottom;}
-  .hero .wrap{grid-template-columns:1fr;padding:96px 20px 63vw;}
-  .hero h1{font-size:48px;white-space:normal;}
+  .hero{min-height:auto;background-size:100% auto;background-position:top center;}
+  .hero .wrap{padding:74px 18px 0;min-height:62vw;}
+  .hero-text{max-width:none;}
+  .hero h1{font-size:40px;white-space:normal;}
   .hero-cta{grid-template-columns:1fr;max-width:none;}
   .problems .grid{grid-template-columns:1fr;}
   .problems .character-l,.problems .character-r{display:none;}
@@ -542,10 +540,12 @@ footer a:hover{color:var(--blue);}
   <div class="wrap">
     <div class="hero-text">
       <h1><span class="blue">ICT</span><span class="blue">の進化を、</span><br><span class="green">誰でも使える技術に。</span></h1>
-      <p class="hero-sub">パソコン・ネット（Wi-Fi）・システム・DX化・AI活用まで。<br>サポートと教育でICTの困りごとを解決します。</p>
     </div>
   </div>
 </section>
+<div class="hero-subband">
+  <p class="hero-sub">パソコン・ネット（Wi-Fi）・システム・DX化・AI活用まで。<br>サポートと教育でICTの困りごとを解決します。</p>
+</div>
 
 <!-- Floating right CTA -->
 <aside class="floating-cta">
