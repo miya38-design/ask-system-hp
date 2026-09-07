@@ -24,13 +24,13 @@ try {
     $parentName = trim((string)($b['parent_name'] ?? ''));
     $email      = trim((string)($b['parent_email'] ?? ''));
     $childName  = trim((string)($b['child_name'] ?? ''));
-    $phone      = trim((string)($b['phone'] ?? '')) ?: null;
+    $phone      = trim((string)($b['phone'] ?? ''));
     $grade      = trim((string)($b['grade'] ?? '')) ?: null;
     $plan       = trim((string)($b['plan'] ?? '')) ?: null;
     $note       = trim((string)($b['note'] ?? '')) ?: null;
 
-    if ($parentName === '' || $childName === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        json_out(['ok' => false, 'error' => '保護者名・お子さまのお名前・メールアドレスは必須です'], 400);
+    if ($parentName === '' || $childName === '' || $phone === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        json_out(['ok' => false, 'error' => '保護者名・お子さまのお名前・電話番号・メールアドレスは必須です'], 400);
     }
 
     $st = ada_db()->prepare(

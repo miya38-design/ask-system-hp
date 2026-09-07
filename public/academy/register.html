@@ -28,20 +28,52 @@
   .msg.err{display:block;background:#fdecef;border:1px solid #f6c4d5;color:#c93866;}
   .foot{margin-top:20px;text-align:center;font-size:13px;} .foot a{color:var(--blue);font-weight:700;text-decoration:none;}
   .note{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.7;}
+  .flow{background:#f7fafd;border:1px solid #e6ebf2;border-radius:12px;padding:16px 14px;margin-bottom:20px;}
+  .flow-title{font-size:13px;font-weight:800;color:var(--blue-dark);margin-bottom:12px;text-align:center;}
+  .flow-steps{display:flex;flex-direction:column;gap:8px;}
+  .flow-step{display:flex;gap:12px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px 14px;}
+  .flow-num{flex-shrink:0;width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--blue),#2b7de0);color:#fff;font-weight:900;display:flex;align-items:center;justify-content:center;font-size:14px;}
+  .flow-body{font-size:14px;line-height:1.7;}
+  .flow-body b{color:var(--ink);}
+  .flow-body .sub{color:var(--muted);font-size:13px;}
+  .flow-pay{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;}
+  .flow-pay span{font-size:12px;font-weight:700;background:#eef5fc;color:var(--blue-dark);border-radius:999px;padding:3px 10px;}
+  .flow-arrow{text-align:center;color:#b9c6d8;font-size:16px;line-height:1;}
 </style>
 </head>
 <body>
   <div class="card">
     <div class="brand"><img src="assets/images/logo.png" alt="ASKデジタルアカデミー"><h1>入会申込</h1></div>
-    <p class="lead">必要事項を入力して送信してください。内容を確認し、教室から折り返しご連絡します。入会の手続きやお支払い方法は、その際にお伝えします。</p>
+    <p class="lead">ご入会は、下の3ステップで完了します。まずは必要事項を入力して送信してください。</p>
+    <div class="flow">
+      <div class="flow-title">ご入会の流れ</div>
+      <div class="flow-steps">
+        <div class="flow-step">
+          <div class="flow-num">1</div>
+          <div class="flow-body"><b>お申し込み</b><div class="sub">このフォームから送信</div></div>
+        </div>
+        <div class="flow-arrow">▼</div>
+        <div class="flow-step">
+          <div class="flow-num">2</div>
+          <div class="flow-body"><b>お支払い</b><div class="sub">下記のいずれかの方法で</div>
+            <div class="flow-pay"><span>オンライン決済</span><span>LINEの支払いリンク</span><span>教室で現金</span></div>
+          </div>
+        </div>
+        <div class="flow-arrow">▼</div>
+        <div class="flow-step">
+          <div class="flow-num">3</div>
+          <div class="flow-body"><b>ご利用開始</b><div class="sub">入金を確認後、アカウントが有効になります</div></div>
+        </div>
+      </div>
+    </div>
     <form id="reg-form" autocomplete="on">
       <input type="text" name="hp" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
       <label>保護者のお名前<span class="req">必須</span></label>
       <input type="text" name="parent_name" required placeholder="山田 太郎">
       <label>メールアドレス<span class="req">必須</span>（ログインIDになります）</label>
       <input type="email" name="parent_email" required placeholder="you@example.com">
-      <label>電話番号</label>
-      <input type="tel" name="phone" placeholder="090-1234-5678">
+      <label>電話番号<span class="req">必須</span></label>
+      <input type="tel" name="phone" required placeholder="090-1234-5678">
       <label>お子さまのお名前<span class="req">必須</span></label>
       <input type="text" name="child_name" required placeholder="山田 はな">
       <label>学年</label>
@@ -59,6 +91,7 @@
       <div class="msg" id="msg"></div>
       <p class="note">※送信した時点では、まだアカウントは使えません。教室での確認とお支払いが済んでから、ご利用いただけます。</p>
     </form>
+    <p class="note" style="text-align:center;">ご不明な点は <a href="mailto:info@ask-system.net" style="color:var(--blue);font-weight:700;">info@ask-system.net</a> までお問い合わせください。</p>
     <div class="foot"><a href="index.html">← アカデミートップへ戻る</a></div>
   </div>
 <script>
@@ -69,7 +102,7 @@ form.addEventListener('submit', async (e)=>{
   try{
     const res=await fetch('api/register.php?action=submit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.fromEntries(new FormData(form).entries()))});
     const d=await res.json();
-    if(d.ok){ form.reset(); msg.className='msg ok'; msg.textContent='お申し込みを受け付けました。教室から折り返しご連絡します。ありがとうございます。'; }
+    if(d.ok){ form.reset(); msg.className='msg ok'; msg.textContent='お申し込みありがとうございます。教室から折り返しご連絡します。'; }
     else { msg.className='msg err'; msg.textContent=d.error||'送信に失敗しました。'; }
   }catch(err){ msg.className='msg err'; msg.textContent='通信エラーが発生しました。時間をおいて再度お試しください。'; }
   finally{ btn.disabled=false; btn.textContent='この内容で申し込む'; }

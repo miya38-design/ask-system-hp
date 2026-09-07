@@ -240,7 +240,8 @@ async function loadApplications(){
       ? `<button class="act" data-act="approve" data-id="${a.id}">承認</button><button class="act del" data-act="reject" data-id="${a.id}">却下</button>`
       : '—';
     const tel = String(a.phone||'').replace(/[^0-9+]/g,'');
-    const contact = `<a href="mailto:${esc(a.parent_email)}" style="color:var(--blue);">${esc(a.parent_email)}</a>`
+    const mailto = `mailto:${esc(a.parent_email)}?cc=info@ask-system.net&subject=${encodeURIComponent('【ASKデジタルアカデミー】ご入会申込について')}`;
+    const contact = `<a href="${mailto}" style="color:var(--blue);">${esc(a.parent_email)}</a>`
       + (a.phone ? `<br><a href="tel:${esc(tel)}" style="color:var(--blue);">${esc(a.phone)}</a>` : '');
     const noteHtml = a.note
       ? `<div style="margin-top:6px;background:#fff4e2;border:1px solid #ffdca8;border-radius:8px;padding:8px 10px;color:#8a5a00;font-size:13px;">ご要望：${esc(a.note)}</div>`
