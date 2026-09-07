@@ -24,11 +24,13 @@ try {
             $rows = $pdo->query(
                 "SELECT u.id, u.email, u.display_name, u.role, u.parent_id,
                         p.display_name AS parent_name,
-                        u.course_type, u.plan, u.area, u.level, u.exp, u.created_at,
+                        u.course_type, u.plan, u.grade, u.area, u.level, u.exp, u.created_at,
+                        u.status, u.admin_role, u.school_name,
                         (u.line_user_id IS NOT NULL) AS line_linked
                  FROM users u
                  LEFT JOIN users p ON p.id = u.parent_id
-                 ORDER BY FIELD(u.role,'instructor','parent','student'), u.created_at DESC"
+                 ORDER BY FIELD(u.status,'active','suspended','withdrawn'),
+                          FIELD(u.role,'instructor','parent','student'), u.created_at DESC"
             )->fetchAll();
             json_out(['ok' => true, 'users' => $rows]);
             break;
@@ -82,12 +84,32 @@ try {
             if (array_key_exists('grade', $b)) {
                 $sets[] = 'grade = ?'; $args[] = trim((string)$b['grade']) ?: null;
             }
+            if (array_key_exists('school_name', $b)) {
+                $sets[] = 'school_name = ?'; $args[] = trim((string)$b['school_name']) ?: null;
+            }
+            foreach (['start_date', 'end_date'] as $df) {
+                if (array_key_exists($df, $b)) {
+                    $sets[] = "$df = ?"; $args[] = ($b[$df] && is_valid_date((string)$b[$df])) ? $b[$df] : null;
+                }
+            }
+            if (array_key_exists('status', $b) && in_array($b['status'], ['active','suspended','withdrawn'], true)) {
+                $sets[] = 'status = ?'; $args[] = $b['status'];
+            }
+            if (array_key_exists('admin_role', $b) && $role === 'instructor') {
+                $sets[] = 'admin_role = ?'; $args[] = in_array($b['admin_role'], ['owner','staff'], true) ? $b['admin_role'] : null;
+            }
             if (!$sets) {
                 json_out(['ok' => false, 'error' => '更新項目がありません'], 400);
             }
             $args[] = $id;
             $pdo->prepare('UPDATE users SET ' . implode(', ', $sets) . ' WHERE id = ?')->execute($args);
+            ada_audit('user_update', "id={$id} " . implode(',', array_map(fn($s)=>explode(' ',$s)[0], $sets)));
             json_out(['ok' => true]);
+            break;
+
+        case 'audit_list':
+            $rows = $pdo->query('SELECT actor_name, action, detail, created_at FROM audit_logs ORDER BY id DESC LIMIT 100')->fetchAll();
+            json_out(['ok' => true, 'logs' => $rows]);
             break;
 
         case 'create_user':
@@ -126,7 +148,9 @@ try {
                      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'
                 );
                 $st->execute([$email, password_hash($pw, PASSWORD_DEFAULT), $name, $role, $parentId, $courseType, $plan, $area, $qrToken]);
-                json_out(['ok' => true, 'id' => (int)$pdo->lastInsertId()]);
+                $newId = (int)$pdo->lastInsertId();
+                ada_audit('user_create', "id={$newId} role={$role} {$email}");
+                json_out(['ok' => true, 'id' => $newId]);
             } catch (PDOException $e) {
                 if ($e->getCode() === '23000') {
                     json_out(['ok' => false, 'error' => 'このメールアドレスは既に登録されています'], 409);
@@ -160,6 +184,7 @@ try {
             }
             $st = $pdo->prepare('DELETE FROM users WHERE id = ?');
             $st->execute([$id]);
+            ada_audit('user_delete', "id={$id}");
             json_out(['ok' => true]);
             break;
 

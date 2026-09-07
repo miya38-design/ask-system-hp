@@ -87,17 +87,17 @@ const fmt = s => s ? String(s).slice(0,10) : '';
 const WD = ['日','月','火','水','木','金','土'];
 const PLAN_WD = {'standard-a':[2,4], 'standard-b':[1,3,5], 'premium':[1,2,3,4,5]};
 // コースから今後約1か月の登校日を算出（欠席連絡の選択肢）
-function genClassDays(plan){
-  const wds = PLAN_WD[plan] || [1,2,3,4,5]; // 未設定は平日
+function genClassDays(plan, courseWd, closed){
+  const wds = (courseWd && courseWd[plan]) ? courseWd[plan] : (PLAN_WD[plan] || [1,2,3,4,5]); // 未設定は平日
   const out = [];
   const d = new Date(); d.setHours(0,0,0,0);
-  for (let i=1; i<=31 && out.length<24; i++){
+  for (let i=1; i<=45 && out.length<24; i++){
     const t = new Date(d.getTime() + i*86400000);
-    if (wds.includes(t.getDay())){
-      const y=t.getFullYear(), m=t.getMonth()+1, day=t.getDate();
-      const value = `${y}-${String(m).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
-      out.push({value, label:`${m}月${day}日（${WD[t.getDay()]}）`});
-    }
+    if (!wds.includes(t.getDay())) continue;
+    const y=t.getFullYear(), m=t.getMonth()+1, day=t.getDate();
+    const value = `${y}-${String(m).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+    if (closed && closed.has(value)) continue; // 休校日は除外
+    out.push({value, label:`${m}月${day}日（${WD[t.getDay()]}）`});
   }
   return out;
 }
@@ -155,11 +155,16 @@ async function loadStudent(u){
 }
 
 async function loadParent(){
-  const [fam, sch, msg] = await Promise.all([
+  const [fam, sch, msg, crs, clo] = await Promise.all([
     api('family.php?action=children'),
     api('schedules.php?action=list'),
     api('messages.php?action=my'),
+    api('courses.php?action=list'),
+    api('closures.php?action=list'),
   ]);
+  const courseWd = {};
+  (crs.courses||[]).forEach(c => { courseWd[c.code] = String(c.allowed_weekdays||'').split(',').filter(x=>x!=='').map(Number); });
+  const closed = new Set((clo.closures||[]).filter(x=>x.type==='closed').map(x=>fmt(x.date)));
   const kids = (fam.children||[]);
   const kidsHtml = kids.length ? kids.map(k => {
     const next=Number(k.exp_to_next)||100, exp=Number(k.exp)||0, pct=Math.max(0,Math.min(100,Math.round(exp/next*100)));
@@ -173,7 +178,7 @@ async function loadParent(){
       <div class="abs-form" id="abs-${k.id}" hidden style="margin-top:10px;background:#f7fafd;border:1px solid #e6ebf2;border-radius:10px;padding:14px;">
         <label class="set-label">欠席する日を選択（${esc(PLAN[k.plan]||'登校日')}）</label>
         <select class="abs-input abs-date">${
-          (function(){ const ds=genClassDays(k.plan); return ds.length ? ds.map(o=>`<option value="${o.value}">${o.label}</option>`).join('') : '<option value="">対象日がありません</option>'; })()
+          (function(){ const ds=genClassDays(k.plan, courseWd, closed); return ds.length ? ds.map(o=>`<option value="${o.value}">${o.label}</option>`).join('') : '<option value="">対象日がありません</option>'; })()
         }</select>
         <div style="margin-top:12px;display:flex;align-items:center;gap:10px;">
           <button class="btn-mini abs-send" data-id="${k.id}" style="background:var(--blue);color:#fff;border-color:var(--blue);">この日で連絡する</button>

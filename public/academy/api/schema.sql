@@ -89,3 +89,58 @@ CREATE TABLE IF NOT EXISTS messages (
   KEY idx_messages_user (user_id),
   CONSTRAINT fk_messages_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS closures (
+  id         INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  date       DATE NOT NULL,
+  type       ENUM('closed','special_open') NOT NULL DEFAULT 'closed',
+  reason     VARCHAR(255) DEFAULT NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_closure_date (date)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS settings (
+  setting_key   VARCHAR(64) NOT NULL,
+  setting_value VARCHAR(255) DEFAULT NULL,
+  value_type    ENUM('string','number','boolean','date','time') NOT NULL DEFAULT 'string',
+  description   VARCHAR(255) DEFAULT NULL,
+  updated_at    DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (setting_key)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS course_plans (
+  id               INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  code             VARCHAR(40) NOT NULL,
+  name             VARCHAR(100) NOT NULL,
+  allowed_weekdays VARCHAR(40) NOT NULL,
+  active           TINYINT(1) NOT NULL DEFAULT 1,
+  sort_order       INT NOT NULL DEFAULT 0,
+  created_at       DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_course_code (code)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS notification_logs (
+  id          INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  event       VARCHAR(40) NOT NULL,
+  to_line_id  VARCHAR(64) NOT NULL,
+  student_id  INT UNSIGNED DEFAULT NULL,
+  body        TEXT,
+  status      ENUM('sent','failed') NOT NULL,
+  error       VARCHAR(255) DEFAULT NULL,
+  created_at  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  KEY idx_notif_created (created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS audit_logs (
+  id         INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  actor_id   INT UNSIGNED DEFAULT NULL,
+  actor_name VARCHAR(100) DEFAULT NULL,
+  action     VARCHAR(60) NOT NULL,
+  detail     VARCHAR(500) DEFAULT NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  KEY idx_audit_created (created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

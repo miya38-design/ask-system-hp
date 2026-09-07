@@ -119,6 +119,29 @@ function can_view_student(array $me, int $studentId): bool
     return false;
 }
 
+/** 監査ログを記録（⑦） */
+function ada_audit(string $action, string $detail = ''): void
+{
+    try {
+        $u = current_user();
+        $st = ada_db()->prepare('INSERT INTO audit_logs (actor_id, actor_name, action, detail) VALUES (?, ?, ?, ?)');
+        $st->execute([$u['id'] ?? null, $u['display_name'] ?? null, $action, mb_substr($detail, 0, 500)]);
+    } catch (Throwable $e) { /* 監査失敗は本処理を止めない */ }
+}
+
+/** 設定値を取得（③） */
+function ada_setting(string $key, ?string $default = null): ?string
+{
+    try {
+        $st = ada_db()->prepare('SELECT setting_value FROM settings WHERE setting_key = ?');
+        $st->execute([$key]);
+        $v = $st->fetchColumn();
+        return $v === false ? $default : $v;
+    } catch (Throwable $e) {
+        return $default;
+    }
+}
+
 /** 出席付与時のEXP加算＋レベルアップ処理（生徒のみ） */
 function award_attendance_exp(int $studentId, int $amount = 20): void
 {

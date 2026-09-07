@@ -68,6 +68,43 @@ try {
     $ensureCol('users', 'qr_token', 'qr_token VARCHAR(32) NULL');
     $ensureCol('users', 'grade', 'grade VARCHAR(40) NULL');
     $ensureCol('attendance', 'absence_reason', 'absence_reason VARCHAR(255) NULL');
+    // ① 在籍・利用状態 / 学校名 / 在籍期間、⑥ 管理者権限
+    $ensureCol('users', 'status', "status ENUM('active','suspended','withdrawn') NOT NULL DEFAULT 'active'");
+    $ensureCol('users', 'school_name', 'school_name VARCHAR(100) NULL');
+    $ensureCol('users', 'start_date', 'start_date DATE NULL');
+    $ensureCol('users', 'end_date', 'end_date DATE NULL');
+    $ensureCol('users', 'admin_role', "admin_role ENUM('owner','staff') NULL");
+
+    // ③ 設定の初期値（既存は上書きしない）
+    $seedSetting = $pdo->prepare(
+        'INSERT INTO settings (setting_key, setting_value, value_type, description)
+         VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE setting_key = setting_key'
+    );
+    foreach ([
+        ['timezone', 'Asia/Tokyo', 'string', '日時判定の基準タイムゾーン'],
+        ['opening_time', '16:30', 'time', '開校時刻'],
+        ['closing_time', '19:30', 'time', '閉校時刻'],
+        ['absence_deadline_time', '23:59', 'time', '欠席連絡の当日締切時刻'],
+        ['daily_capacity', '22', 'number', '1日の定員（参考値）'],
+    ] as $s) {
+        $seedSetting->execute($s);
+    }
+
+    // ⑤ コースの初期値（曜日はJS getDay: 日0〜土6）
+    $seedCourse = $pdo->prepare(
+        'INSERT INTO course_plans (code, name, allowed_weekdays, sort_order)
+         VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE code = code'
+    );
+    foreach ([
+        ['standard-a', '週2回（火・木）', '2,4', 1],
+        ['standard-b', '週3回（月・水・金）', '1,3,5', 2],
+        ['premium', '週5回（通い放題）', '1,2,3,4,5', 3],
+    ] as $c) {
+        $seedCourse->execute($c);
+    }
+
+    // 一人目の講師を owner に（未設定時のみ）
+    $pdo->exec("UPDATE users SET admin_role='owner' WHERE role='instructor' AND admin_role IS NULL ORDER BY id LIMIT 1");
     try { $pdo->exec('ALTER TABLE users ADD UNIQUE KEY uq_users_qr (qr_token)'); } catch (Throwable $e) {}
     try { $pdo->exec('ALTER TABLE users ADD KEY idx_users_line (line_user_id)'); } catch (Throwable $e) {}
 

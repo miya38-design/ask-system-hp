@@ -69,8 +69,8 @@ try {
             $parentId = (int)$pdo->lastInsertId();
             // 生徒（同じメールで登録可・QR自動発行）
             $sInsert = $pdo->prepare(
-                'INSERT INTO users (email, password_hash, display_name, role, parent_id, course_type, plan, grade, qr_token)
-                 VALUES (?, ?, ?, "student", ?, ?, ?, ?, ?)'
+                'INSERT INTO users (email, password_hash, display_name, role, parent_id, course_type, plan, grade, qr_token, start_date)
+                 VALUES (?, ?, ?, "student", ?, ?, ?, ?, ?, CURDATE())'
             );
             $sInsert->execute([
                 $a['parent_email'], password_hash($studentPw, PASSWORD_DEFAULT), $a['child_name'],
@@ -120,6 +120,7 @@ Web: https://asksystem.jp/academy/
 ──────────────────
 TXT;
             $mailSent = ada_send_mail($a['parent_email'], $subject, $body);
+            ada_audit('application_approve', "app_id={$id} parent={$parentId} student={$studentId}");
 
             json_out([
                 'ok' => true,
@@ -139,6 +140,7 @@ TXT;
             $b = json_body();
             $id = (int)($b['id'] ?? 0);
             $pdo->prepare("UPDATE applications SET status='rejected', processed_at=NOW() WHERE id=? AND status='pending'")->execute([$id]);
+            ada_audit('application_reject', "app_id={$id}");
             json_out(['ok' => true]);
             break;
 

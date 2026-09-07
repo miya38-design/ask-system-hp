@@ -65,7 +65,7 @@ try {
                 $pp->execute([(int)$stu['parent_id']]);
                 $lineId = (string)($pp->fetchColumn() ?: '');
                 if ($lineId !== '') {
-                    line_push($lineId, "【ASKデジタルアカデミー】\n{$stu['display_name']}さんが{$verb}しました（{$hhmm}）");
+                    ada_notify($lineId, "【ASKデジタルアカデミー】\n{$stu['display_name']}さんが{$verb}しました（{$hhmm}）", 'checkin_' . $type, $sid);
                 }
             }
 

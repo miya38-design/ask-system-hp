@@ -33,6 +33,11 @@ try {
             if (count($matched) === 0) {
                 json_out(['ok' => false, 'error' => 'メールアドレスまたはパスワードが違います'], 401);
             }
+            // 在籍状態が active 以外はログイン不可（休会/退会/無効化）
+            $matched = array_values(array_filter($matched, fn($r) => ($r['status'] ?? 'active') === 'active'));
+            if (count($matched) === 0) {
+                json_out(['ok' => false, 'error' => 'このアカウントは現在ご利用いただけません。教室までお問い合わせください。'], 403);
+            }
             if (count($matched) > 1) {
                 // 同一メール＆同一パスワードの複数アカウント → 選択させる
                 $choices = array_map(fn($r) => [

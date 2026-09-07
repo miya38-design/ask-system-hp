@@ -68,6 +68,11 @@
       <button class="tab" data-tab="attendance">出席入力</button>
       <button class="tab" data-tab="schedules">スケジュール</button>
       <button class="tab" data-tab="messages">お知らせ</button>
+      <button class="tab" data-tab="closures">休校日</button>
+      <button class="tab" data-tab="courses">コース</button>
+      <button class="tab" data-tab="settings">設定</button>
+      <button class="tab" data-tab="notifs">通知ログ</button>
+      <button class="tab" data-tab="audit">監査ログ</button>
     </div>
 
     <!-- ===== アカウント ===== -->
@@ -94,7 +99,7 @@
       <div class="card">
         <h2>登録アカウント一覧</h2>
         <div class="table-wrap"><table>
-          <thead><tr><th>お名前</th><th>メール</th><th>ロール</th><th>保護者 / LINE</th><th>登録日</th><th>操作</th></tr></thead>
+          <thead><tr><th>お名前</th><th>メール</th><th>ロール</th><th>保護者 / LINE</th><th>状態</th><th>登録日</th><th>操作</th></tr></thead>
           <tbody id="user-rows"></tbody>
         </table></div>
       </div>
@@ -199,6 +204,90 @@
         </table></div>
       </div>
     </div>
+
+    <!-- ===== 休校日 ===== -->
+    <div class="panel" id="p-closures">
+      <div class="card">
+        <h2>休校日・特別開校を登録</h2>
+        <form id="clo-form">
+          <div class="form-grid">
+            <div><label>日付</label><input type="date" name="date" required></div>
+            <div><label>種別</label><select name="type"><option value="closed">休校</option><option value="special_open">特別開校</option></select></div>
+          </div>
+          <label style="margin-top:14px;">理由（任意）</label><input type="text" name="reason" placeholder="夏季休校 など">
+          <button class="primary" id="clo-btn" type="submit">保存する</button>
+          <div class="msg" id="clo-msg"></div>
+          <p class="hint">休校日は、保護者マイページの「欠席連絡」の日付候補から自動的に除外されます。</p>
+        </form>
+      </div>
+      <div class="card">
+        <h2>登録済み休校日</h2>
+        <div class="table-wrap"><table>
+          <thead><tr><th>日付</th><th>種別</th><th>理由</th><th>操作</th></tr></thead>
+          <tbody id="clo-rows"></tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- ===== コース ===== -->
+    <div class="panel" id="p-courses">
+      <div class="card">
+        <h2>コースを登録／更新</h2>
+        <form id="crs-form">
+          <div class="form-grid">
+            <div><label>コード</label><input type="text" name="code" required placeholder="standard-a"></div>
+            <div><label>コース名</label><input type="text" name="name" required placeholder="週2回（火・木）"></div>
+          </div>
+          <label style="margin-top:14px;">通学曜日（複数選択）</label>
+          <div id="crs-wd" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:6px;"></div>
+          <label style="margin-top:14px;display:flex;align-items:center;gap:8px;"><input type="checkbox" name="active" checked style="width:auto;"> 有効</label>
+          <button class="primary" id="crs-btn" type="submit">保存する</button>
+          <div class="msg" id="crs-msg"></div>
+          <p class="hint">コードは生徒の希望コース（standard-a / standard-b / premium など）と一致させると、欠席連絡の曜日算出に使われます。</p>
+        </form>
+      </div>
+      <div class="card">
+        <h2>登録済みコース</h2>
+        <div class="table-wrap"><table>
+          <thead><tr><th>コード</th><th>名称</th><th>曜日</th><th>状態</th><th>操作</th></tr></thead>
+          <tbody id="crs-rows"></tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- ===== 設定 ===== -->
+    <div class="panel" id="p-settings">
+      <div class="card">
+        <h2>運用設定</h2>
+        <div class="table-wrap"><table>
+          <thead><tr><th>設定</th><th>値</th><th>操作</th></tr></thead>
+          <tbody id="set-rows"></tbody>
+        </table></div>
+        <div class="msg" id="set-msg"></div>
+      </div>
+    </div>
+
+    <!-- ===== 通知ログ ===== -->
+    <div class="panel" id="p-notifs">
+      <div class="card">
+        <h2>通知ログ（入退室などのLINE送信）</h2>
+        <div class="table-wrap"><table>
+          <thead><tr><th>日時</th><th>種別</th><th>対象</th><th>宛先</th><th>状態</th><th>操作</th></tr></thead>
+          <tbody id="notif-rows"></tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- ===== 監査ログ ===== -->
+    <div class="panel" id="p-audit">
+      <div class="card">
+        <h2>監査ログ（管理操作の履歴）</h2>
+        <div class="table-wrap"><table>
+          <thead><tr><th>日時</th><th>操作者</th><th>操作</th><th>詳細</th></tr></thead>
+          <tbody id="audit-rows"></tbody>
+        </table></div>
+      </div>
+    </div>
   </div>
 
 <script>
@@ -228,7 +317,101 @@ document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () =>
   document.getElementById('p-'+t.dataset.tab).classList.add('active');
 }));
 
-function init(){ loadUsers(); loadSchedules(); loadSentMessages(); loadLineStatus(); loadApplications(); loadAbsences(); }
+function init(){ loadUsers(); loadSchedules(); loadSentMessages(); loadLineStatus(); loadApplications(); loadAbsences();
+  loadClosures(); loadCourses(); loadSettings(); loadNotifs(); loadAudit(); buildWeekdayChecks(); }
+
+const WDNAME=['日','月','火','水','木','金','土'];
+const fmtDT = s => s ? String(s).replace('T',' ').slice(0,16) : '';
+
+// ---- 休校日 ----
+const CLO_TYPE={closed:'休校', special_open:'特別開校'};
+async function loadClosures(){
+  const d=await api('closures.php?action=list&all=1'); if(!d.ok) return;
+  document.getElementById('clo-rows').innerHTML=(d.closures||[]).map(x=>
+    `<tr><td>${fmt(x.date)}</td><td>${CLO_TYPE[x.type]||x.type}</td><td>${esc(x.reason||'')}</td>
+     <td><button class="act del" data-id="${x.id}">削除</button></td></tr>`).join('')||'<tr><td colspan="4" class="hint">未登録</td></tr>';
+}
+document.getElementById('clo-form').addEventListener('submit', async e=>{
+  e.preventDefault(); const btn=document.getElementById('clo-btn'), m=document.getElementById('clo-msg'); m.style.display='none'; btn.disabled=true;
+  const d=await api('closures.php?action=save',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.fromEntries(new FormData(e.target).entries()))});
+  btn.disabled=false;
+  if(d.ok){m.className='msg ok';m.textContent='保存しました。';e.target.reset();loadClosures();} else {m.className='msg err';m.textContent=d.error||'失敗しました。';}
+});
+document.getElementById('clo-rows').addEventListener('click', async e=>{
+  const b=e.target.closest('button'); if(!b) return; if(!confirm('削除しますか？')) return;
+  const d=await api('closures.php?action=delete',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:b.dataset.id})});
+  if(d.ok) loadClosures(); else alert('失敗：'+(d.error||''));
+});
+
+// ---- コース ----
+function buildWeekdayChecks(){
+  document.getElementById('crs-wd').innerHTML = WDNAME.map((n,i)=>
+    `<label style="display:inline-flex;align-items:center;gap:4px;font-weight:600;"><input type="checkbox" class="crs-wd-cb" value="${i}" style="width:auto;"> ${n}</label>`).join('');
+}
+async function loadCourses(){
+  const d=await api('courses.php?action=list'); if(!d.ok) return;
+  document.getElementById('crs-rows').innerHTML=(d.courses||[]).map(c=>{
+    const wd=String(c.allowed_weekdays||'').split(',').filter(x=>x!=='').map(n=>WDNAME[n]).join('・');
+    return `<tr><td>${esc(c.code)}</td><td>${esc(c.name)}</td><td>${wd}</td><td>${Number(c.active)?'有効':'無効'}</td>
+      <td><button class="act del" data-id="${c.id}">削除</button></td></tr>`;
+  }).join('')||'<tr><td colspan="5" class="hint">未登録</td></tr>';
+}
+document.getElementById('crs-form').addEventListener('submit', async e=>{
+  e.preventDefault(); const btn=document.getElementById('crs-btn'), m=document.getElementById('crs-msg'); m.style.display='none'; btn.disabled=true;
+  const f=e.target;
+  const wds=[...document.querySelectorAll('.crs-wd-cb:checked')].map(c=>c.value).join(',');
+  const payload={code:f.code.value.trim(), name:f.name.value.trim(), allowed_weekdays:wds, active:f.active.checked?1:0};
+  const d=await api('courses.php?action=save',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+  btn.disabled=false;
+  if(d.ok){m.className='msg ok';m.textContent='保存しました。';f.reset();document.querySelectorAll('.crs-wd-cb').forEach(c=>c.checked=false);loadCourses();} else {m.className='msg err';m.textContent=d.error||'失敗しました。';}
+});
+document.getElementById('crs-rows').addEventListener('click', async e=>{
+  const b=e.target.closest('button'); if(!b) return; if(!confirm('削除しますか？')) return;
+  const d=await api('courses.php?action=delete',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:b.dataset.id})});
+  if(d.ok) loadCourses(); else alert('失敗：'+(d.error||''));
+});
+
+// ---- 設定 ----
+async function loadSettings(){
+  const d=await api('settings.php?action=list'); if(!d.ok) return;
+  document.getElementById('set-rows').innerHTML=(d.settings||[]).map(s=>
+    `<tr><td>${esc(s.description||s.setting_key)}<br><span class="hint">${esc(s.setting_key)}</span></td>
+      <td><input class="set-val" data-key="${esc(s.setting_key)}" value="${esc(s.setting_value||'')}" style="padding:8px 10px;border:1px solid var(--line);border-radius:8px;font-family:inherit;width:140px;"></td>
+      <td><button class="act set-save" data-key="${esc(s.setting_key)}">保存</button></td></tr>`).join('');
+}
+document.getElementById('set-rows').addEventListener('click', async e=>{
+  const b=e.target.closest('.set-save'); if(!b) return;
+  const inp=document.querySelector('.set-val[data-key="'+CSS.escape(b.dataset.key)+'"]');
+  const m=document.getElementById('set-msg'); m.style.display='none';
+  const d=await api('settings.php?action=update',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({key:b.dataset.key, value:inp.value})});
+  m.className=d.ok?'msg ok':'msg err'; m.textContent=d.ok?'保存しました。':(d.error||'失敗しました。');
+});
+
+// ---- 通知ログ ----
+const NOTIF_EV={checkin_in:'入室通知', checkin_out:'退室通知'};
+async function loadNotifs(){
+  const d=await api('notifications.php?action=list'); if(!d.ok) return;
+  document.getElementById('notif-rows').innerHTML=(d.logs||[]).map(n=>{
+    const ev=NOTIF_EV[n.event]||n.event;
+    const stat=n.status==='sent'?'<span style="color:#1f7a37;font-weight:700;">送信済</span>':'<span style="color:#c93866;font-weight:700;">失敗</span>';
+    return `<tr><td>${fmtDT(n.created_at)}</td><td>${esc(ev)}</td><td>${esc(n.student_name||'')}</td><td>${esc(n.to_short||'')}</td>
+      <td>${stat}${n.error?'<br><span class="hint">'+esc(n.error)+'</span>':''}</td>
+      <td><button class="act notif-resend" data-id="${n.id}">再送</button></td></tr>`;
+  }).join('')||'<tr><td colspan="6" class="hint">ログはありません</td></tr>';
+}
+document.getElementById('notif-rows').addEventListener('click', async e=>{
+  const b=e.target.closest('.notif-resend'); if(!b) return; if(!confirm('この通知を再送しますか？')) return;
+  const d=await api('notifications.php?action=resend',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:b.dataset.id})});
+  alert(d.ok?'再送しました。':'再送失敗：'+(d.error||'')); loadNotifs();
+});
+
+// ---- 監査ログ ----
+async function loadAudit(){
+  const d=await api('admin.php?action=audit_list'); if(!d.ok) return;
+  document.getElementById('audit-rows').innerHTML=(d.logs||[]).map(l=>
+    `<tr><td>${fmtDT(l.created_at)}</td><td>${esc(l.actor_name||'')}</td><td>${esc(l.action)}</td><td>${esc(l.detail||'')}</td></tr>`).join('')
+    ||'<tr><td colspan="4" class="hint">履歴はありません</td></tr>';
+}
 
 // ---- applications (入会申込) ----
 const APP_STATUS = {pending:'未処理', approved:'承認済', rejected:'却下'};
@@ -345,11 +528,31 @@ async function loadUsers(){
         ? '<span style="color:#1f7a37;font-weight:700;">LINE連携✓</span>'
         : '<span style="color:#c93866;font-weight:700;">LINE未連携</span>';
     } else { relCell = '—'; }
-    return `<tr><td>${esc(u.display_name)}</td><td>${esc(u.email)}</td><td><span class="role-badge ${cls}">${lbl}</span></td>
-      <td>${relCell}</td><td>${fmt(u.created_at)}</td>
+    const statusSel = `<select class="status-sel" data-id="${u.id}" style="padding:5px 8px;border:1px solid var(--line);border-radius:8px;font-family:inherit;">
+        <option value="active" ${u.status==='active'?'selected':''}>在籍</option>
+        <option value="suspended" ${u.status==='suspended'?'selected':''}>休会</option>
+        <option value="withdrawn" ${u.status==='withdrawn'?'selected':''}>退会</option>
+      </select>`;
+    const roleSel = u.role==='instructor'
+      ? `<select class="arole-sel" data-id="${u.id}" style="margin-top:6px;padding:5px 8px;border:1px solid var(--line);border-radius:8px;font-family:inherit;">
+          <option value="staff" ${u.admin_role==='staff'?'selected':''}>スタッフ</option>
+          <option value="owner" ${u.admin_role==='owner'?'selected':''}>オーナー</option>
+        </select>` : '';
+    const dim = u.status!=='active' ? 'opacity:.55;' : '';
+    return `<tr style="${dim}"><td>${esc(u.display_name)}</td><td>${esc(u.email)}</td><td><span class="role-badge ${cls}">${lbl}</span></td>
+      <td>${relCell}</td><td>${statusSel}${roleSel}</td><td>${fmt(u.created_at)}</td>
       <td><button class="act" data-act="pw" data-id="${u.id}" data-name="${esc(u.display_name)}">PW再発行</button>
       <button class="act del" data-act="del" data-id="${u.id}" data-name="${esc(u.display_name)}">削除</button></td></tr>`;
   }).join('');
+  // 状態・権限の変更
+  document.querySelectorAll('.status-sel').forEach(sel => sel.addEventListener('change', async ()=>{
+    const d = await api('admin.php?action=update_user',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:sel.dataset.id, status: sel.value})});
+    if(d.ok) loadUsers(); else alert('状態の変更に失敗：'+(d.error||''));
+  }));
+  document.querySelectorAll('.arole-sel').forEach(sel => sel.addEventListener('change', async ()=>{
+    const d = await api('admin.php?action=update_user',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:sel.dataset.id, admin_role: sel.value})});
+    if(!d.ok) alert('権限の変更に失敗：'+(d.error||''));
+  }));
 
   // 生徒の保護者をその場で紐付け
   document.querySelectorAll('.parent-sel').forEach(sel => sel.addEventListener('change', async ()=>{
