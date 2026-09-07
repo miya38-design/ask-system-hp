@@ -17,4 +17,8 @@ return [
     'db_user'    => 'YOUR_DB_USER',
     'db_pass'    => 'YOUR_DB_PASSWORD',
     'db_charset' => 'utf8mb4',
+
+    // 管理用トークン（migrate.php / setup.php の実行に必要）。
+    // 推測されにくい長い文字列を自分で決めて設定してください。
+    'admin_token' => 'CHANGE_ME_to_a_long_random_string',
 ];
