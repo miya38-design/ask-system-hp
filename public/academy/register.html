@@ -33,7 +33,7 @@
 <body>
   <div class="card">
     <div class="brand"><img src="assets/images/logo.png" alt="ASKデジタルアカデミー"><h1>入会申込</h1></div>
-    <p class="lead">必要事項をご記入ください。内容を確認後、教室よりご連絡し、ご入会手続き（お支払い）をご案内します。</p>
+    <p class="lead">必要事項を入力して送信してください。内容を確認し、教室から折り返しご連絡します。入会の手続きやお支払い方法は、その際にお伝えします。</p>
     <form id="reg-form" autocomplete="on">
       <input type="text" name="hp" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
       <label>保護者のお名前<span class="req">必須</span></label>
@@ -57,7 +57,7 @@
       <textarea name="note" placeholder="ご不明点やご希望があればご記入ください"></textarea>
       <button id="submit" type="submit">この内容で申し込む</button>
       <div class="msg" id="msg"></div>
-      <p class="note">※送信後すぐにアカウントが有効になるわけではありません。教室での確認・お支払い後にご利用開始となります。</p>
+      <p class="note">※送信した時点では、まだアカウントは使えません。教室での確認とお支払いが済んでから、ご利用いただけます。</p>
     </form>
     <div class="foot"><a href="index.html">← アカデミートップへ戻る</a></div>
   </div>
@@ -69,7 +69,7 @@ form.addEventListener('submit', async (e)=>{
   try{
     const res=await fetch('api/register.php?action=submit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.fromEntries(new FormData(form).entries()))});
     const d=await res.json();
-    if(d.ok){ form.reset(); msg.className='msg ok'; msg.textContent='お申し込みを受け付けました。教室よりご連絡いたします。ありがとうございます！'; }
+    if(d.ok){ form.reset(); msg.className='msg ok'; msg.textContent='お申し込みを受け付けました。教室から折り返しご連絡します。ありがとうございます。'; }
     else { msg.className='msg err'; msg.textContent=d.error||'送信に失敗しました。'; }
   }catch(err){ msg.className='msg err'; msg.textContent='通信エラーが発生しました。時間をおいて再度お試しください。'; }
   finally{ btn.disabled=false; btn.textContent='この内容で申し込む'; }

@@ -104,7 +104,7 @@
     <div class="panel" id="p-applications">
       <div class="card">
         <h2>入会申込一覧</h2>
-        <p class="hint">「承認」すると保護者＋生徒アカウントを発行します（初期パスワードは自動発行され、画面に表示されます）。お支払い確認後に承認してください。</p>
+        <p class="hint">対応の流れ：①申込内容と「ご要望」を確認 → ②必要なら連絡先（電話・メールをタップで発信/送信）へ教室から連絡し、内容・お支払いを確定 → ③「承認」で保護者＋生徒アカウントを発行（初期パスワードを画面表示）。見送る場合は「却下」。</p>
         <div class="table-wrap"><table>
           <thead><tr><th>申込日</th><th>保護者</th><th>お子さま</th><th>連絡先</th><th>希望</th><th>状態</th><th>操作</th></tr></thead>
           <tbody id="app-rows"></tbody>
@@ -239,12 +239,18 @@ async function loadApplications(){
     const acts = a.status==='pending'
       ? `<button class="act" data-act="approve" data-id="${a.id}">承認</button><button class="act del" data-act="reject" data-id="${a.id}">却下</button>`
       : '—';
+    const tel = String(a.phone||'').replace(/[^0-9+]/g,'');
+    const contact = `<a href="mailto:${esc(a.parent_email)}" style="color:var(--blue);">${esc(a.parent_email)}</a>`
+      + (a.phone ? `<br><a href="tel:${esc(tel)}" style="color:var(--blue);">${esc(a.phone)}</a>` : '');
+    const noteHtml = a.note
+      ? `<div style="margin-top:6px;background:#fff4e2;border:1px solid #ffdca8;border-radius:8px;padding:8px 10px;color:#8a5a00;font-size:13px;">ご要望：${esc(a.note)}</div>`
+      : '';
     return `<tr>
       <td>${fmt(a.created_at)}</td>
-      <td>${esc(a.parent_name)}<br><span class="hint">${esc(a.parent_email)}</span></td>
+      <td>${esc(a.parent_name)}<br><span class="hint">${contact}</span></td>
       <td>${esc(a.child_name)}${a.grade?'（'+esc(a.grade)+'）':''}</td>
       <td>${esc(a.phone||'')}</td>
-      <td>${esc(a.plan||'')}${a.note?'<br><span class="hint">'+esc(a.note)+'</span>':''}</td>
+      <td>${esc(a.plan||'')}${noteHtml}</td>
       <td>${APP_STATUS[a.status]||a.status}</td>
       <td>${acts}</td></tr>`;
   }).join('') || '<tr><td colspan="7" class="hint">申込はありません</td></tr>';
