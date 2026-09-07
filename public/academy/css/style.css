@@ -1,5 +1,5 @@
 /* =============================================
-   ADA - ASKデジタルアカデミー
+   ASK Digital Academy - ASKデジタルアカデミー
    Global Stylesheet
    ============================================ */
 
@@ -2298,6 +2298,15 @@ button {
 
 .share-btn:hover {
   transform: translateY(-2px);
+}
+
+.share-btn:disabled,
+.share-btn.is-disabled,
+.share-btn.is-disabled:hover {
+  cursor: not-allowed;
+  opacity: 0.62;
+  box-shadow: none;
+  transform: none;
 }
 
 .share-line {

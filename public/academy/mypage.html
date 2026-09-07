@@ -36,8 +36,10 @@
   .st{font-size:12px;font-weight:700;padding:2px 10px;border-radius:999px;white-space:nowrap;}
   .st-open{background:#eafaef;color:#1f7a37;} .st-few{background:#fff4e2;color:#b26a00;}
   .st-full{background:#fdecef;color:#c93866;} .st-closed{background:#eef2f7;color:#6b7280;}
-  .msg-item{cursor:pointer;}
+  .msg-list li{display:block;cursor:pointer;}
+  .msg-head{display:flex;justify-content:space-between;gap:10px;align-items:center;}
   .msg-item .t{font-weight:700;}
+  .msg-body{margin-top:10px;color:#4a5568;font-size:14px;line-height:1.85;background:#f7fafd;border:1px solid #e6ebf2;border-radius:8px;padding:12px 14px;}
   .dot{width:8px;height:8px;border-radius:50%;background:var(--blue);display:inline-block;margin-right:6px;}
   .empty{color:var(--muted);font-size:14px;}
   .kid{border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:12px;}
@@ -94,8 +96,11 @@ function scheduleList(items){
 
 function messageList(items){
   if (!items.length) return '<p class="empty">お知らせはありません。</p>';
-  return '<ul class="list">' + items.map(m =>
-    `<li class="msg-item" data-id="${m.id}"><span class="t">${Number(m.is_read)?'':'<span class="dot"></span>'}${esc(m.title)}</span><span class="empty">${fmt(m.created_at)}</span></li>`
+  return '<ul class="list msg-list">' + items.map(m =>
+    `<li class="msg-item" data-id="${m.id}">
+       <div class="msg-head"><span class="t">${Number(m.is_read)?'':'<span class="dot"></span>'}${esc(m.title)}</span><span class="empty">${fmt(m.created_at)}</span></div>
+       <div class="msg-body" hidden>${esc(m.body).replace(/\n/g,'<br>')}</div>
+     </li>`
   ).join('') + '</ul>';
 }
 
@@ -162,9 +167,9 @@ async function render(u){
 
   // お知らせクリックで既読
   c.querySelectorAll('.msg-item').forEach(li => li.addEventListener('click', async () => {
-    const id = li.dataset.id;
-    const dot = li.querySelector('.dot'); if (dot) dot.remove();
-    try { await api('messages.php?action=mark_read', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({id})}); } catch(e){}
+    const body = li.querySelector('.msg-body'); if (body) body.hidden = !body.hidden;
+    const dot = li.querySelector('.dot');
+    if (dot){ dot.remove(); try { await api('messages.php?action=mark_read', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({id: li.dataset.id})}); } catch(e){} }
   }));
 }
 

@@ -159,8 +159,8 @@ function animateCounter(element) {
 /* --- Share Buttons --- */
 function initShareButtons() {
   const siteUrl = window.location.href;
-  const siteTitle = 'ASKデジタルアカデミー（ADA）';
-  const siteDesc = 'ICTの進化を、誰でも使える技術に。小学生向けIT教育＆シニア向けデジタルサポート。';
+  const siteTitle = 'ASKデジタルアカデミー';
+  const siteDesc = '小学3〜6年生向けに、5教科学習・タイピング・AI学習を通して自分で学ぶ力を育てます。';
 
   // LINE share
   const lineBtn = document.getElementById('share-line');
@@ -173,7 +173,7 @@ function initShareButtons() {
 
   // X (Twitter) share
   const xBtn = document.getElementById('share-x');
-  if (xBtn) {
+  if (xBtn && !xBtn.disabled) {
     xBtn.addEventListener('click', () => {
       const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(siteTitle + ' - ' + siteDesc)}&url=${encodeURIComponent(siteUrl)}`;
       window.open(tweetUrl, '_blank', 'width=600,height=500');
@@ -182,7 +182,7 @@ function initShareButtons() {
 
   // Facebook share
   const fbBtn = document.getElementById('share-facebook');
-  if (fbBtn) {
+  if (fbBtn && !fbBtn.disabled) {
     fbBtn.addEventListener('click', () => {
       const fbUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(siteUrl)}`;
       window.open(fbUrl, '_blank', 'width=600,height=500');
