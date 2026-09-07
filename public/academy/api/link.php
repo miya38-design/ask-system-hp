@@ -26,7 +26,14 @@ try {
                 $code = strtoupper(bin2hex(random_bytes(3))); // 6桁
                 $pdo->prepare('UPDATE users SET line_link_code = ? WHERE id = ?')->execute([$code, (int)$me['id']]);
             }
-            json_out(['ok' => true, 'linked' => false, 'code' => $code]);
+            $cfg = ada_config();
+            json_out([
+                'ok'      => true,
+                'linked'  => false,
+                'code'    => $code,
+                'add_url' => (string)($cfg['line_add_url'] ?? 'https://lin.ee/xaSJRVQ'),
+                'oa_id'   => (string)($cfg['line_oa_id'] ?? ''),
+            ]);
             break;
 
         default:

@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS users (
   created_at    DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at    DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
-  UNIQUE KEY uq_users_email (email),
+  KEY idx_users_email (email),
   KEY idx_users_role (role),
   KEY idx_users_parent (parent_id),
   CONSTRAINT fk_users_parent FOREIGN KEY (parent_id) REFERENCES users(id) ON DELETE SET NULL

@@ -185,13 +185,35 @@ async function render(u){
       const s = await api('link.php?action=status');
       const box = document.getElementById('linebox');
       if (box) {
-        box.innerHTML = s.linked
-          ? '<p style="color:#1f7a37;font-weight:700;">✅ LINE連携済みです。入退室やお知らせがLINEに届きます。</p>'
-          : `<ol style="font-size:14px;color:#4a5568;line-height:2;padding-left:20px;margin-bottom:10px;">
-               <li>公式LINEを「友だち追加」</li>
-               <li>下の<b>連携コード</b>をトークにそのまま送信</li>
+        if (s.linked) {
+          box.innerHTML = '<p style="color:#1f7a37;font-weight:700;">✅ LINE連携済みです。入退室やお知らせがLINEに届きます。</p>';
+        } else {
+          const code = esc(s.code || '');
+          const addUrl = esc(s.add_url || 'https://lin.ee/xaSJRVQ');
+          const sendBtn = s.oa_id
+            ? `<a href="https://line.me/R/oaMessage/${encodeURIComponent(s.oa_id)}/?${encodeURIComponent(s.code||'')}" target="_blank" rel="noopener"
+                  style="display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:12px 18px;border-radius:999px;font-weight:800;color:#fff;background:#06c755;text-decoration:none;">② このコードをLINEで送信</a>`
+            : `<p style="font-size:13px;color:#4a5568;margin-top:4px;">② LINEのトークに上のコードを貼り付けて送信してください。</p>`;
+          box.innerHTML =
+            `<ol style="font-size:14px;color:#4a5568;line-height:1.9;padding-left:20px;margin-bottom:12px;">
+               <li>「① 公式LINEを友だち追加」を押して友だち追加</li>
+               <li>下のコードをコピー → LINEのトークに貼り付けて送信</li>
+               <li>「連携しました」と返信が来れば完了</li>
              </ol>
-             <div style="font-size:28px;font-weight:900;letter-spacing:5px;color:#16498f;background:#eef5fc;border:1px dashed #1f5fbf;border-radius:10px;padding:14px;text-align:center;">${esc(s.code||'')}</div>`;
+             <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px;">
+               <div id="link-code" style="font-size:26px;font-weight:900;letter-spacing:5px;color:#16498f;background:#eef5fc;border:1px dashed #1f5fbf;border-radius:10px;padding:12px 18px;">${code}</div>
+               <button id="copy-code" type="button" style="padding:10px 16px;border:1px solid var(--line);background:#fff;border-radius:999px;font-family:inherit;font-weight:700;cursor:pointer;">コードをコピー</button>
+             </div>
+             <div style="display:flex;gap:10px;flex-wrap:wrap;">
+               <a href="${addUrl}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:12px 18px;border-radius:999px;font-weight:800;color:#fff;background:#06c755;text-decoration:none;">① 公式LINEを友だち追加</a>
+               ${sendBtn}
+             </div>
+             <p style="font-size:12px;color:#8496b6;margin-top:10px;">※通知を受け取るにはこの連携が必要です。うまくいかない場合は教室までお問い合わせください。</p>`;
+          const cp = document.getElementById('copy-code');
+          if (cp) cp.addEventListener('click', async () => {
+            try { await navigator.clipboard.writeText(s.code||''); cp.textContent='コピーしました'; setTimeout(()=>cp.textContent='コードをコピー',1500); } catch(e){}
+          });
+        }
       }
     } catch(e){}
   }

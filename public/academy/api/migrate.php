@@ -53,6 +53,16 @@ try {
             $pdo->exec("ALTER TABLE `$table` ADD COLUMN $ddl");
         }
     };
+    // メール一意制約を撤廃（生徒と保護者で同じメールを許可）
+    $uq = $pdo->query(
+        "SELECT COUNT(*) FROM information_schema.STATISTICS
+         WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'users' AND INDEX_NAME = 'uq_users_email'"
+    )->fetchColumn();
+    if ((int)$uq) {
+        $pdo->exec('ALTER TABLE users DROP INDEX uq_users_email');
+        try { $pdo->exec('ALTER TABLE users ADD INDEX idx_users_email (email)'); } catch (Throwable $e) {}
+    }
+
     $ensureCol('users', 'line_user_id', 'line_user_id VARCHAR(64) NULL');
     $ensureCol('users', 'line_link_code', 'line_link_code VARCHAR(12) NULL');
     $ensureCol('users', 'qr_token', 'qr_token VARCHAR(32) NULL');

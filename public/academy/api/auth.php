@@ -18,15 +18,29 @@ try {
             $b = json_body();
             $email = trim((string)($b['email'] ?? ''));
             $pw    = (string)($b['password'] ?? '');
+            $accountId = (int)($b['account_id'] ?? 0); // 同一メール複数時の選択
             if ($email === '' || $pw === '') {
                 json_out(['ok' => false, 'error' => 'email と password は必須です'], 400);
             }
             $st = ada_db()->prepare('SELECT * FROM users WHERE email = ?');
             $st->execute([$email]);
-            $u = $st->fetch();
-            if (!$u || !password_verify($pw, $u['password_hash'])) {
+            $rows = $st->fetchAll();
+            // パスワード一致するアカウントを抽出
+            $matched = array_values(array_filter($rows, fn($r) => password_verify($pw, $r['password_hash'])));
+            if ($accountId > 0) {
+                $matched = array_values(array_filter($matched, fn($r) => (int)$r['id'] === $accountId));
+            }
+            if (count($matched) === 0) {
                 json_out(['ok' => false, 'error' => 'メールアドレスまたはパスワードが違います'], 401);
             }
+            if (count($matched) > 1) {
+                // 同一メール＆同一パスワードの複数アカウント → 選択させる
+                $choices = array_map(fn($r) => [
+                    'id' => (int)$r['id'], 'role' => $r['role'], 'display_name' => $r['display_name'],
+                ], $matched);
+                json_out(['ok' => false, 'choose' => $choices]);
+            }
+            $u = $matched[0];
             ada_session_start();
             session_regenerate_id(true);
             $_SESSION['uid'] = (int)$u['id'];

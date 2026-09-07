@@ -43,6 +43,10 @@
       <button id="submit" type="submit">ログイン</button>
       <div class="msg err" id="msg"></div>
     </form>
+    <div id="choose" style="display:none;margin-top:18px;">
+      <p style="font-size:14px;font-weight:700;color:#33404f;margin-bottom:10px;">同じメールで複数のアカウントがあります。ログインする方を選んでください：</p>
+      <div id="choose-list" style="display:flex;flex-direction:column;gap:8px;"></div>
+    </div>
     <div class="foot"><a href="index.html">← アカデミートップへ戻る</a></div>
   </div>
 
@@ -57,36 +61,45 @@ fetch(API + '?action=me', {credentials:'same-origin'})
   .then(d => { if (d && d.user) location.replace('mypage.html'); })
   .catch(()=>{});
 
-document.getElementById('login-form').addEventListener('submit', async (e) => {
-  e.preventDefault();
+const ROLE_LABEL = {parent:'保護者', student:'生徒', instructor:'講師'};
+
+async function doLogin(accountId){
   msg.style.display = 'none';
-  btn.disabled = true;
-  btn.textContent = 'ログイン中…';
+  btn.disabled = true; btn.textContent = 'ログイン中…';
+  const payload = {
+    email: document.getElementById('email').value.trim(),
+    password: document.getElementById('password').value
+  };
+  if (accountId) payload.account_id = accountId;
   try {
     const res = await fetch(API + '?action=login', {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      credentials:'same-origin',
-      body: JSON.stringify({
-        email: document.getElementById('email').value.trim(),
-        password: document.getElementById('password').value
-      })
+      method:'POST', headers:{'Content-Type':'application/json'}, credentials:'same-origin',
+      body: JSON.stringify(payload)
     });
     const data = await res.json();
-    if (data.ok) {
-      location.replace('mypage.html');
-    } else {
-      msg.textContent = data.error || 'ログインに失敗しました。';
-      msg.className = 'msg err';
-    }
+    if (data.ok) { location.replace('mypage.html'); return; }
+    if (data.choose) { showChooser(data.choose); return; }
+    msg.textContent = data.error || 'ログインに失敗しました。';
+    msg.className = 'msg err';
   } catch (err) {
     msg.textContent = '通信エラーが発生しました。時間をおいて再度お試しください。';
     msg.className = 'msg err';
   } finally {
-    btn.disabled = false;
-    btn.textContent = 'ログイン';
+    btn.disabled = false; btn.textContent = 'ログイン';
   }
-});
+}
+
+function showChooser(list){
+  const box = document.getElementById('choose');
+  const cl = document.getElementById('choose-list');
+  cl.innerHTML = list.map(a =>
+    `<button type="button" data-id="${a.id}" style="text-align:left;padding:12px 14px;border:1.5px solid #d3dce6;border-radius:10px;background:#fbfdff;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;">
+       ${a.display_name}（${ROLE_LABEL[a.role]||a.role}）</button>`).join('');
+  cl.querySelectorAll('button').forEach(b => b.addEventListener('click', () => doLogin(Number(b.dataset.id))));
+  box.style.display = 'block';
+}
+
+document.getElementById('login-form').addEventListener('submit', (e) => { e.preventDefault(); document.getElementById('choose').style.display='none'; doLogin(0); });
 </script>
 </body>
 </html>

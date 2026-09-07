@@ -25,4 +25,6 @@ return [
     // LINE Messaging API（LINE Developers で取得）。
     'line_channel_token'  => '',  // チャネルアクセストークン（長期）
     'line_channel_secret' => '',  // チャネルシークレット
+    'line_add_url'        => 'https://lin.ee/xaSJRVQ', // 公式LINE友だち追加URL
+    'line_oa_id'          => '',  // 公式アカウントのベーシックID（@から始まる）。設定するとワンタップでコード送信
 ];
