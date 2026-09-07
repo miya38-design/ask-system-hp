@@ -69,12 +69,12 @@ try {
             $parentId = (int)$pdo->lastInsertId();
             // 生徒（同じメールで登録可・QR自動発行）
             $sInsert = $pdo->prepare(
-                'INSERT INTO users (email, password_hash, display_name, role, parent_id, course_type, plan, qr_token)
-                 VALUES (?, ?, ?, "student", ?, ?, ?, ?)'
+                'INSERT INTO users (email, password_hash, display_name, role, parent_id, course_type, plan, grade, qr_token)
+                 VALUES (?, ?, ?, "student", ?, ?, ?, ?, ?)'
             );
             $sInsert->execute([
                 $a['parent_email'], password_hash($studentPw, PASSWORD_DEFAULT), $a['child_name'],
-                $parentId, $courseType, $plan, bin2hex(random_bytes(16)),
+                $parentId, $courseType, $plan, ($a['grade'] ?: null), bin2hex(random_bytes(16)),
             ]);
             $studentId = (int)$pdo->lastInsertId();
 

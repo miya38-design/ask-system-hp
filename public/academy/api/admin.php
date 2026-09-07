@@ -79,6 +79,9 @@ try {
             if (array_key_exists('area', $b)) {
                 $sets[] = 'area = ?'; $args[] = trim((string)$b['area']) ?: null;
             }
+            if (array_key_exists('grade', $b)) {
+                $sets[] = 'grade = ?'; $args[] = trim((string)$b['grade']) ?: null;
+            }
             if (!$sets) {
                 json_out(['ok' => false, 'error' => '更新項目がありません'], 400);
             }

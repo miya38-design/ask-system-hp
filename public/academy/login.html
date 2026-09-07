@@ -79,11 +79,11 @@ async function doLogin(accountId){
     const data = await res.json();
     if (data.ok) { location.replace('mypage.html'); return; }
     if (data.choose) { showChooser(data.choose); return; }
-    msg.textContent = data.error || 'ログインに失敗しました。';
-    msg.className = 'msg err';
+    msg.textContent = data.error || 'メールアドレスまたはパスワードが違います。';
+    msg.className = 'msg err'; msg.style.display = 'block';
   } catch (err) {
     msg.textContent = '通信エラーが発生しました。時間をおいて再度お試しください。';
-    msg.className = 'msg err';
+    msg.className = 'msg err'; msg.style.display = 'block';
   } finally {
     btn.disabled = false; btn.textContent = 'ログイン';
   }
