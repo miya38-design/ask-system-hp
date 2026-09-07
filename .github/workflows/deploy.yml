@@ -15,23 +15,35 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Deploy via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          # お名前.comは通常FTPS(明示)対応。うまくいかない場合は Secrets に
-          # FTP_PROTOCOL=ftp（平文）または ftps-legacy を設定して上書き。
-          protocol: ${{ secrets.FTP_PROTOCOL || 'ftps' }}
-          port: ${{ secrets.FTP_PORT || '21' }}
-          local-dir: ./public/
-          # 公開ディレクトリのパス（末尾に / が必要）。例: /ドメイン/public_html/
-          server-dir: ${{ secrets.FTP_SERVER_DIR }}
-          # サーバー上のDB設定や同期状態ファイルは触らない
-          exclude: |
-            **/config.php
-            **/.git*
-            **/.git*/**
-            **/.DS_Store
-            **/.ftp-deploy-sync-state.json
+      - name: Install lftp
+        run: sudo apt-get update && sudo apt-get install -y lftp
+
+      - name: Deploy via lftp (FTP/FTPS)
+        env:
+          FTP_SERVER: ${{ secrets.FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          FTP_SERVER_DIR: ${{ secrets.FTP_SERVER_DIR }}
+          FTP_PORT: ${{ secrets.FTP_PORT }}
+        run: |
+          set -euo pipefail
+          PORT="${FTP_PORT:-21}"
+          # Credentials via .netrc so no special-char/quoting issues in the command
+          umask 077
+          printf 'machine %s\n  login %s\n  password %s\n' "$FTP_SERVER" "$FTP_USERNAME" "$FTP_PASSWORD" > "$HOME/.netrc"
+          chmod 600 "$HOME/.netrc"
+          lftp -c "
+            set cmd:fail-exit true;
+            set ftp:ssl-allow true;
+            set ftp:ssl-force true;
+            set ftp:ssl-protect-data true;
+            set ssl:verify-certificate no;
+            set net:max-retries 2;
+            set net:timeout 20;
+            open -p $PORT \"$FTP_SERVER\";
+            mirror --reverse --delete --verbose --parallel=2 \
+              --exclude-glob config.php \
+              --exclude-glob .ftp-deploy-sync-state.json \
+              ./public/ \"$FTP_SERVER_DIR\";
+          "
+          rm -f "$HOME/.netrc"
