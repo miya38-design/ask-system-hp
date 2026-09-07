@@ -1,1 +1,4 @@
 .claude/worktrees/
+
+# Server-only secrets (DB credentials) — never commit; upload manually to the server once
+public/academy/api/config.php
