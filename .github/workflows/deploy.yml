@@ -1,10 +1,11 @@
-name: Deploy to server
+name: Deploy to server (FTP)
 
 on:
   push:
     branches: [main]
     paths:
       - "public/**"
+      - ".github/workflows/deploy.yml"
   workflow_dispatch:
 
 jobs:
@@ -14,13 +15,23 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Deploy via SFTP
-        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+      - name: Deploy via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          server: ${{ secrets.SFTP_SERVER }}
-          port: ${{ secrets.SFTP_PORT }}
-          username: ${{ secrets.SFTP_USERNAME }}
-          password: ${{ secrets.SFTP_PASSWORD }}
-          local_path: "./public/*"
-          remote_path: ${{ secrets.SFTP_REMOTE_PATH }}
-          sftp_only: true
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          # お名前.comは通常FTPS(明示)対応。うまくいかない場合は Secrets に
+          # FTP_PROTOCOL=ftp（平文）または ftps-legacy を設定して上書き。
+          protocol: ${{ secrets.FTP_PROTOCOL || 'ftps' }}
+          port: ${{ secrets.FTP_PORT || '21' }}
+          local-dir: ./public/
+          # 公開ディレクトリのパス（末尾に / が必要）。例: /ドメイン/public_html/
+          server-dir: ${{ secrets.FTP_SERVER_DIR }}
+          # サーバー上のDB設定や同期状態ファイルは触らない
+          exclude: |
+            **/config.php
+            **/.git*
+            **/.git*/**
+            **/.DS_Store
+            **/.ftp-deploy-sync-state.json
