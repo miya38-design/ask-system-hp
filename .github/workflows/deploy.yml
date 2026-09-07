@@ -23,34 +23,31 @@ jobs:
           FTP_SERVER: ${{ secrets.FTP_SERVER }}
           FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
-          FTP_SERVER_DIR: ${{ secrets.FTP_SERVER_DIR }}
           FTP_PORT: ${{ secrets.FTP_PORT }}
         run: |
           set -u
           PORT="${FTP_PORT:-21}"
-          # FTP logins are usually chrooted to the account home, so an absolute
-          # filesystem path like /home/xxxx/public_html must become relative.
-          TARGET="$FTP_SERVER_DIR"
-          case "$TARGET" in
-            /home/*/*) TARGET="${TARGET#/home/*/}" ;;
-          esac
-          echo "Deploy target (relative to FTP root): '$TARGET'"
+          DOMAIN="asksystem.jp"
           umask 077
           printf 'machine %s login %s password %s\n' "$FTP_SERVER" "$FTP_USERNAME" "$FTP_PASSWORD" > "$HOME/.netrc"
           chmod 600 "$HOME/.netrc"
+          SETTINGS="set ftp:ssl-allow true; set ftp:ssl-force true; set ftp:ssl-protect-data true; set ssl:verify-certificate no; set ftp:passive-mode true; set net:max-retries 2; set net:timeout 25;"
+
+          # Detect the real document root: <domain>/public_html if present, else <domain>/
+          lftp -c "$SETTINGS open -p $PORT \"$FTP_SERVER\"; cls -1 \"$DOMAIN/\";" > list.txt 2>/dev/null || true
+          echo "----- $DOMAIN/ contents -----"; cat list.txt || true
+          if grep -qiE '(^|/)public_html/?$' list.txt; then
+            TARGET="$DOMAIN/public_html"
+          else
+            TARGET="$DOMAIN"
+          fi
+          echo "Deploy target: '$TARGET'"
+
           set +e
           lftp -c "
             set cmd:fail-exit true;
-            set ftp:ssl-allow true;
-            set ftp:ssl-force true;
-            set ftp:ssl-protect-data true;
-            set ssl:verify-certificate no;
-            set ftp:passive-mode true;
-            set net:max-retries 2;
-            set net:timeout 25;
+            $SETTINGS
             open -p $PORT \"$FTP_SERVER\";
-            pwd;
-            cls -la;
             mirror --reverse --delete --verbose --parallel=2 \
               --exclude-glob config.php \
               --exclude-glob .ftp-deploy-sync-state.json \
