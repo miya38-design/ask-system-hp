@@ -21,10 +21,11 @@
   textarea{min-height:90px;resize:vertical;}
   input:focus,select:focus,textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(31,95,191,.12);}
   .hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0;}
-  button{margin-top:22px;width:100%;padding:14px;border:0;border-radius:999px;font-family:inherit;font-weight:800;font-size:16px;color:#fff;background:linear-gradient(135deg,var(--blue),#2b7de0);cursor:pointer;}
-  button:disabled{opacity:.6;}
+  .btn{margin-top:22px;width:100%;padding:14px;border:0;border-radius:999px;font-family:inherit;font-weight:800;font-size:16px;cursor:pointer;}
+  .btn-primary{color:#fff;background:linear-gradient(135deg,var(--blue),#2b7de0);}
+  .btn-ghost{color:var(--blue-dark);background:#eef5fc;border:1px solid #cfe0f3;}
+  .btn:disabled{opacity:.6;}
   .msg{margin-top:16px;padding:12px 14px;border-radius:9px;font-size:14px;font-weight:700;display:none;}
-  .msg.ok{display:block;background:#eafaef;border:1px solid #bfe6c4;color:#1f7a37;}
   .msg.err{display:block;background:#fdecef;border:1px solid #f6c4d5;color:#c93866;}
   .foot{margin-top:20px;text-align:center;font-size:13px;} .foot a{color:var(--blue);font-weight:700;text-decoration:none;}
   .note{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.7;}
@@ -33,79 +34,153 @@
   .flow-steps{display:flex;flex-direction:column;gap:8px;}
   .flow-step{display:flex;gap:12px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px 14px;}
   .flow-num{flex-shrink:0;width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--blue),#2b7de0);color:#fff;font-weight:900;display:flex;align-items:center;justify-content:center;font-size:14px;}
-  .flow-body{font-size:14px;line-height:1.7;}
-  .flow-body b{color:var(--ink);}
-  .flow-body .sub{color:var(--muted);font-size:13px;}
+  .flow-body{font-size:14px;line-height:1.7;} .flow-body b{color:var(--ink);} .flow-body .sub{color:var(--muted);font-size:13px;}
   .flow-pay{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;}
   .flow-pay span{font-size:12px;font-weight:700;background:#eef5fc;color:var(--blue-dark);border-radius:999px;padding:3px 10px;}
   .flow-arrow{text-align:center;color:#b9c6d8;font-size:16px;line-height:1;}
+  /* confirm */
+  .summary{border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-bottom:6px;}
+  .summary .row{display:flex;border-bottom:1px solid #eef2f7;}
+  .summary .row:last-child{border-bottom:0;}
+  .summary .k{flex:0 0 38%;background:#f7fafd;padding:11px 12px;font-size:13px;font-weight:700;color:#33404f;}
+  .summary .v{flex:1;padding:11px 12px;font-size:14px;word-break:break-word;white-space:pre-wrap;}
+  .confirm-title{font-size:16px;font-weight:900;color:var(--blue-dark);text-align:center;margin-bottom:14px;}
+  /* done */
+  .done{text-align:center;padding:14px 4px;}
+  .done .check{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#2bb24c,#57c977);color:#fff;font-size:40px;display:flex;align-items:center;justify-content:center;margin:6px auto 18px;}
+  .done h2{font-size:20px;font-weight:900;margin-bottom:12px;}
+  .done p{font-size:14px;color:#4a5568;line-height:1.9;margin-bottom:8px;}
+  .done .box{background:#f7fafd;border:1px solid #e6ebf2;border-radius:12px;padding:14px;margin:16px 0;font-size:13px;color:#4a5568;line-height:1.9;text-align:left;}
+  [hidden]{display:none!important;}
 </style>
 </head>
 <body>
   <div class="card">
     <div class="brand"><img src="assets/images/logo.png" alt="ASKデジタルアカデミー"><h1>入会申込</h1></div>
-    <p class="lead">ご入会は、下の3ステップで完了します。まずは必要事項を入力して送信してください。</p>
-    <div class="flow">
-      <div class="flow-title">ご入会の流れ</div>
-      <div class="flow-steps">
-        <div class="flow-step">
-          <div class="flow-num">1</div>
-          <div class="flow-body"><b>お申し込み</b><div class="sub">このフォームから送信</div></div>
-        </div>
-        <div class="flow-arrow">▼</div>
-        <div class="flow-step">
-          <div class="flow-num">2</div>
-          <div class="flow-body"><b>お支払い</b><div class="sub">下記のいずれかの方法で</div>
-            <div class="flow-pay"><span>オンライン決済</span><span>LINEの支払いリンク</span><span>教室で現金</span></div>
-          </div>
-        </div>
-        <div class="flow-arrow">▼</div>
-        <div class="flow-step">
-          <div class="flow-num">3</div>
-          <div class="flow-body"><b>ご利用開始</b><div class="sub">入金を確認後、アカウントが有効になります</div></div>
+
+    <!-- ===== 入力 ===== -->
+    <div id="view-form">
+      <p class="lead">ご入会は、下の3ステップで完了します。まずは必要事項を入力して送信してください。</p>
+      <div class="flow">
+        <div class="flow-title">ご入会の流れ</div>
+        <div class="flow-steps">
+          <div class="flow-step"><div class="flow-num">1</div><div class="flow-body"><b>お申し込み</b><div class="sub">このフォームから送信</div></div></div>
+          <div class="flow-arrow">▼</div>
+          <div class="flow-step"><div class="flow-num">2</div><div class="flow-body"><b>お支払い</b><div class="sub">下記のいずれかの方法で</div>
+            <div class="flow-pay"><span>オンライン決済</span><span>LINEの支払いリンク</span><span>教室で現金</span></div></div></div>
+          <div class="flow-arrow">▼</div>
+          <div class="flow-step"><div class="flow-num">3</div><div class="flow-body"><b>ご利用開始</b><div class="sub">入金を確認後、アカウントが有効になります</div></div></div>
         </div>
       </div>
-    </div>
-    <form id="reg-form" autocomplete="on">
-      <input type="text" name="hp" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
-      <label>保護者のお名前<span class="req">必須</span></label>
-      <input type="text" name="parent_name" required placeholder="山田 太郎">
-      <label>メールアドレス<span class="req">必須</span>（ログインIDになります）</label>
-      <input type="email" name="parent_email" required placeholder="you@example.com">
-      <label>電話番号<span class="req">必須</span></label>
-      <input type="tel" name="phone" required placeholder="090-1234-5678">
-      <label>お子さまのお名前<span class="req">必須</span></label>
-      <input type="text" name="child_name" required placeholder="山田 はな">
-      <label>学年</label>
-      <input type="text" name="grade" placeholder="小3 など">
-      <label>希望コース</label>
-      <select name="plan">
-        <option value="">未定・相談したい</option>
-        <option value="standard-a">週2回（火・木）</option>
-        <option value="standard-b">週3回（月・水・金）</option>
-        <option value="premium">週5回（通い放題）</option>
-      </select>
-      <label>ご質問・ご要望</label>
-      <textarea name="note" placeholder="ご不明点やご希望があればご記入ください"></textarea>
-      <button id="submit" type="submit">この内容で申し込む</button>
-      <div class="msg" id="msg"></div>
+      <form id="reg-form" autocomplete="on">
+        <input type="text" name="hp" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <label>保護者のお名前<span class="req">必須</span></label>
+        <input type="text" name="parent_name" required placeholder="山田 太郎">
+        <label>メールアドレス<span class="req">必須</span>（ログインIDになります）</label>
+        <input type="email" name="parent_email" required placeholder="you@example.com">
+        <label>電話番号<span class="req">必須</span></label>
+        <input type="tel" name="phone" required placeholder="090-1234-5678">
+        <label>お子さまのお名前<span class="req">必須</span></label>
+        <input type="text" name="child_name" required placeholder="山田 はな">
+        <label>学年</label>
+        <input type="text" name="grade" placeholder="小3 など">
+        <label>希望コース</label>
+        <select name="plan">
+          <option value="">未定・相談したい</option>
+          <option value="standard-a">週2回（火・木）</option>
+          <option value="standard-b">週3回（月・水・金）</option>
+          <option value="premium">週5回（通い放題）</option>
+        </select>
+        <label>ご質問・ご要望</label>
+        <textarea name="note" placeholder="ご不明点やご希望があればご記入ください"></textarea>
+        <button class="btn btn-primary" type="submit">入力内容を確認する</button>
+      </form>
       <p class="note">※送信した時点では、まだアカウントは使えません。教室での確認とお支払いが済んでから、ご利用いただけます。</p>
-    </form>
-    <p class="note" style="text-align:center;">ご不明な点は <a href="mailto:info@ask-system.net" style="color:var(--blue);font-weight:700;">info@ask-system.net</a> までお問い合わせください。</p>
-    <div class="foot"><a href="index.html">← アカデミートップへ戻る</a></div>
+      <p class="note" style="text-align:center;">ご不明な点は <a href="mailto:info@ask-system.net" style="color:var(--blue);font-weight:700;">info@ask-system.net</a> または公式LINEまで。</p>
+    </div>
+
+    <!-- ===== 確認 ===== -->
+    <div id="view-confirm" hidden>
+      <div class="confirm-title">この内容でよろしいですか？</div>
+      <div class="summary" id="summary"></div>
+      <div class="msg err" id="msg"></div>
+      <button class="btn btn-primary" id="send-btn" type="button">この内容で申し込む</button>
+      <button class="btn btn-ghost" id="back-btn" type="button">修正する</button>
+    </div>
+
+    <!-- ===== 完了 ===== -->
+    <div id="view-done" hidden>
+      <div class="done">
+        <div class="check">✓</div>
+        <h2>お申し込みありがとうございます。</h2>
+        <p>教室から折り返しご連絡します。</p>
+        <div class="box">
+          このあとの流れ：<br>
+          ① 教室から内容確認のご連絡 → ② お支払い（オンライン決済／LINEの支払いリンク／教室で現金）→ ③ 入金確認後にアカウントが有効になり、ご利用開始
+        </div>
+        <a class="btn btn-ghost" href="index.html" style="display:block;text-decoration:none;text-align:center;">アカデミートップへ戻る</a>
+      </div>
+    </div>
+
+    <div class="foot" id="foot"><a href="index.html">← アカデミートップへ戻る</a></div>
   </div>
+
 <script>
-const form=document.getElementById('reg-form'), msg=document.getElementById('msg'), btn=document.getElementById('submit');
-form.addEventListener('submit', async (e)=>{
+const PLAN_LABEL = {'':'未定・相談したい','standard-a':'週2回（火・木）','standard-b':'週3回（月・水・金）','premium':'週5回（通い放題）'};
+const form = document.getElementById('reg-form');
+const vForm = document.getElementById('view-form');
+const vConfirm = document.getElementById('view-confirm');
+const vDone = document.getElementById('view-done');
+const foot = document.getElementById('foot');
+const msg = document.getElementById('msg');
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let payload = {};
+
+// 入力 → 確認
+form.addEventListener('submit', (e) => {
   e.preventDefault();
-  msg.style.display='none'; btn.disabled=true; btn.textContent='送信中…';
-  try{
-    const res=await fetch('api/register.php?action=submit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.fromEntries(new FormData(form).entries()))});
-    const d=await res.json();
-    if(d.ok){ form.reset(); msg.className='msg ok'; msg.textContent='お申し込みありがとうございます。教室から折り返しご連絡します。'; }
-    else { msg.className='msg err'; msg.textContent=d.error||'送信に失敗しました。'; }
-  }catch(err){ msg.className='msg err'; msg.textContent='通信エラーが発生しました。時間をおいて再度お試しください。'; }
-  finally{ btn.disabled=false; btn.textContent='この内容で申し込む'; }
+  payload = Object.fromEntries(new FormData(form).entries());
+  const rows = [
+    ['保護者のお名前', payload.parent_name],
+    ['メールアドレス', payload.parent_email],
+    ['電話番号', payload.phone],
+    ['お子さまのお名前', payload.child_name],
+    ['学年', payload.grade || '（未記入）'],
+    ['希望コース', PLAN_LABEL[payload.plan] ?? payload.plan],
+    ['ご質問・ご要望', payload.note || '（なし）'],
+  ];
+  document.getElementById('summary').innerHTML = rows.map(([k,v]) =>
+    `<div class="row"><div class="k">${k}</div><div class="v">${esc(v)}</div></div>`).join('');
+  msg.style.display = 'none';
+  vForm.hidden = true; vConfirm.hidden = false; foot.hidden = true;
+  window.scrollTo(0,0);
+});
+
+// 修正
+document.getElementById('back-btn').addEventListener('click', () => {
+  vConfirm.hidden = true; vForm.hidden = false; foot.hidden = false;
+  window.scrollTo(0,0);
+});
+
+// 送信
+const sendBtn = document.getElementById('send-btn');
+sendBtn.addEventListener('click', async () => {
+  msg.style.display = 'none'; sendBtn.disabled = true; sendBtn.textContent = '送信中…';
+  try {
+    const res = await fetch('api/register.php?action=submit', {
+      method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)
+    });
+    const d = await res.json();
+    if (d.ok) {
+      vConfirm.hidden = true; vDone.hidden = false; window.scrollTo(0,0);
+    } else {
+      msg.className = 'msg err'; msg.textContent = d.error || '送信に失敗しました。';
+    }
+  } catch (err) {
+    msg.className = 'msg err'; msg.textContent = '通信エラーが発生しました。時間をおいて再度お試しください。';
+  } finally {
+    sendBtn.disabled = false; sendBtn.textContent = 'この内容で申し込む';
+  }
 });
 </script>
 </body>
