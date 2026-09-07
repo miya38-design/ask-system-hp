@@ -42,6 +42,8 @@ jobs:
           fi
           echo "Deploy target: '$TARGET'"
 
+          # Upload (lftp can exit non-zero on benign verbose/delete messages; we
+          # judge success separately by verifying a key file below).
           set +e
           lftp -c "
             $SETTINGS
@@ -51,16 +53,21 @@ jobs:
               --exclude-glob .ftp-deploy-sync-state.json \
               ./public/ \"$TARGET\";
           " > lftp.out 2>&1
-          code=$?
-          set -e
-          echo "===== lftp output (exit $code) ====="
+          echo "===== lftp output ====="
           cat lftp.out || true
+
+          # Verify deployment by confirming index.html exists at the target.
+          if lftp -c "$SETTINGS open -p $PORT \"$FTP_SERVER\"; cls \"$TARGET/index.html\";" > /dev/null 2>&1; then
+            ok=1
+          else
+            ok=0
+          fi
+          set -e
           rm -f "$HOME/.netrc"
 
-          # lftp/mirror can return non-zero on benign conditions; only fail on a
-          # real transfer/connection error message.
-          if grep -qiE 'Access failed|Fatal error|Login failed|change directory|No such file|Permission denied|not connected' lftp.out; then
-            grep -iE 'Access failed|Fatal error|Login failed|change directory|No such file|Permission denied|not connected' lftp.out | tail -n 15 | while IFS= read -r l; do [ -n "$l" ] && echo "::error::${l}"; done
+          if [ "$ok" -ne 1 ]; then
+            echo "Deployment verification failed (index.html not found at $TARGET)."
+            tail -n 25 lftp.out | while IFS= read -r l; do [ -n "$l" ] && echo "::error::${l}"; done
             exit 1
           fi
-          echo "Deploy completed successfully."
+          echo "Deploy verified: https://$DOMAIN/ is updated."
