@@ -28,6 +28,13 @@ jobs:
         run: |
           set -u
           PORT="${FTP_PORT:-21}"
+          # FTP logins are usually chrooted to the account home, so an absolute
+          # filesystem path like /home/xxxx/public_html must become relative.
+          TARGET="$FTP_SERVER_DIR"
+          case "$TARGET" in
+            /home/*/*) TARGET="${TARGET#/home/*/}" ;;
+          esac
+          echo "Deploy target (relative to FTP root): '$TARGET'"
           umask 077
           printf 'machine %s login %s password %s\n' "$FTP_SERVER" "$FTP_USERNAME" "$FTP_PASSWORD" > "$HOME/.netrc"
           chmod 600 "$HOME/.netrc"
@@ -42,10 +49,12 @@ jobs:
             set net:max-retries 2;
             set net:timeout 25;
             open -p $PORT \"$FTP_SERVER\";
+            pwd;
+            cls -la;
             mirror --reverse --delete --verbose --parallel=2 \
               --exclude-glob config.php \
               --exclude-glob .ftp-deploy-sync-state.json \
-              ./public/ \"$FTP_SERVER_DIR\";
+              ./public/ \"$TARGET\";
           " > lftp.out 2>&1
           code=$?
           set -e
@@ -53,7 +62,6 @@ jobs:
           cat lftp.out || true
           rm -f "$HOME/.netrc"
           if [ "$code" -ne 0 ]; then
-            # Surface the real lftp error as annotations (readable via the API)
             tail -n 25 lftp.out | while IFS= read -r l; do [ -n "$l" ] && echo "::error::${l}"; done
             exit 1
           fi
