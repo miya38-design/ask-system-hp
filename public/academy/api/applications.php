@@ -9,6 +9,7 @@ declare(strict_types=1);
  *   POST ?action=reject   {id}
  */
 require_once __DIR__ . '/lib.php';
+require_once __DIR__ . '/mailer.php';
 
 $me = require_auth();
 require_role($me, 'instructor');
@@ -80,8 +81,47 @@ try {
                 ->execute([$parentId, $studentId, $id]);
             $pdo->commit();
 
+            // 登録メールを自動送信（info@ask-system.net から）
+            $loginUrl = 'https://asksystem.jp/academy/login.html';
+            $subject = '【ASKデジタルアカデミー】ご入会手続きとログイン情報のご案内';
+            $body = <<<TXT
+{$a['parent_name']} 様
+
+この度はASKデジタルアカデミーへのお申し込み、誠にありがとうございます。
+会員ページ（マイページ）にログインするための情報をご案内します。
+
+■ ログインページ
+{$loginUrl}
+
+■ ログインID（メールアドレス）
+{$a['parent_email']}
+
+■ 保護者アカウント
+　お名前：{$a['parent_name']}
+　パスワード：{$parentPw}
+
+■ 生徒アカウント
+　お名前：{$a['child_name']}
+　パスワード：{$studentPw}
+
+※ログインIDは保護者・生徒とも共通です。ログイン画面で「保護者」「生徒」のどちらでログインするか選べます。
+※お子さまの入退室通知をLINEで受け取るには、保護者マイページの「LINE連携」から公式LINEと連携してください。
+※パスワードの変更をご希望の場合は、教室までお申し付けください。
+
+ご不明な点は、本メール（info@ask-system.net）または公式LINEまでお気軽にお問い合わせください。
+今後ともよろしくお願いいたします。
+
+──────────────────
+ASKデジタルアカデミー ／ アスクシステム
+Mail: info@ask-system.net
+Web: https://asksystem.jp/academy/
+──────────────────
+TXT;
+            $mailSent = ada_send_mail($a['parent_email'], $subject, $body);
+
             json_out([
                 'ok' => true,
+                'mail_sent' => $mailSent,
                 'credentials' => [
                     'login_email'      => $a['parent_email'],
                     'parent_name'      => $a['parent_name'],

@@ -264,7 +264,11 @@ document.getElementById('app-rows').addEventListener('click', async e=>{
     const d=await api('applications.php?action=approve',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})});
     if(d.ok){
       const c=d.credentials;
-      alert('アカウントを発行しました。以下をご本人にお伝えください：\n\n【ログインID（共通）】'+c.login_email+
+      const mailLine = d.mail_sent
+        ? '\n\n✉ 登録メールを '+c.login_email+' に自動送信しました。'
+        : '\n\n⚠ メール自動送信に失敗しました。下記を手動でお伝えください。';
+      alert('アカウントを発行しました。'+mailLine+
+        '\n\n【ログインID（共通）】'+c.login_email+
         '\n\n■保護者：'+c.parent_name+'\n　パスワード：'+c.parent_password+
         '\n\n■生徒：'+c.student_name+'\n　パスワード：'+c.student_password);
       loadApplications(); loadUsers();

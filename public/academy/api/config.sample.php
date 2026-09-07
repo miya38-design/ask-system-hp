@@ -27,4 +27,8 @@ return [
     'line_channel_secret' => '',  // チャネルシークレット
     'line_add_url'        => 'https://lin.ee/xaSJRVQ', // 公式LINE友だち追加URL
     'line_oa_id'          => '',  // 公式アカウントのベーシックID（@から始まる）。設定するとワンタップでコード送信
+
+    // 自動送信メールの差出人
+    'mail_from'      => 'info@ask-system.net',
+    'mail_from_name' => 'ASKデジタルアカデミー',
 ];
