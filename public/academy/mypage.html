@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>マイページ｜ASKデジタルアカデミー</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{--blue:#1f5fbf;--blue-dark:#16498f;--blue-soft:#e8f1fb;--green:#2bb24c;--ink:#1f2735;--muted:#6b7280;--line:#e5e9ef;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:"Noto Sans JP",sans-serif;color:var(--ink);background:#f5f8fc;min-height:100vh;}
+  .topbar{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:10;}
+  .topbar .inner{max-width:960px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:12px 20px;gap:12px;}
+  .topbar img{height:38px;width:auto;}
+  .btn-logout{border:1px solid var(--line);background:#fff;color:var(--muted);font-family:inherit;font-weight:700;font-size:13px;padding:8px 16px;border-radius:999px;cursor:pointer;}
+  .btn-logout:hover{background:#f2f5f9;color:var(--ink);}
+  .wrap{max-width:960px;margin:0 auto;padding:28px 20px 60px;}
+  .hello{font-size:24px;font-weight:900;margin-bottom:6px;}
+  .role{display:inline-block;font-size:12px;font-weight:700;padding:3px 12px;border-radius:999px;background:var(--blue-soft);color:var(--blue-dark);margin-bottom:24px;}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+  .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:22px;box-shadow:0 6px 18px rgba(22,73,143,.05);}
+  .card h2{font-size:16px;font-weight:900;color:var(--blue-dark);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+  .card.full{grid-column:1 / -1;}
+  .lv{display:flex;align-items:baseline;gap:10px;margin-bottom:12px;}
+  .lv .n{font-size:40px;font-weight:900;color:var(--blue);line-height:1;}
+  .bar{height:12px;border-radius:999px;background:#eef2f7;overflow:hidden;}
+  .bar > span{display:block;height:100%;background:linear-gradient(90deg,#2b7de0,#2bb24c);}
+  .exp-meta{font-size:13px;color:var(--muted);margin-top:8px;}
+  .soon{color:var(--muted);font-size:14px;line-height:1.9;}
+  .soon .badge{display:inline-block;font-size:11px;font-weight:700;color:#b26a00;background:#fff4e2;border:1px solid #ffdca8;border-radius:999px;padding:2px 10px;margin-left:6px;}
+  .row{display:flex;justify-content:space-between;padding:10px 2px;border-bottom:1px dashed #e6ebf2;font-size:14px;}
+  .row:last-child{border-bottom:0;}
+  .foot{margin-top:26px;text-align:center;font-size:13px;}
+  .foot a{color:var(--blue);font-weight:700;text-decoration:none;}
+  @media(max-width:640px){.grid{grid-template-columns:1fr;}}
+  #loading{padding:60px 0;text-align:center;color:var(--muted);}
+</style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="inner">
+      <a href="index.html"><img src="assets/images/logo.png" alt="ASKデジタルアカデミー"></a>
+      <button class="btn-logout" id="logout">ログアウト</button>
+    </div>
+  </div>
+
+  <div id="loading">読み込み中…</div>
+  <div class="wrap" id="content" hidden></div>
+
+<script>
+const API = 'api/auth.php';
+const ROLE_LABEL = {parent:'保護者', student:'生徒', instructor:'講師（管理者）'};
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function soon(text){ return `<p class="soon">${text}<span class="badge">準備中</span></p>`; }
+
+function render(u){
+  const parts = [];
+  parts.push(`<div class="hello">こんにちは、${esc(u.display_name)} さん</div>`);
+  parts.push(`<span class="role">${ROLE_LABEL[u.role] || u.role}</span>`);
+
+  if (u.role === 'student'){
+    const exp = Number(u.exp)||0, next = Number(u.exp_to_next)||100;
+    const pct = Math.max(0, Math.min(100, Math.round(exp/next*100)));
+    parts.push(`<div class="grid">
+      <div class="card">
+        <h2>学習レベル</h2>
+        <div class="lv"><span class="n">Lv.${Number(u.level)||1}</span></div>
+        <div class="bar"><span style="width:${pct}%"></span></div>
+        <div class="exp-meta">EXP ${exp} / ${next}（次のレベルまで ${Math.max(0,next-exp)}）</div>
+      </div>
+      <div class="card"><h2>出席・スタンプ</h2>${soon('出席状況とスタンプカードをここに表示します。')}</div>
+      <div class="card"><h2>スケジュール</h2>${soon('通学予定・空き状況をここに表示します。')}</div>
+      <div class="card"><h2>ミッション</h2>${soon('今週の課題・ミッションをここに表示します。')}</div>
+    </div>`);
+  } else if (u.role === 'parent'){
+    parts.push(`<div class="grid">
+      <div class="card"><h2>お子さまの状況</h2>${soon('お子さまの学習進捗・出席をここに表示します。')}</div>
+      <div class="card"><h2>お知らせ・メッセージ</h2>${soon('教室からのお知らせをここに表示します。')}</div>
+      <div class="card"><h2>スケジュール</h2>${soon('予約・スケジュールをここに表示します。')}</div>
+      <div class="card"><h2>お支払い</h2>${soon('料金プラン・お支払い情報をここに表示します。')}</div>
+    </div>`);
+  } else { // instructor
+    parts.push(`<div class="grid">
+      <div class="card full"><h2>講師メニュー</h2>${soon('受講生管理・スケジュール登録・出席入力などをここに用意します。')}</div>
+      <div class="card"><h2>本日の予定</h2>${soon('本日のクラス・予約をここに表示します。')}</div>
+      <div class="card"><h2>受講生</h2>${soon('担当受講生の一覧・進捗をここに表示します。')}</div>
+    </div>`);
+  }
+
+  parts.push(`<div class="foot"><a href="index.html">← アカデミートップへ戻る</a></div>`);
+  const c = document.getElementById('content');
+  c.innerHTML = parts.join('');
+  c.hidden = false;
+  document.getElementById('loading').hidden = true;
+}
+
+// セッション確認 → 未ログインならログインへ
+fetch(API + '?action=me', {credentials:'same-origin'})
+  .then(r => r.json())
+  .then(d => {
+    if (!d || !d.user) { location.replace('login.html'); return; }
+    render(d.user);
+  })
+  .catch(() => { location.replace('login.html'); });
+
+document.getElementById('logout').addEventListener('click', async () => {
+  try { await fetch(API + '?action=logout', {method:'POST', credentials:'same-origin'}); } catch(e){}
+  location.replace('login.html');
+});
+</script>
+</body>
+</html>
