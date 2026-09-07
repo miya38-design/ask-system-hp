@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>入退室受付｜ASKデジタルアカデミー</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jsQR/1.4.0/jsQR.js"></script>
+<style>
+  :root{--blue:#1f5fbf;--green:#2bb24c;--ink:#1f2735;--muted:#6b7280;--line:#e5e9ef;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:"Noto Sans JP",sans-serif;color:var(--ink);background:#0a1020;min-height:100vh;}
+  .topbar{background:#111c34;border-bottom:1px solid rgba(255,255,255,.1);}
+  .topbar .inner{max-width:720px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:12px 18px;}
+  .topbar img{height:34px;} .topbar a{color:#c6d2e6;font-size:13px;font-weight:700;text-decoration:none;border:1px solid rgba(255,255,255,.15);padding:7px 14px;border-radius:999px;}
+  .wrap{max-width:720px;margin:0 auto;padding:20px 18px 50px;color:#eef3fc;}
+  h1{font-size:20px;font-weight:900;margin-bottom:6px;}
+  p.sub{color:#8496b6;font-size:13px;margin-bottom:18px;}
+  .camwrap{position:relative;background:#000;border-radius:16px;overflow:hidden;aspect-ratio:4/3;max-height:60vh;margin:0 auto;}
+  video{width:100%;height:100%;object-fit:cover;display:block;}
+  .frame{position:absolute;inset:14%;border:3px solid rgba(255,255,255,.7);border-radius:16px;box-shadow:0 0 0 100vmax rgba(0,0,0,.25);}
+  .result{margin-top:18px;padding:22px;border-radius:16px;text-align:center;display:none;}
+  .result.show{display:block;animation:pop .25s ease;}
+  .result.in{background:linear-gradient(135deg,#1f7a37,#2bb24c);} .result.out{background:linear-gradient(135deg,#16498f,#1f5fbf);}
+  .result .name{font-size:30px;font-weight:900;} .result .verb{font-size:20px;font-weight:800;margin-top:4px;} .result .time{opacity:.9;margin-top:2px;}
+  .err{margin-top:14px;background:#7a1f2e;color:#ffd7de;padding:14px;border-radius:12px;text-align:center;font-weight:700;display:none;}
+  @keyframes pop{from{transform:scale(.9);opacity:.4;}to{transform:scale(1);opacity:1;}}
+  #loading{padding:60px;text-align:center;color:#8496b6;}
+  .hint{color:#8496b6;font-size:13px;margin-top:16px;text-align:center;}
+</style>
+</head>
+<body>
+  <div class="topbar"><div class="inner">
+    <img src="assets/images/logo.png" alt="ASKデジタルアカデミー">
+    <a href="admin.html">コンソールへ</a>
+  </div></div>
+
+  <div id="loading">読み込み中…</div>
+
+  <div class="wrap" id="content" hidden>
+    <h1>入退室受付</h1>
+    <p class="sub">生徒さんのQRコードをカメラにかざしてください（入室→退室を自動で切替）。</p>
+    <div class="camwrap"><video id="video" playsinline muted></video><div class="frame"></div></div>
+    <div class="result" id="result"><div class="name" id="r-name"></div><div class="verb" id="r-verb"></div><div class="time" id="r-time"></div></div>
+    <div class="err" id="err"></div>
+    <p class="hint">このページは受付端末で開いたままにしてください。カメラの使用を許可する必要があります。</p>
+  </div>
+
+<script>
+const API='api/';
+const api=(u,o)=>fetch(API+u,Object.assign({credentials:'same-origin'},o)).then(r=>r.json());
+
+api('auth.php?action=me').then(d=>{
+  if(!d||!d.user){ location.replace('login.html'); return; }
+  if(d.user.role!=='instructor'){ location.replace('mypage.html'); return; }
+  document.getElementById('loading').hidden=true;
+  document.getElementById('content').hidden=false;
+  startCamera();
+}).catch(()=>location.replace('login.html'));
+
+const video=document.getElementById('video');
+const canvas=document.createElement('canvas');
+const ctx=canvas.getContext('2d',{willReadFrequently:true});
+let lastToken='', lastAt=0, busy=false;
+
+async function startCamera(){
+  try{
+    const stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}});
+    video.srcObject=stream; await video.play();
+    requestAnimationFrame(tick);
+  }catch(e){ showErr('カメラを起動できませんでした。ブラウザのカメラ許可をご確認ください。'); }
+}
+
+function tick(){
+  if(video.readyState===video.HAVE_ENOUGH_DATA){
+    canvas.width=video.videoWidth; canvas.height=video.videoHeight;
+    ctx.drawImage(video,0,0,canvas.width,canvas.height);
+    const img=ctx.getImageData(0,0,canvas.width,canvas.height);
+    const code=jsQR(img.data,img.width,img.height,{inversionAttempts:'dontInvert'});
+    if(code && code.data){ onScan(code.data.trim()); }
+  }
+  requestAnimationFrame(tick);
+}
+
+async function onScan(token){
+  const now=Date.now();
+  if(busy) return;
+  if(token===lastToken && now-lastAt<6000) return; // 同一QRの連続読取を抑制
+  lastToken=token; lastAt=now; busy=true;
+  try{
+    const d=await api('checkin.php?action=scan',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({qr_token:token})});
+    if(d.ok){ showResult(d); } else { showErr(d.error||'記録できませんでした。'); }
+  }catch(e){ showErr('通信エラーが発生しました。'); }
+  finally{ setTimeout(()=>{busy=false;}, 1500); }
+}
+
+function beep(){ try{ const a=new (window.AudioContext||window.webkitAudioContext)(); const o=a.createOscillator(); o.connect(a.destination); o.frequency.value=880; o.start(); setTimeout(()=>{o.stop();a.close();},140);}catch(e){} }
+
+function showResult(d){
+  document.getElementById('err').style.display='none';
+  const r=document.getElementById('result');
+  r.className='result show '+(d.type==='in'?'in':'out');
+  document.getElementById('r-name').textContent=d.student+' さん';
+  document.getElementById('r-verb').textContent=(d.type==='in'?'入室しました':'退室しました');
+  document.getElementById('r-time').textContent=d.time;
+  beep();
+  clearTimeout(showResult._t); showResult._t=setTimeout(()=>{r.classList.remove('show');},4000);
+}
+function showErr(m){
+  const e=document.getElementById('err'); e.textContent=m; e.style.display='block';
+  clearTimeout(showErr._t); showErr._t=setTimeout(()=>{e.style.display='none';},4000);
+}
+</script>
+</body>
+</html>

@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>マイページ｜ASKデジタルアカデミー</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
   :root{--blue:#1f5fbf;--blue-dark:#16498f;--blue-soft:#e8f1fb;--green:#2bb24c;--ink:#1f2735;--muted:#6b7280;--line:#e5e9ef;}
   *{box-sizing:border-box;margin:0;padding:0;}
@@ -114,8 +115,12 @@ async function loadStudent(u){
   return `<div class="grid">
     <div class="card"><h2>学習レベル</h2>${levelCard(s)}</div>
     <div class="card"><h2>スタンプカード</h2>${stampCard(s.stamps||0)}</div>
+    <div class="card"><h2>入退室用QRコード</h2>
+      <div id="qrbox" style="display:flex;justify-content:center;padding:8px;"></div>
+      <p class="empty" style="text-align:center;">受付でこのQRをかざしてください。</p>
+    </div>
     <div class="card"><h2>スケジュール</h2>${scheduleList(sch.schedules||[])}</div>
-    <div class="card"><h2>お知らせ</h2>${messageList(msg.messages||[])}</div>
+    <div class="card full"><h2>お知らせ</h2>${messageList(msg.messages||[])}</div>
   </div>`;
 }
 
@@ -138,6 +143,7 @@ async function loadParent(){
   }).join('') : '<p class="empty">お子さまのアカウントが登録されると、ここに表示されます。</p>';
   return `<div class="grid">
     <div class="card full"><h2>お子さまの状況</h2>${kidsHtml}</div>
+    <div class="card full"><h2>LINE連携</h2><div id="linebox"><p class="empty">読み込み中…</p></div></div>
     <div class="card"><h2>スケジュール</h2>${scheduleList(sch.schedules||[])}</div>
     <div class="card"><h2>お知らせ</h2>${messageList(msg.messages||[])}</div>
   </div>`;
@@ -164,6 +170,31 @@ async function render(u){
   c.innerHTML = inner;
   c.hidden = false;
   document.getElementById('loading').hidden = true;
+
+  // 生徒：入退室用QRを描画
+  if (u.role === 'student') {
+    try {
+      const q = await api('checkin.php?action=my_qr');
+      const box = document.getElementById('qrbox');
+      if (q.ok && box && window.QRCode) { new QRCode(box, {text: q.qr_token, width: 168, height: 168}); }
+    } catch(e){}
+  }
+  // 保護者：LINE連携状態
+  if (u.role === 'parent') {
+    try {
+      const s = await api('link.php?action=status');
+      const box = document.getElementById('linebox');
+      if (box) {
+        box.innerHTML = s.linked
+          ? '<p style="color:#1f7a37;font-weight:700;">✅ LINE連携済みです。入退室やお知らせがLINEに届きます。</p>'
+          : `<ol style="font-size:14px;color:#4a5568;line-height:2;padding-left:20px;margin-bottom:10px;">
+               <li>公式LINEを「友だち追加」</li>
+               <li>下の<b>連携コード</b>をトークにそのまま送信</li>
+             </ol>
+             <div style="font-size:28px;font-weight:900;letter-spacing:5px;color:#16498f;background:#eef5fc;border:1px dashed #1f5fbf;border-radius:10px;padding:14px;text-align:center;">${esc(s.code||'')}</div>`;
+      }
+    } catch(e){}
+  }
 
   // お知らせクリックで既読
   c.querySelectorAll('.msg-item').forEach(li => li.addEventListener('click', async () => {

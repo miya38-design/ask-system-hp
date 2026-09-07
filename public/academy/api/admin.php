@@ -61,12 +61,13 @@ try {
                     $parentId = (int)$b['parent_id'];
                 }
             }
+            $qrToken = $role === 'student' ? bin2hex(random_bytes(16)) : null;
             try {
                 $st = $pdo->prepare(
-                    'INSERT INTO users (email, password_hash, display_name, role, parent_id, course_type, plan, area)
-                     VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
+                    'INSERT INTO users (email, password_hash, display_name, role, parent_id, course_type, plan, area, qr_token)
+                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'
                 );
-                $st->execute([$email, password_hash($pw, PASSWORD_DEFAULT), $name, $role, $parentId, $courseType, $plan, $area]);
+                $st->execute([$email, password_hash($pw, PASSWORD_DEFAULT), $name, $role, $parentId, $courseType, $plan, $area, $qrToken]);
                 json_out(['ok' => true, 'id' => (int)$pdo->lastInsertId()]);
             } catch (PDOException $e) {
                 if ($e->getCode() === '23000') {

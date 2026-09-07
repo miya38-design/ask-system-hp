@@ -21,4 +21,8 @@ return [
     // 管理用トークン（migrate.php / setup.php の実行に必要）。
     // 推測されにくい長い文字列を自分で決めて設定してください。
     'admin_token' => 'CHANGE_ME_to_a_long_random_string',
+
+    // LINE Messaging API（LINE Developers で取得）。
+    'line_channel_token'  => '',  // チャネルアクセストークン（長期）
+    'line_channel_secret' => '',  // チャネルシークレット
 ];

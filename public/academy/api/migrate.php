@@ -42,6 +42,32 @@ try {
          WHERE batch_id IS NULL"
     );
 
+    // LINE連携・QR用カラム（users）
+    $ensureCol = function (string $table, string $col, string $ddl) use ($pdo) {
+        $q = $pdo->prepare(
+            "SELECT COUNT(*) FROM information_schema.COLUMNS
+             WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = ? AND COLUMN_NAME = ?"
+        );
+        $q->execute([$table, $col]);
+        if (!(int)$q->fetchColumn()) {
+            $pdo->exec("ALTER TABLE `$table` ADD COLUMN $ddl");
+        }
+    };
+    $ensureCol('users', 'line_user_id', 'line_user_id VARCHAR(64) NULL');
+    $ensureCol('users', 'line_link_code', 'line_link_code VARCHAR(12) NULL');
+    $ensureCol('users', 'qr_token', 'qr_token VARCHAR(32) NULL');
+    try { $pdo->exec('ALTER TABLE users ADD UNIQUE KEY uq_users_qr (qr_token)'); } catch (Throwable $e) {}
+    try { $pdo->exec('ALTER TABLE users ADD KEY idx_users_line (line_user_id)'); } catch (Throwable $e) {}
+
+    // 既存の生徒でqr_token未設定のものに発行
+    $need = $pdo->query("SELECT id FROM users WHERE role='student' AND (qr_token IS NULL OR qr_token='')")->fetchAll(PDO::FETCH_COLUMN);
+    if ($need) {
+        $up = $pdo->prepare('UPDATE users SET qr_token = ? WHERE id = ?');
+        foreach ($need as $uid) {
+            $up->execute([bin2hex(random_bytes(16)), (int)$uid]);
+        }
+    }
+
     // 確認：テーブル一覧
     $tables = $pdo->query('SHOW TABLES')->fetchAll(PDO::FETCH_COLUMN);
     json_out(['ok' => true, 'executed' => $count, 'tables' => $tables]);
