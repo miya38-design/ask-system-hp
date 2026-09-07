@@ -150,8 +150,6 @@ async function loadParent(){
       <div class="abs-form" id="abs-${k.id}" style="display:none;margin-top:10px;background:#f7fafd;border:1px solid #e6ebf2;border-radius:10px;padding:14px;">
         <label style="font-size:12px;font-weight:700;color:#33404f;">欠席する日</label>
         <input type="date" class="abs-input abs-date">
-        <label style="font-size:12px;font-weight:700;color:#33404f;margin-top:8px;display:block;">理由（任意）</label>
-        <input type="text" class="abs-input abs-reason" placeholder="体調不良 など">
         <div style="margin-top:12px;display:flex;align-items:center;gap:10px;">
           <button class="btn-mini abs-send" data-id="${k.id}" style="background:var(--blue);color:#fff;border-color:var(--blue);">欠席を連絡する</button>
           <span class="abs-msg" style="font-size:13px;font-weight:700;"></span>
@@ -254,11 +252,10 @@ async function render(u){
       const id = btn.dataset.id;
       const f = document.getElementById('abs-'+id);
       const date = f.querySelector('.abs-date').value;
-      const reason = f.querySelector('.abs-reason').value;
       const out = f.querySelector('.abs-msg');
       if (!date) { out.style.color='#c93866'; out.textContent='日付を選んでください'; return; }
       btn.disabled = true;
-      const d = await api('attendance.php?action=report_absence', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({student_id:id, date, reason})});
+      const d = await api('attendance.php?action=report_absence', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({student_id:id, date})});
       btn.disabled = false;
       if (d.ok) { out.style.color='#1f7a37'; out.textContent='欠席を連絡しました'; }
       else { out.style.color='#c93866'; out.textContent=d.error||'送信に失敗しました'; }

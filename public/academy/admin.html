@@ -136,7 +136,7 @@
       <div class="card">
         <h2>欠席連絡（保護者から・直近7日〜）</h2>
         <div class="table-wrap"><table>
-          <thead><tr><th>日付</th><th>お子さま</th><th>理由</th></tr></thead>
+          <thead><tr><th>日付</th><th>お子さま</th></tr></thead>
           <tbody id="absence-rows"></tbody>
         </table></div>
       </div>
@@ -274,8 +274,8 @@ async function loadAbsences(){
   const d = await api('attendance.php?action=list_absences');
   if(!d.ok) return;
   document.getElementById('absence-rows').innerHTML = (d.absences||[]).map(x=>
-    `<tr><td>${fmt(x.date)}</td><td>${esc(x.display_name)}</td><td>${esc(x.absence_reason||'')}</td></tr>`).join('')
-    || '<tr><td colspan="3" class="hint">欠席連絡はありません</td></tr>';
+    `<tr><td>${fmt(x.date)}</td><td>${esc(x.display_name)}</td></tr>`).join('')
+    || '<tr><td colspan="2" class="hint">欠席連絡はありません</td></tr>';
 }
 
 async function loadLineStatus(){

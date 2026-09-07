@@ -95,7 +95,7 @@ try {
             $b = json_body();
             $sid = (int)($b['student_id'] ?? 0);
             $date = trim((string)($b['date'] ?? ''));
-            $reason = trim((string)($b['reason'] ?? '')) ?: '（理由未記入）';
+            $reason = '保護者より欠席連絡'; // 理由欄は廃止（保護者からの連絡フラグとして使用）
             if ($sid <= 0 || !is_valid_date($date)) {
                 json_out(['ok' => false, 'error' => '生徒と日付を確認してください'], 400);
             }
