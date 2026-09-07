@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>入退室受付｜ASKデジタルアカデミー</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jsQR/1.4.0/jsQR.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
 <style>
   :root{--blue:#1f5fbf;--green:#2bb24c;--ink:#1f2735;--muted:#6b7280;--line:#e5e9ef;}
   *{box-sizing:border-box;margin:0;padding:0;}
@@ -64,21 +64,26 @@ const ctx=canvas.getContext('2d',{willReadFrequently:true});
 let lastToken='', lastAt=0, busy=false;
 
 async function startCamera(){
+  if(typeof jsQR === 'undefined'){ showErr('QR読取ライブラリの読み込みに失敗しました。通信環境をご確認のうえ、ページを再読み込みしてください。'); return; }
   try{
     const stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}});
-    video.srcObject=stream; await video.play();
+    video.srcObject=stream;
+    video.setAttribute('playsinline','');
+    await video.play();
     requestAnimationFrame(tick);
-  }catch(e){ showErr('カメラを起動できませんでした。ブラウザのカメラ許可をご確認ください。'); }
+  }catch(e){ showErr('カメラを起動できませんでした。ブラウザのカメラ許可をご確認ください（PCは前面カメラでもOK）。'); }
 }
 
 function tick(){
-  if(video.readyState===video.HAVE_ENOUGH_DATA){
-    canvas.width=video.videoWidth; canvas.height=video.videoHeight;
-    ctx.drawImage(video,0,0,canvas.width,canvas.height);
-    const img=ctx.getImageData(0,0,canvas.width,canvas.height);
-    const code=jsQR(img.data,img.width,img.height,{inversionAttempts:'dontInvert'});
-    if(code && code.data){ onScan(code.data.trim()); }
-  }
+  try{
+    if(video.readyState===video.HAVE_ENOUGH_DATA && video.videoWidth>0){
+      canvas.width=video.videoWidth; canvas.height=video.videoHeight;
+      ctx.drawImage(video,0,0,canvas.width,canvas.height);
+      const img=ctx.getImageData(0,0,canvas.width,canvas.height);
+      const code=jsQR(img.data,img.width,img.height,{inversionAttempts:'attemptBoth'});
+      if(code && code.data){ onScan(code.data.trim()); }
+    }
+  }catch(e){ /* 1フレームの失敗は無視して継続 */ }
   requestAnimationFrame(tick);
 }
 
