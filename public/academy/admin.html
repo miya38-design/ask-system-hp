@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>受講生・アカウント管理｜ASKデジタルアカデミー</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{--blue:#1f5fbf;--blue-dark:#16498f;--blue-soft:#e8f1fb;--green:#2bb24c;--pink:#e74e7c;--ink:#1f2735;--muted:#6b7280;--line:#e5e9ef;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:"Noto Sans JP",sans-serif;color:var(--ink);background:#f5f8fc;min-height:100vh;}
+  .topbar{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:10;}
+  .topbar .inner{max-width:1040px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:12px 20px;gap:12px;}
+  .topbar img{height:36px;}
+  .topbar .links a,.btn-logout{font-size:13px;font-weight:700;text-decoration:none;color:var(--muted);border:1px solid var(--line);background:#fff;padding:8px 14px;border-radius:999px;cursor:pointer;font-family:inherit;}
+  .topbar .links a:hover,.btn-logout:hover{background:#f2f5f9;color:var(--ink);}
+  .wrap{max-width:1040px;margin:0 auto;padding:26px 20px 60px;}
+  h1{font-size:22px;font-weight:900;margin-bottom:20px;}
+  .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:22px;box-shadow:0 6px 18px rgba(22,73,143,.05);margin-bottom:22px;}
+  .card h2{font-size:16px;font-weight:900;color:var(--blue-dark);margin-bottom:16px;}
+  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  label{display:block;font-size:13px;font-weight:700;color:#33404f;margin-bottom:6px;}
+  input,select{width:100%;padding:11px 12px;font-size:15px;font-family:inherit;border:1.5px solid #d3dce6;border-radius:9px;background:#fbfdff;}
+  input:focus,select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(31,95,191,.12);}
+  .student-only{display:none;}
+  button.primary{margin-top:16px;padding:12px 26px;border:0;border-radius:999px;font-family:inherit;font-weight:800;font-size:15px;color:#fff;background:linear-gradient(135deg,var(--blue),#2b7de0);cursor:pointer;}
+  button.primary:hover{filter:brightness(1.05);}
+  button.primary:disabled{opacity:.6;}
+  table{width:100%;border-collapse:collapse;}
+  th,td{text-align:left;padding:10px 10px;border-bottom:1px solid #eef2f7;font-size:14px;vertical-align:middle;}
+  th{font-size:12px;color:var(--muted);font-weight:700;}
+  .role-badge{font-size:11px;font-weight:700;padding:2px 9px;border-radius:999px;}
+  .r-instructor{background:#eef5fc;color:var(--blue-dark);}
+  .r-parent{background:#eafaef;color:#1f7a37;}
+  .r-student{background:#fff3e0;color:#b26a00;}
+  .act{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 10px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;margin-right:6px;}
+  .act.del{color:var(--pink);border-color:#f6c4d5;}
+  .act:hover{background:#f6f9fc;}
+  .msg{padding:11px 14px;border-radius:9px;font-size:14px;font-weight:700;margin-top:14px;display:none;}
+  .msg.ok{display:block;background:#eafaef;border:1px solid #bfe6c4;color:#1f7a37;}
+  .msg.err{display:block;background:#fdecef;border:1px solid #f6c4d5;color:#c93866;}
+  #loading{padding:60px;text-align:center;color:var(--muted);}
+  .table-wrap{overflow-x:auto;}
+  @media(max-width:640px){.form-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="inner">
+      <a href="index.html"><img src="assets/images/logo.png" alt="ASKデジタルアカデミー"></a>
+      <div class="links">
+        <a href="mypage.html">マイページ</a>
+        <button class="btn-logout" id="logout">ログアウト</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="loading">読み込み中…</div>
+
+  <div class="wrap" id="content" hidden>
+    <h1>受講生・アカウント管理</h1>
+
+    <div class="card">
+      <h2>アカウントを作成</h2>
+      <form id="create-form">
+        <div class="form-grid">
+          <div>
+            <label>ロール</label>
+            <select name="role" id="role">
+              <option value="student">生徒</option>
+              <option value="parent">保護者</option>
+              <option value="instructor">講師（管理者）</option>
+            </select>
+          </div>
+          <div>
+            <label>お名前（表示名）</label>
+            <input type="text" name="display_name" required>
+          </div>
+          <div>
+            <label>メールアドレス（ログインID）</label>
+            <input type="email" name="email" required>
+          </div>
+          <div>
+            <label>初期パスワード（8文字以上）</label>
+            <input type="text" name="password" minlength="8" required>
+          </div>
+          <div class="student-only">
+            <label>保護者（生徒の紐付け・任意）</label>
+            <select name="parent_id" id="parent_id"><option value="">（なし）</option></select>
+          </div>
+          <div class="student-only">
+            <label>コース（任意）</label>
+            <select name="course_type">
+              <option value="">（未設定）</option>
+              <option value="junior">ジュニア</option>
+              <option value="senior">シニア/大人</option>
+            </select>
+          </div>
+          <div class="student-only">
+            <label>料金プラン（任意）</label>
+            <select name="plan">
+              <option value="">（未設定）</option>
+              <option value="standard-a">週2回</option>
+              <option value="standard-b">週3回</option>
+              <option value="premium">週5回</option>
+            </select>
+          </div>
+          <div>
+            <label>エリア（任意）</label>
+            <input type="text" name="area" placeholder="八代市 など">
+          </div>
+        </div>
+        <button class="primary" id="create-btn" type="submit">作成する</button>
+        <div class="msg" id="create-msg"></div>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2>登録アカウント一覧</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>お名前</th><th>メール</th><th>ロール</th><th>保護者</th><th>登録日</th><th>操作</th></tr></thead>
+          <tbody id="user-rows"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+<script>
+const API_AUTH = 'api/auth.php';
+const API_ADMIN = 'api/admin.php';
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const ROLE = {instructor:['講師','r-instructor'], parent:['保護者','r-parent'], student:['生徒','r-student']};
+
+async function api(url, opts){ const r = await fetch(url, Object.assign({credentials:'same-origin'}, opts)); return r.json(); }
+
+// ゲート：講師のみ
+api(API_AUTH + '?action=me').then(d => {
+  if (!d || !d.user) { location.replace('login.html'); return; }
+  if (d.user.role !== 'instructor') { location.replace('mypage.html'); return; }
+  document.getElementById('loading').hidden = true;
+  document.getElementById('content').hidden = false;
+  loadUsers();
+}).catch(()=>location.replace('login.html'));
+
+// role切替で生徒項目の表示制御
+const roleSel = document.getElementById('role');
+function toggleStudent(){ document.querySelectorAll('.student-only').forEach(el => el.style.display = roleSel.value==='student' ? '' : 'none'); }
+roleSel.addEventListener('change', toggleStudent); toggleStudent();
+
+function fmtDate(s){ return s ? String(s).slice(0,10) : ''; }
+
+async function loadUsers(){
+  const d = await api(API_ADMIN + '?action=list_users');
+  if (!d.ok) return;
+  // parent dropdown
+  const psel = document.getElementById('parent_id');
+  psel.innerHTML = '<option value="">（なし）</option>' +
+    d.users.filter(u=>u.role==='parent').map(u=>`<option value="${u.id}">${esc(u.display_name)}（${esc(u.email)}）</option>`).join('');
+  // table
+  document.getElementById('user-rows').innerHTML = d.users.map(u => {
+    const [lbl,cls] = ROLE[u.role] || [u.role,''];
+    return `<tr>
+      <td>${esc(u.display_name)}</td>
+      <td>${esc(u.email)}</td>
+      <td><span class="role-badge ${cls}">${lbl}</span></td>
+      <td>${esc(u.parent_name || '')}</td>
+      <td>${fmtDate(u.created_at)}</td>
+      <td>
+        <button class="act" data-act="pw" data-id="${u.id}" data-name="${esc(u.display_name)}">PW再発行</button>
+        <button class="act del" data-act="del" data-id="${u.id}" data-name="${esc(u.display_name)}">削除</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+// create
+document.getElementById('create-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const f = e.target, btn = document.getElementById('create-btn'), msg = document.getElementById('create-msg');
+  msg.style.display='none'; btn.disabled=true;
+  const payload = Object.fromEntries(new FormData(f).entries());
+  const d = await api(API_ADMIN + '?action=create_user', {
+    method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)
+  });
+  btn.disabled=false;
+  if (d.ok){ msg.className='msg ok'; msg.textContent='作成しました。'; f.reset(); toggleStudent(); loadUsers(); }
+  else { msg.className='msg err'; msg.textContent = d.error || '作成に失敗しました。'; }
+});
+
+// row actions
+document.getElementById('user-rows').addEventListener('click', async (e) => {
+  const b = e.target.closest('button'); if (!b) return;
+  const id = b.dataset.id, name = b.dataset.name, act = b.dataset.act;
+  if (act === 'pw'){
+    const np = prompt(`「${name}」の新しいパスワード（8文字以上）を入力してください：`);
+    if (np === null) return;
+    if (np.length < 8){ alert('8文字以上にしてください。'); return; }
+    const d = await api(API_ADMIN + '?action=reset_password', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({id, password: np})});
+    alert(d.ok ? 'パスワードを再発行しました。' : ('失敗：' + (d.error||'')));
+  } else if (act === 'del'){
+    if (!confirm(`「${name}」を削除します。よろしいですか？`)) return;
+    const d = await api(API_ADMIN + '?action=delete_user', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({id})});
+    if (d.ok) loadUsers(); else alert('失敗：' + (d.error||''));
+  }
+});
+
+document.getElementById('logout').addEventListener('click', async () => {
+  try { await fetch(API_AUTH + '?action=logout', {method:'POST', credentials:'same-origin'}); } catch(e){}
+  location.replace('login.html');
+});
+</script>
+</body>
+</html>

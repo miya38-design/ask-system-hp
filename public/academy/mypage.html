@@ -82,7 +82,11 @@ function render(u){
     </div>`);
   } else { // instructor
     parts.push(`<div class="grid">
-      <div class="card full"><h2>講師メニュー</h2>${soon('受講生管理・スケジュール登録・出席入力などをここに用意します。')}</div>
+      <div class="card full">
+        <h2>講師メニュー</h2>
+        <p style="margin-bottom:14px;color:#4a5568;font-size:14px;">受講生・保護者アカウントの作成や管理ができます。</p>
+        <a href="admin.html" style="display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:999px;font-weight:800;font-size:15px;color:#fff;background:linear-gradient(135deg,#1f5fbf,#2b7de0);text-decoration:none;">受講生・アカウント管理へ →</a>
+      </div>
       <div class="card"><h2>本日の予定</h2>${soon('本日のクラス・予約をここに表示します。')}</div>
       <div class="card"><h2>受講生</h2>${soon('担当受講生の一覧・進捗をここに表示します。')}</div>
     </div>`);
