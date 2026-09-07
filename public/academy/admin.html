@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>受講生・アカウント管理｜ASKデジタルアカデミー</title>
+<title>講師コンソール｜ASKデジタルアカデミー</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
   :root{--blue:#1f5fbf;--blue-dark:#16498f;--blue-soft:#e8f1fb;--green:#2bb24c;--pink:#e74e7c;--ink:#1f2735;--muted:#6b7280;--line:#e5e9ef;}
@@ -14,33 +14,34 @@
   .topbar img{height:36px;}
   .topbar .links a,.btn-logout{font-size:13px;font-weight:700;text-decoration:none;color:var(--muted);border:1px solid var(--line);background:#fff;padding:8px 14px;border-radius:999px;cursor:pointer;font-family:inherit;}
   .topbar .links a:hover,.btn-logout:hover{background:#f2f5f9;color:var(--ink);}
-  .wrap{max-width:1040px;margin:0 auto;padding:26px 20px 60px;}
-  h1{font-size:22px;font-weight:900;margin-bottom:20px;}
+  .wrap{max-width:1040px;margin:0 auto;padding:22px 20px 60px;}
+  h1{font-size:22px;font-weight:900;margin-bottom:16px;}
+  .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;}
+  .tab{padding:10px 18px;border-radius:999px;border:1px solid var(--line);background:#fff;font-family:inherit;font-weight:700;font-size:14px;cursor:pointer;color:var(--muted);}
+  .tab.active{background:var(--blue);border-color:var(--blue);color:#fff;}
+  .panel{display:none;} .panel.active{display:block;}
   .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:22px;box-shadow:0 6px 18px rgba(22,73,143,.05);margin-bottom:22px;}
   .card h2{font-size:16px;font-weight:900;color:var(--blue-dark);margin-bottom:16px;}
   .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
   label{display:block;font-size:13px;font-weight:700;color:#33404f;margin-bottom:6px;}
-  input,select{width:100%;padding:11px 12px;font-size:15px;font-family:inherit;border:1.5px solid #d3dce6;border-radius:9px;background:#fbfdff;}
-  input:focus,select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(31,95,191,.12);}
+  input,select,textarea{width:100%;padding:11px 12px;font-size:15px;font-family:inherit;border:1.5px solid #d3dce6;border-radius:9px;background:#fbfdff;}
+  textarea{min-height:110px;resize:vertical;}
+  input:focus,select:focus,textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(31,95,191,.12);}
   .student-only{display:none;}
   button.primary{margin-top:16px;padding:12px 26px;border:0;border-radius:999px;font-family:inherit;font-weight:800;font-size:15px;color:#fff;background:linear-gradient(135deg,var(--blue),#2b7de0);cursor:pointer;}
-  button.primary:hover{filter:brightness(1.05);}
-  button.primary:disabled{opacity:.6;}
-  table{width:100%;border-collapse:collapse;}
-  th,td{text-align:left;padding:10px 10px;border-bottom:1px solid #eef2f7;font-size:14px;vertical-align:middle;}
+  button.primary:hover{filter:brightness(1.05);} button.primary:disabled{opacity:.6;}
+  table{width:100%;border-collapse:collapse;} th,td{text-align:left;padding:10px;border-bottom:1px solid #eef2f7;font-size:14px;vertical-align:middle;}
   th{font-size:12px;color:var(--muted);font-weight:700;}
   .role-badge{font-size:11px;font-weight:700;padding:2px 9px;border-radius:999px;}
-  .r-instructor{background:#eef5fc;color:var(--blue-dark);}
-  .r-parent{background:#eafaef;color:#1f7a37;}
-  .r-student{background:#fff3e0;color:#b26a00;}
+  .r-instructor{background:#eef5fc;color:var(--blue-dark);} .r-parent{background:#eafaef;color:#1f7a37;} .r-student{background:#fff3e0;color:#b26a00;}
   .act{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 10px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;margin-right:6px;}
-  .act.del{color:var(--pink);border-color:#f6c4d5;}
-  .act:hover{background:#f6f9fc;}
+  .act.del{color:var(--pink);border-color:#f6c4d5;} .act:hover{background:#f6f9fc;}
   .msg{padding:11px 14px;border-radius:9px;font-size:14px;font-weight:700;margin-top:14px;display:none;}
   .msg.ok{display:block;background:#eafaef;border:1px solid #bfe6c4;color:#1f7a37;}
   .msg.err{display:block;background:#fdecef;border:1px solid #f6c4d5;color:#c93866;}
-  #loading{padding:60px;text-align:center;color:var(--muted);}
   .table-wrap{overflow-x:auto;}
+  .hint{font-size:13px;color:var(--muted);margin-top:8px;}
+  #loading{padding:60px;text-align:center;color:var(--muted);}
   @media(max-width:640px){.form-grid{grid-template-columns:1fr;}}
 </style>
 </head>
@@ -58,155 +59,268 @@
   <div id="loading">読み込み中…</div>
 
   <div class="wrap" id="content" hidden>
-    <h1>受講生・アカウント管理</h1>
-
-    <div class="card">
-      <h2>アカウントを作成</h2>
-      <form id="create-form">
-        <div class="form-grid">
-          <div>
-            <label>ロール</label>
-            <select name="role" id="role">
-              <option value="student">生徒</option>
-              <option value="parent">保護者</option>
-              <option value="instructor">講師（管理者）</option>
-            </select>
-          </div>
-          <div>
-            <label>お名前（表示名）</label>
-            <input type="text" name="display_name" required>
-          </div>
-          <div>
-            <label>メールアドレス（ログインID）</label>
-            <input type="email" name="email" required>
-          </div>
-          <div>
-            <label>初期パスワード（8文字以上）</label>
-            <input type="text" name="password" minlength="8" required>
-          </div>
-          <div class="student-only">
-            <label>保護者（生徒の紐付け・任意）</label>
-            <select name="parent_id" id="parent_id"><option value="">（なし）</option></select>
-          </div>
-          <div class="student-only">
-            <label>コース（任意）</label>
-            <select name="course_type">
-              <option value="">（未設定）</option>
-              <option value="junior">ジュニア</option>
-              <option value="senior">シニア/大人</option>
-            </select>
-          </div>
-          <div class="student-only">
-            <label>料金プラン（任意）</label>
-            <select name="plan">
-              <option value="">（未設定）</option>
-              <option value="standard-a">週2回</option>
-              <option value="standard-b">週3回</option>
-              <option value="premium">週5回</option>
-            </select>
-          </div>
-          <div>
-            <label>エリア（任意）</label>
-            <input type="text" name="area" placeholder="八代市 など">
-          </div>
-        </div>
-        <button class="primary" id="create-btn" type="submit">作成する</button>
-        <div class="msg" id="create-msg"></div>
-      </form>
+    <h1>講師コンソール</h1>
+    <div class="tabs">
+      <button class="tab active" data-tab="accounts">アカウント</button>
+      <button class="tab" data-tab="attendance">出席入力</button>
+      <button class="tab" data-tab="schedules">スケジュール</button>
+      <button class="tab" data-tab="messages">お知らせ</button>
     </div>
 
-    <div class="card">
-      <h2>登録アカウント一覧</h2>
-      <div class="table-wrap">
-        <table>
+    <!-- ===== アカウント ===== -->
+    <div class="panel active" id="p-accounts">
+      <div class="card">
+        <h2>アカウントを作成</h2>
+        <form id="create-form">
+          <div class="form-grid">
+            <div><label>ロール</label><select name="role" id="role">
+              <option value="student">生徒</option><option value="parent">保護者</option><option value="instructor">講師（管理者）</option>
+            </select></div>
+            <div><label>お名前（表示名）</label><input type="text" name="display_name" required></div>
+            <div><label>メールアドレス（ログインID）</label><input type="email" name="email" required></div>
+            <div><label>初期パスワード（8文字以上）</label><input type="text" name="password" minlength="8" required></div>
+            <div class="student-only"><label>保護者（紐付け・任意）</label><select name="parent_id" id="parent_id"><option value="">（なし）</option></select></div>
+            <div class="student-only"><label>コース（任意）</label><select name="course_type"><option value="">（未設定）</option><option value="junior">ジュニア</option><option value="senior">シニア/大人</option></select></div>
+            <div class="student-only"><label>料金プラン（任意）</label><select name="plan"><option value="">（未設定）</option><option value="standard-a">週2回</option><option value="standard-b">週3回</option><option value="premium">週5回</option></select></div>
+            <div><label>エリア（任意）</label><input type="text" name="area" placeholder="八代市 など"></div>
+          </div>
+          <button class="primary" id="create-btn" type="submit">作成する</button>
+          <div class="msg" id="create-msg"></div>
+        </form>
+      </div>
+      <div class="card">
+        <h2>登録アカウント一覧</h2>
+        <div class="table-wrap"><table>
           <thead><tr><th>お名前</th><th>メール</th><th>ロール</th><th>保護者</th><th>登録日</th><th>操作</th></tr></thead>
           <tbody id="user-rows"></tbody>
-        </table>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- ===== 出席入力 ===== -->
+    <div class="panel" id="p-attendance">
+      <div class="card">
+        <h2>出席を記録</h2>
+        <form id="att-form">
+          <div class="form-grid">
+            <div><label>生徒</label><select name="student_id" id="att-student" required></select></div>
+            <div><label>日付</label><input type="date" name="date" id="att-date" required></div>
+            <div><label>状態</label><select name="status">
+              <option value="present">出席（スタンプ＋EXP付与）</option><option value="late">遅刻</option><option value="absent">欠席</option>
+            </select></div>
+          </div>
+          <button class="primary" id="att-btn" type="submit">記録する</button>
+          <div class="msg" id="att-msg"></div>
+          <p class="hint">「出席」を記録すると、その生徒にスタンプ＋EXP（+20）が付与され、必要に応じてレベルアップします（同じ日の重複付与はありません）。</p>
+        </form>
+      </div>
+      <div class="card">
+        <h2>選択中の生徒の最近の出席</h2>
+        <div id="att-recent"><p class="hint">生徒を選ぶと表示されます。</p></div>
+      </div>
+    </div>
+
+    <!-- ===== スケジュール ===== -->
+    <div class="panel" id="p-schedules">
+      <div class="card">
+        <h2>スケジュールを登録／更新</h2>
+        <form id="sch-form">
+          <div class="form-grid">
+            <div><label>日付</label><input type="date" name="date" required></div>
+            <div><label>状態</label><select name="status">
+              <option value="open">受付中</option><option value="few">残りわずか</option><option value="full">満席</option><option value="closed">休講</option>
+            </select></div>
+            <div><label>タイトル（任意）</label><input type="text" name="title" placeholder="通常授業 / 特別講座 など"></div>
+            <div><label>定員（任意）</label><input type="number" name="capacity" min="0"></div>
+          </div>
+          <label style="margin-top:14px;">メモ（任意）</label><input type="text" name="note">
+          <button class="primary" id="sch-btn" type="submit">保存する</button>
+          <div class="msg" id="sch-msg"></div>
+          <p class="hint">同じ日付で保存すると上書きされます。</p>
+        </form>
+      </div>
+      <div class="card">
+        <h2>登録済みスケジュール</h2>
+        <div class="table-wrap"><table>
+          <thead><tr><th>日付</th><th>状態</th><th>タイトル</th><th>メモ</th><th>操作</th></tr></thead>
+          <tbody id="sch-rows"></tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- ===== お知らせ ===== -->
+    <div class="panel" id="p-messages">
+      <div class="card">
+        <h2>お知らせを配信</h2>
+        <form id="msg-form">
+          <label>送信先</label>
+          <select name="to_role" id="msg-to">
+            <option value="all">全員（保護者＋生徒）</option>
+            <option value="parent">保護者のみ</option>
+            <option value="student">生徒のみ</option>
+            <option value="__user">特定の1名を選ぶ…</option>
+          </select>
+          <div id="msg-user-wrap" style="display:none;margin-top:12px;">
+            <label>宛先（1名）</label><select name="user_id" id="msg-user"></select>
+          </div>
+          <label style="margin-top:14px;">タイトル</label><input type="text" name="title" required>
+          <label style="margin-top:14px;">本文</label><textarea name="body" required></textarea>
+          <button class="primary" id="msg-btn" type="submit">配信する</button>
+          <div class="msg" id="msg-msg"></div>
+        </form>
       </div>
     </div>
   </div>
 
 <script>
-const API_AUTH = 'api/auth.php';
-const API_ADMIN = 'api/admin.php';
+const API = 'api/';
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const api = (u, o) => fetch(API + u, Object.assign({credentials:'same-origin'}, o)).then(r => r.json());
 const ROLE = {instructor:['講師','r-instructor'], parent:['保護者','r-parent'], student:['生徒','r-student']};
-
-async function api(url, opts){ const r = await fetch(url, Object.assign({credentials:'same-origin'}, opts)); return r.json(); }
+const SCH = {open:'受付中', few:'残りわずか', full:'満席', closed:'休講'};
+const fmt = s => s ? String(s).slice(0,10) : '';
+let USERS = [];
 
 // ゲート：講師のみ
-api(API_AUTH + '?action=me').then(d => {
+api('auth.php?action=me').then(d => {
   if (!d || !d.user) { location.replace('login.html'); return; }
   if (d.user.role !== 'instructor') { location.replace('mypage.html'); return; }
   document.getElementById('loading').hidden = true;
   document.getElementById('content').hidden = false;
-  loadUsers();
+  document.getElementById('att-date').value = new Date().toISOString().slice(0,10);
+  init();
 }).catch(()=>location.replace('login.html'));
 
-// role切替で生徒項目の表示制御
+// tabs
+document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => {
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(x=>x.classList.remove('active'));
+  t.classList.add('active');
+  document.getElementById('p-'+t.dataset.tab).classList.add('active');
+}));
+
+function init(){ loadUsers(); loadSchedules(); }
+
+// ---- accounts ----
 const roleSel = document.getElementById('role');
-function toggleStudent(){ document.querySelectorAll('.student-only').forEach(el => el.style.display = roleSel.value==='student' ? '' : 'none'); }
+function toggleStudent(){ document.querySelectorAll('.student-only').forEach(el=>el.style.display = roleSel.value==='student'?'':'none'); }
 roleSel.addEventListener('change', toggleStudent); toggleStudent();
 
-function fmtDate(s){ return s ? String(s).slice(0,10) : ''; }
-
 async function loadUsers(){
-  const d = await api(API_ADMIN + '?action=list_users');
+  const d = await api('admin.php?action=list_users');
   if (!d.ok) return;
-  // parent dropdown
-  const psel = document.getElementById('parent_id');
-  psel.innerHTML = '<option value="">（なし）</option>' +
-    d.users.filter(u=>u.role==='parent').map(u=>`<option value="${u.id}">${esc(u.display_name)}（${esc(u.email)}）</option>`).join('');
-  // table
-  document.getElementById('user-rows').innerHTML = d.users.map(u => {
-    const [lbl,cls] = ROLE[u.role] || [u.role,''];
-    return `<tr>
-      <td>${esc(u.display_name)}</td>
-      <td>${esc(u.email)}</td>
-      <td><span class="role-badge ${cls}">${lbl}</span></td>
-      <td>${esc(u.parent_name || '')}</td>
-      <td>${fmtDate(u.created_at)}</td>
-      <td>
-        <button class="act" data-act="pw" data-id="${u.id}" data-name="${esc(u.display_name)}">PW再発行</button>
-        <button class="act del" data-act="del" data-id="${u.id}" data-name="${esc(u.display_name)}">削除</button>
-      </td>
-    </tr>`;
+  USERS = d.users;
+  const students = USERS.filter(u=>u.role==='student');
+  const parents = USERS.filter(u=>u.role==='parent');
+  document.getElementById('parent_id').innerHTML = '<option value="">（なし）</option>' +
+    parents.map(u=>`<option value="${u.id}">${esc(u.display_name)}（${esc(u.email)}）</option>`).join('');
+  document.getElementById('att-student').innerHTML = students.length
+    ? students.map(u=>`<option value="${u.id}">${esc(u.display_name)}</option>`).join('')
+    : '<option value="">（生徒が未登録です）</option>';
+  document.getElementById('msg-user').innerHTML =
+    USERS.filter(u=>u.role!=='instructor').map(u=>`<option value="${u.id}">${esc(u.display_name)}（${ROLE[u.role][0]}）</option>`).join('');
+  document.getElementById('user-rows').innerHTML = USERS.map(u=>{
+    const [lbl,cls]=ROLE[u.role]||[u.role,''];
+    return `<tr><td>${esc(u.display_name)}</td><td>${esc(u.email)}</td><td><span class="role-badge ${cls}">${lbl}</span></td>
+      <td>${esc(u.parent_name||'')}</td><td>${fmt(u.created_at)}</td>
+      <td><button class="act" data-act="pw" data-id="${u.id}" data-name="${esc(u.display_name)}">PW再発行</button>
+      <button class="act del" data-act="del" data-id="${u.id}" data-name="${esc(u.display_name)}">削除</button></td></tr>`;
   }).join('');
 }
 
-// create
-document.getElementById('create-form').addEventListener('submit', async (e) => {
+document.getElementById('create-form').addEventListener('submit', async e=>{
   e.preventDefault();
-  const f = e.target, btn = document.getElementById('create-btn'), msg = document.getElementById('create-msg');
+  const f=e.target, btn=document.getElementById('create-btn'), msg=document.getElementById('create-msg');
   msg.style.display='none'; btn.disabled=true;
-  const payload = Object.fromEntries(new FormData(f).entries());
-  const d = await api(API_ADMIN + '?action=create_user', {
-    method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)
-  });
+  const d = await api('admin.php?action=create_user',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.fromEntries(new FormData(f).entries()))});
   btn.disabled=false;
-  if (d.ok){ msg.className='msg ok'; msg.textContent='作成しました。'; f.reset(); toggleStudent(); loadUsers(); }
-  else { msg.className='msg err'; msg.textContent = d.error || '作成に失敗しました。'; }
+  if(d.ok){ msg.className='msg ok'; msg.textContent='作成しました。'; f.reset(); toggleStudent(); loadUsers(); }
+  else { msg.className='msg err'; msg.textContent=d.error||'作成に失敗しました。'; }
 });
 
-// row actions
-document.getElementById('user-rows').addEventListener('click', async (e) => {
-  const b = e.target.closest('button'); if (!b) return;
-  const id = b.dataset.id, name = b.dataset.name, act = b.dataset.act;
-  if (act === 'pw'){
-    const np = prompt(`「${name}」の新しいパスワード（8文字以上）を入力してください：`);
-    if (np === null) return;
-    if (np.length < 8){ alert('8文字以上にしてください。'); return; }
-    const d = await api(API_ADMIN + '?action=reset_password', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({id, password: np})});
-    alert(d.ok ? 'パスワードを再発行しました。' : ('失敗：' + (d.error||'')));
-  } else if (act === 'del'){
-    if (!confirm(`「${name}」を削除します。よろしいですか？`)) return;
-    const d = await api(API_ADMIN + '?action=delete_user', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({id})});
-    if (d.ok) loadUsers(); else alert('失敗：' + (d.error||''));
+document.getElementById('user-rows').addEventListener('click', async e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  const {id,name,act}=b.dataset;
+  if(act==='pw'){
+    const np=prompt(`「${name}」の新しいパスワード（8文字以上）：`); if(np===null) return;
+    if(np.length<8){ alert('8文字以上にしてください。'); return; }
+    const d=await api('admin.php?action=reset_password',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id,password:np})});
+    alert(d.ok?'再発行しました。':'失敗：'+(d.error||''));
+  } else if(act==='del'){
+    if(!confirm(`「${name}」を削除します。よろしいですか？`)) return;
+    const d=await api('admin.php?action=delete_user',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})});
+    if(d.ok) loadUsers(); else alert('失敗：'+(d.error||''));
   }
 });
 
-document.getElementById('logout').addEventListener('click', async () => {
-  try { await fetch(API_AUTH + '?action=logout', {method:'POST', credentials:'same-origin'}); } catch(e){}
+// ---- attendance ----
+const attStudent = document.getElementById('att-student');
+attStudent.addEventListener('change', loadAttRecent);
+async function loadAttRecent(){
+  const sid = attStudent.value; if(!sid){ document.getElementById('att-recent').innerHTML=''; return; }
+  const d = await api('attendance.php?action=for_student&student_id='+encodeURIComponent(sid));
+  const box = document.getElementById('att-recent');
+  if(!d.ok){ box.innerHTML='<p class="hint">取得できませんでした。</p>'; return; }
+  const s=d.summary;
+  const rows=(s.records||[]).slice(0,14).map(r=>`<tr><td>${fmt(r.date)}</td><td>${{present:'出席',late:'遅刻',absent:'欠席'}[r.status]||r.status}</td></tr>`).join('');
+  box.innerHTML=`<p style="margin-bottom:10px;">Lv.${s.level}／スタンプ ${s.stamps}個／EXP ${s.exp}/${s.exp_to_next}</p>
+    <div class="table-wrap"><table><thead><tr><th>日付</th><th>状態</th></tr></thead><tbody>${rows||'<tr><td colspan="2" class="hint">記録なし</td></tr>'}</tbody></table></div>`;
+}
+
+document.getElementById('att-form').addEventListener('submit', async e=>{
+  e.preventDefault();
+  const btn=document.getElementById('att-btn'), msg=document.getElementById('att-msg');
+  msg.style.display='none'; btn.disabled=true;
+  const p=Object.fromEntries(new FormData(e.target).entries());
+  const d=await api('attendance.php?action=record',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)});
+  btn.disabled=false;
+  if(d.ok){ msg.className='msg ok'; msg.textContent='記録しました。'+(d.awarded?' スタンプ＋EXPを付与しました。':''); loadAttRecent(); }
+  else { msg.className='msg err'; msg.textContent=d.error||'記録に失敗しました。'; }
+});
+
+// ---- schedules ----
+async function loadSchedules(){
+  const d = await api('schedules.php?action=list&all=1');
+  if(!d.ok) return;
+  document.getElementById('sch-rows').innerHTML = (d.schedules||[]).map(s=>
+    `<tr><td>${fmt(s.date)}</td><td>${SCH[s.status]||s.status}</td><td>${esc(s.title||'')}</td><td>${esc(s.note||'')}</td>
+     <td><button class="act del" data-id="${s.id}">削除</button></td></tr>`).join('')
+    || '<tr><td colspan="5" class="hint">未登録</td></tr>';
+}
+document.getElementById('sch-form').addEventListener('submit', async e=>{
+  e.preventDefault();
+  const btn=document.getElementById('sch-btn'), msg=document.getElementById('sch-msg');
+  msg.style.display='none'; btn.disabled=true;
+  const d=await api('schedules.php?action=save',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.fromEntries(new FormData(e.target).entries()))});
+  btn.disabled=false;
+  if(d.ok){ msg.className='msg ok'; msg.textContent='保存しました。'; e.target.reset(); loadSchedules(); }
+  else { msg.className='msg err'; msg.textContent=d.error||'保存に失敗しました。'; }
+});
+document.getElementById('sch-rows').addEventListener('click', async e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  if(!confirm('このスケジュールを削除しますか？')) return;
+  const d=await api('schedules.php?action=delete',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:b.dataset.id})});
+  if(d.ok) loadSchedules(); else alert('失敗：'+(d.error||''));
+});
+
+// ---- messages ----
+const msgTo=document.getElementById('msg-to');
+msgTo.addEventListener('change', ()=>{ document.getElementById('msg-user-wrap').style.display = msgTo.value==='__user'?'':'none'; });
+document.getElementById('msg-form').addEventListener('submit', async e=>{
+  e.preventDefault();
+  const btn=document.getElementById('msg-btn'), msg=document.getElementById('msg-msg');
+  msg.style.display='none'; btn.disabled=true;
+  const f=e.target; const payload={title:f.title.value, body:f.body.value};
+  if(msgTo.value==='__user') payload.user_id=document.getElementById('msg-user').value;
+  else payload.to_role=msgTo.value;
+  const d=await api('messages.php?action=send',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+  btn.disabled=false;
+  if(d.ok){ msg.className='msg ok'; msg.textContent=`配信しました（${d.sent}件）。`; f.reset(); document.getElementById('msg-user-wrap').style.display='none'; }
+  else { msg.className='msg err'; msg.textContent=d.error||'配信に失敗しました。'; }
+});
+
+document.getElementById('logout').addEventListener('click', async ()=>{
+  try{ await fetch(API+'auth.php?action=logout',{method:'POST',credentials:'same-origin'}); }catch(e){}
   location.replace('login.html');
 });
 </script>

@@ -19,17 +19,31 @@
   .role{display:inline-block;font-size:12px;font-weight:700;padding:3px 12px;border-radius:999px;background:var(--blue-soft);color:var(--blue-dark);margin-bottom:24px;}
   .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
   .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:22px;box-shadow:0 6px 18px rgba(22,73,143,.05);}
-  .card h2{font-size:16px;font-weight:900;color:var(--blue-dark);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+  .card h2{font-size:16px;font-weight:900;color:var(--blue-dark);margin-bottom:14px;}
   .card.full{grid-column:1 / -1;}
   .lv{display:flex;align-items:baseline;gap:10px;margin-bottom:12px;}
   .lv .n{font-size:40px;font-weight:900;color:var(--blue);line-height:1;}
   .bar{height:12px;border-radius:999px;background:#eef2f7;overflow:hidden;}
   .bar > span{display:block;height:100%;background:linear-gradient(90deg,#2b7de0,#2bb24c);}
   .exp-meta{font-size:13px;color:var(--muted);margin-top:8px;}
-  .soon{color:var(--muted);font-size:14px;line-height:1.9;}
-  .soon .badge{display:inline-block;font-size:11px;font-weight:700;color:#b26a00;background:#fff4e2;border:1px solid #ffdca8;border-radius:999px;padding:2px 10px;margin-left:6px;}
-  .row{display:flex;justify-content:space-between;padding:10px 2px;border-bottom:1px dashed #e6ebf2;font-size:14px;}
-  .row:last-child{border-bottom:0;}
+  .stamps{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;}
+  .stamp{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;border:2px dashed #d3dce6;color:#cbd5e1;}
+  .stamp.on{background:#fff7e6;border:2px solid #ffcf6b;color:#f59e0b;}
+  .stamp-total{font-size:14px;color:var(--muted);margin-top:10px;}
+  .list{list-style:none;}
+  .list li{padding:11px 2px;border-bottom:1px dashed #e6ebf2;font-size:14px;display:flex;justify-content:space-between;gap:10px;align-items:center;}
+  .list li:last-child{border-bottom:0;}
+  .st{font-size:12px;font-weight:700;padding:2px 10px;border-radius:999px;white-space:nowrap;}
+  .st-open{background:#eafaef;color:#1f7a37;} .st-few{background:#fff4e2;color:#b26a00;}
+  .st-full{background:#fdecef;color:#c93866;} .st-closed{background:#eef2f7;color:#6b7280;}
+  .msg-item{cursor:pointer;}
+  .msg-item .t{font-weight:700;}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--blue);display:inline-block;margin-right:6px;}
+  .empty{color:var(--muted);font-size:14px;}
+  .kid{border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:12px;}
+  .kid h3{font-size:16px;font-weight:900;margin-bottom:8px;}
+  .kid .meta{display:flex;gap:18px;flex-wrap:wrap;font-size:14px;color:#4a5568;}
+  .kid .meta b{color:var(--blue-dark);}
   .foot{margin-top:26px;text-align:center;font-size:13px;}
   .foot a{color:var(--blue);font-weight:700;text-decoration:none;}
   @media(max-width:640px){.grid{grid-template-columns:1fr;}}
@@ -48,68 +62,118 @@
   <div class="wrap" id="content" hidden></div>
 
 <script>
-const API = 'api/auth.php';
+const API = 'api/';
 const ROLE_LABEL = {parent:'保護者', student:'生徒', instructor:'講師（管理者）'};
+const SCH = {open:['受付中','st-open'], few:['残りわずか','st-few'], full:['満席','st-full'], closed:['休講','st-closed']};
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const api = (u, o) => fetch(API + u, Object.assign({credentials:'same-origin'}, o)).then(r => r.json());
+const fmt = s => s ? String(s).slice(0,10) : '';
 
-function soon(text){ return `<p class="soon">${text}<span class="badge">準備中</span></p>`; }
-
-function render(u){
-  const parts = [];
-  parts.push(`<div class="hello">こんにちは、${esc(u.display_name)} さん</div>`);
-  parts.push(`<span class="role">${ROLE_LABEL[u.role] || u.role}</span>`);
-
-  if (u.role === 'student'){
-    const exp = Number(u.exp)||0, next = Number(u.exp_to_next)||100;
-    const pct = Math.max(0, Math.min(100, Math.round(exp/next*100)));
-    parts.push(`<div class="grid">
-      <div class="card">
-        <h2>学習レベル</h2>
-        <div class="lv"><span class="n">Lv.${Number(u.level)||1}</span></div>
-        <div class="bar"><span style="width:${pct}%"></span></div>
-        <div class="exp-meta">EXP ${exp} / ${next}（次のレベルまで ${Math.max(0,next-exp)}）</div>
-      </div>
-      <div class="card"><h2>出席・スタンプ</h2>${soon('出席状況とスタンプカードをここに表示します。')}</div>
-      <div class="card"><h2>スケジュール</h2>${soon('通学予定・空き状況をここに表示します。')}</div>
-      <div class="card"><h2>ミッション</h2>${soon('今週の課題・ミッションをここに表示します。')}</div>
-    </div>`);
-  } else if (u.role === 'parent'){
-    parts.push(`<div class="grid">
-      <div class="card"><h2>お子さまの状況</h2>${soon('お子さまの学習進捗・出席をここに表示します。')}</div>
-      <div class="card"><h2>お知らせ・メッセージ</h2>${soon('教室からのお知らせをここに表示します。')}</div>
-      <div class="card"><h2>スケジュール</h2>${soon('予約・スケジュールをここに表示します。')}</div>
-      <div class="card"><h2>お支払い</h2>${soon('料金プラン・お支払い情報をここに表示します。')}</div>
-    </div>`);
-  } else { // instructor
-    parts.push(`<div class="grid">
-      <div class="card full">
-        <h2>講師メニュー</h2>
-        <p style="margin-bottom:14px;color:#4a5568;font-size:14px;">受講生・保護者アカウントの作成や管理ができます。</p>
-        <a href="admin.html" style="display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:999px;font-weight:800;font-size:15px;color:#fff;background:linear-gradient(135deg,#1f5fbf,#2b7de0);text-decoration:none;">受講生・アカウント管理へ →</a>
-      </div>
-      <div class="card"><h2>本日の予定</h2>${soon('本日のクラス・予約をここに表示します。')}</div>
-      <div class="card"><h2>受講生</h2>${soon('担当受講生の一覧・進捗をここに表示します。')}</div>
-    </div>`);
-  }
-
-  parts.push(`<div class="foot"><a href="index.html">← アカデミートップへ戻る</a></div>`);
-  const c = document.getElementById('content');
-  c.innerHTML = parts.join('');
-  c.hidden = false;
-  document.getElementById('loading').hidden = true;
+function stampCard(stamps){
+  const shown = Math.min(stamps, 10);
+  let dots = '';
+  for (let i=0;i<10;i++) dots += `<div class="stamp ${i<shown?'on':''}">${i<shown?'★':''}</div>`;
+  return `<div class="stamps">${dots}</div><div class="stamp-total">獲得スタンプ：<b>${stamps}</b> 個</div>`;
 }
 
-// セッション確認 → 未ログインならログインへ
-fetch(API + '?action=me', {credentials:'same-origin'})
-  .then(r => r.json())
-  .then(d => {
-    if (!d || !d.user) { location.replace('login.html'); return; }
-    render(d.user);
-  })
-  .catch(() => { location.replace('login.html'); });
+function levelCard(s){
+  const exp=Number(s.exp)||0, next=Number(s.exp_to_next)||100;
+  const pct=Math.max(0,Math.min(100,Math.round(exp/next*100)));
+  return `<div class="lv"><span class="n">Lv.${Number(s.level)||1}</span></div>
+    <div class="bar"><span style="width:${pct}%"></span></div>
+    <div class="exp-meta">EXP ${exp} / ${next}（次のレベルまで ${Math.max(0,next-exp)}）</div>`;
+}
+
+function scheduleList(items){
+  if (!items.length) return '<p class="empty">予定はまだありません。</p>';
+  return '<ul class="list">' + items.map(s => {
+    const [lbl,cls] = SCH[s.status] || [s.status,''];
+    return `<li><span>${fmt(s.date)}　${esc(s.title||'')}</span><span class="st ${cls}">${lbl}</span></li>`;
+  }).join('') + '</ul>';
+}
+
+function messageList(items){
+  if (!items.length) return '<p class="empty">お知らせはありません。</p>';
+  return '<ul class="list">' + items.map(m =>
+    `<li class="msg-item" data-id="${m.id}"><span class="t">${Number(m.is_read)?'':'<span class="dot"></span>'}${esc(m.title)}</span><span class="empty">${fmt(m.created_at)}</span></li>`
+  ).join('') + '</ul>';
+}
+
+async function loadStudent(u){
+  const [att, sch, msg] = await Promise.all([
+    api('attendance.php?action=my'),
+    api('schedules.php?action=list'),
+    api('messages.php?action=my'),
+  ]);
+  const s = (att.ok && att.summary) ? att.summary : {level:u.level,exp:u.exp,exp_to_next:u.exp_to_next,stamps:0};
+  return `<div class="grid">
+    <div class="card"><h2>学習レベル</h2>${levelCard(s)}</div>
+    <div class="card"><h2>スタンプカード</h2>${stampCard(s.stamps||0)}</div>
+    <div class="card"><h2>スケジュール</h2>${scheduleList(sch.schedules||[])}</div>
+    <div class="card"><h2>お知らせ</h2>${messageList(msg.messages||[])}</div>
+  </div>`;
+}
+
+async function loadParent(){
+  const [fam, sch, msg] = await Promise.all([
+    api('family.php?action=children'),
+    api('schedules.php?action=list'),
+    api('messages.php?action=my'),
+  ]);
+  const kids = (fam.children||[]);
+  const kidsHtml = kids.length ? kids.map(k => {
+    const next=Number(k.exp_to_next)||100, exp=Number(k.exp)||0, pct=Math.max(0,Math.min(100,Math.round(exp/next*100)));
+    return `<div class="kid">
+      <h3>${esc(k.display_name)}</h3>
+      <div class="meta"><span>レベル <b>Lv.${Number(k.level)||1}</b></span>
+        <span>スタンプ <b>${k.stamps||0}</b> 個</span>
+        <span>最終出席 <b>${k.last_attended?fmt(k.last_attended):'—'}</b></span></div>
+      <div class="bar" style="margin-top:10px;"><span style="width:${pct}%"></span></div>
+    </div>`;
+  }).join('') : '<p class="empty">お子さまのアカウントが登録されると、ここに表示されます。</p>';
+  return `<div class="grid">
+    <div class="card full"><h2>お子さまの状況</h2>${kidsHtml}</div>
+    <div class="card"><h2>スケジュール</h2>${scheduleList(sch.schedules||[])}</div>
+    <div class="card"><h2>お知らせ</h2>${messageList(msg.messages||[])}</div>
+  </div>`;
+}
+
+function loadInstructor(){
+  return `<div class="grid">
+    <div class="card full">
+      <h2>講師メニュー</h2>
+      <p style="margin-bottom:14px;color:#4a5568;font-size:14px;">アカウント管理・出席入力・スケジュール・お知らせ配信ができます。</p>
+      <a href="admin.html" style="display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:999px;font-weight:800;font-size:15px;color:#fff;background:linear-gradient(135deg,#1f5fbf,#2b7de0);text-decoration:none;">講師コンソールを開く →</a>
+    </div>
+  </div>`;
+}
+
+async function render(u){
+  let inner = `<div class="hello">こんにちは、${esc(u.display_name)} さん</div>
+               <span class="role">${ROLE_LABEL[u.role]||u.role}</span>`;
+  if (u.role === 'student') inner += await loadStudent(u);
+  else if (u.role === 'parent') inner += await loadParent();
+  else inner += loadInstructor();
+  inner += `<div class="foot"><a href="index.html">← アカデミートップへ戻る</a></div>`;
+  const c = document.getElementById('content');
+  c.innerHTML = inner;
+  c.hidden = false;
+  document.getElementById('loading').hidden = true;
+
+  // お知らせクリックで既読
+  c.querySelectorAll('.msg-item').forEach(li => li.addEventListener('click', async () => {
+    const id = li.dataset.id;
+    const dot = li.querySelector('.dot'); if (dot) dot.remove();
+    try { await api('messages.php?action=mark_read', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({id})}); } catch(e){}
+  }));
+}
+
+api('auth.php?action=me')
+  .then(d => { if (!d || !d.user) { location.replace('login.html'); return; } return render(d.user); })
+  .catch(() => location.replace('login.html'));
 
 document.getElementById('logout').addEventListener('click', async () => {
-  try { await fetch(API + '?action=logout', {method:'POST', credentials:'same-origin'}); } catch(e){}
+  try { await fetch(API + 'auth.php?action=logout', {method:'POST', credentials:'same-origin'}); } catch(e){}
   location.replace('login.html');
 });
 </script>

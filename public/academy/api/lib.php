@@ -94,3 +94,49 @@ function require_role(array $user, string ...$roles): void
         json_out(['ok' => false, 'error' => 'forbidden'], 403);
     }
 }
+
+/** YYYY-MM-DD 形式か */
+function is_valid_date(string $d): bool
+{
+    $dt = DateTime::createFromFormat('Y-m-d', $d);
+    return $dt !== false && $dt->format('Y-m-d') === $d;
+}
+
+/** $me がその生徒を閲覧してよいか（講師 / 本人 / その保護者） */
+function can_view_student(array $me, int $studentId): bool
+{
+    if ($me['role'] === 'instructor') {
+        return true;
+    }
+    if ((int)$me['id'] === $studentId) {
+        return true;
+    }
+    if ($me['role'] === 'parent') {
+        $st = ada_db()->prepare('SELECT 1 FROM users WHERE id = ? AND parent_id = ?');
+        $st->execute([$studentId, (int)$me['id']]);
+        return (bool)$st->fetch();
+    }
+    return false;
+}
+
+/** 出席付与時のEXP加算＋レベルアップ処理（生徒のみ） */
+function award_attendance_exp(int $studentId, int $amount = 20): void
+{
+    $pdo = ada_db();
+    $st = $pdo->prepare("SELECT level, exp, exp_to_next FROM users WHERE id = ? AND role = 'student'");
+    $st->execute([$studentId]);
+    $u = $st->fetch();
+    if (!$u) {
+        return;
+    }
+    $level = (int)$u['level'];
+    $exp   = (int)$u['exp'] + $amount;
+    $next  = (int)$u['exp_to_next'] ?: 100;
+    while ($exp >= $next) {
+        $exp  -= $next;
+        $level++;
+        $next  = $level * 100;
+    }
+    $up = $pdo->prepare('UPDATE users SET level = ?, exp = ?, exp_to_next = ? WHERE id = ?');
+    $up->execute([$level, $exp, $next, $studentId]);
+}
