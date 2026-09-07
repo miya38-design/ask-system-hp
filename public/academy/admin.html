@@ -61,6 +61,7 @@
 
   <div class="wrap" id="content" hidden>
     <h1>講師コンソール</h1>
+    <div id="line-warn" style="display:none;background:#fff4e2;border:1px solid #ffdca8;color:#8a5a00;border-radius:10px;padding:12px 14px;margin-bottom:16px;font-size:14px;font-weight:700;"></div>
     <div class="tabs">
       <button class="tab active" data-tab="accounts">アカウント</button>
       <button class="tab" data-tab="attendance">出席入力</button>
@@ -92,7 +93,7 @@
       <div class="card">
         <h2>登録アカウント一覧</h2>
         <div class="table-wrap"><table>
-          <thead><tr><th>お名前</th><th>メール</th><th>ロール</th><th>保護者</th><th>登録日</th><th>操作</th></tr></thead>
+          <thead><tr><th>お名前</th><th>メール</th><th>ロール</th><th>保護者 / LINE</th><th>登録日</th><th>操作</th></tr></thead>
           <tbody id="user-rows"></tbody>
         </table></div>
       </div>
@@ -207,7 +208,16 @@ document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () =>
   document.getElementById('p-'+t.dataset.tab).classList.add('active');
 }));
 
-function init(){ loadUsers(); loadSchedules(); loadSentMessages(); }
+function init(){ loadUsers(); loadSchedules(); loadSentMessages(); loadLineStatus(); }
+
+async function loadLineStatus(){
+  const d = await api('admin.php?action=line_status');
+  const w = document.getElementById('line-warn');
+  if (d.ok && !d.configured){
+    w.style.display='block';
+    w.textContent='⚠ LINE未設定です。保護者へ通知するには、サーバーの config.php に line_channel_token / line_channel_secret を設定し、LINE Developers で Webhook URL を設定してください。';
+  } else { w.style.display='none'; }
+}
 
 async function loadSentMessages(){
   const d = await api('messages.php?action=list_sent');
@@ -244,11 +254,28 @@ async function loadUsers(){
     USERS.filter(u=>u.role!=='instructor').map(u=>`<option value="${u.id}">${esc(u.display_name)}（${ROLE[u.role][0]}）</option>`).join('');
   document.getElementById('user-rows').innerHTML = USERS.map(u=>{
     const [lbl,cls]=ROLE[u.role]||[u.role,''];
+    let relCell;
+    if (u.role==='student'){
+      relCell = `<select class="parent-sel" data-id="${u.id}" style="padding:6px 8px;border:1px solid var(--line);border-radius:8px;font-family:inherit;max-width:200px;">
+        <option value="">（保護者なし）</option>
+        ${parents.map(p=>`<option value="${p.id}" ${String(p.id)===String(u.parent_id)?'selected':''}>${esc(p.display_name)}</option>`).join('')}
+      </select>`;
+    } else if (u.role==='parent'){
+      relCell = Number(u.line_linked)
+        ? '<span style="color:#1f7a37;font-weight:700;">LINE連携✓</span>'
+        : '<span style="color:#c93866;font-weight:700;">LINE未連携</span>';
+    } else { relCell = '—'; }
     return `<tr><td>${esc(u.display_name)}</td><td>${esc(u.email)}</td><td><span class="role-badge ${cls}">${lbl}</span></td>
-      <td>${esc(u.parent_name||'')}</td><td>${fmt(u.created_at)}</td>
+      <td>${relCell}</td><td>${fmt(u.created_at)}</td>
       <td><button class="act" data-act="pw" data-id="${u.id}" data-name="${esc(u.display_name)}">PW再発行</button>
       <button class="act del" data-act="del" data-id="${u.id}" data-name="${esc(u.display_name)}">削除</button></td></tr>`;
   }).join('');
+
+  // 生徒の保護者をその場で紐付け
+  document.querySelectorAll('.parent-sel').forEach(sel => sel.addEventListener('change', async ()=>{
+    const d = await api('admin.php?action=update_user',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:sel.dataset.id, parent_id: sel.value})});
+    if(!d.ok){ alert('保護者の設定に失敗：'+(d.error||'')); } else { loadUsers(); }
+  }));
 }
 
 document.getElementById('create-form').addEventListener('submit', async e=>{

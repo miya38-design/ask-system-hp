@@ -24,12 +24,67 @@ try {
             $rows = $pdo->query(
                 "SELECT u.id, u.email, u.display_name, u.role, u.parent_id,
                         p.display_name AS parent_name,
-                        u.course_type, u.plan, u.area, u.level, u.exp, u.created_at
+                        u.course_type, u.plan, u.area, u.level, u.exp, u.created_at,
+                        (u.line_user_id IS NOT NULL) AS line_linked
                  FROM users u
                  LEFT JOIN users p ON p.id = u.parent_id
                  ORDER BY FIELD(u.role,'instructor','parent','student'), u.created_at DESC"
             )->fetchAll();
             json_out(['ok' => true, 'users' => $rows]);
+            break;
+
+        case 'line_status':
+            $c = ada_config();
+            $configured = (($c['line_channel_token'] ?? '') !== '') && (($c['line_channel_secret'] ?? '') !== '');
+            json_out(['ok' => true, 'configured' => $configured]);
+            break;
+
+        case 'update_user':
+            require_method('POST');
+            $b = json_body();
+            $id = (int)($b['id'] ?? 0);
+            if ($id <= 0) {
+                json_out(['ok' => false, 'error' => 'IDが不正です'], 400);
+            }
+            $chk = $pdo->prepare('SELECT role FROM users WHERE id = ?');
+            $chk->execute([$id]);
+            $role = $chk->fetchColumn();
+            if (!$role) {
+                json_out(['ok' => false, 'error' => '対象が見つかりません'], 404);
+            }
+            $sets = [];
+            $args = [];
+            if (isset($b['display_name']) && trim((string)$b['display_name']) !== '') {
+                $sets[] = 'display_name = ?'; $args[] = trim((string)$b['display_name']);
+            }
+            if (array_key_exists('parent_id', $b) && $role === 'student') {
+                if (empty($b['parent_id'])) {
+                    $sets[] = 'parent_id = NULL';
+                } else {
+                    $pv = (int)$b['parent_id'];
+                    $pc = $pdo->prepare("SELECT id FROM users WHERE id = ? AND role = 'parent'");
+                    $pc->execute([$pv]);
+                    if (!$pc->fetch()) {
+                        json_out(['ok' => false, 'error' => '指定した保護者が見つかりません'], 400);
+                    }
+                    $sets[] = 'parent_id = ?'; $args[] = $pv;
+                }
+            }
+            foreach (['course_type' => ['junior','senior'], 'plan' => ['standard-a','standard-b','premium']] as $f => $allow) {
+                if (array_key_exists($f, $b) && $role === 'student') {
+                    if ($b[$f] === '' || $b[$f] === null) { $sets[] = "$f = NULL"; }
+                    elseif (in_array($b[$f], $allow, true)) { $sets[] = "$f = ?"; $args[] = $b[$f]; }
+                }
+            }
+            if (array_key_exists('area', $b)) {
+                $sets[] = 'area = ?'; $args[] = trim((string)$b['area']) ?: null;
+            }
+            if (!$sets) {
+                json_out(['ok' => false, 'error' => '更新項目がありません'], 400);
+            }
+            $args[] = $id;
+            $pdo->prepare('UPDATE users SET ' . implode(', ', $sets) . ' WHERE id = ?')->execute($args);
+            json_out(['ok' => true]);
             break;
 
         case 'create_user':
