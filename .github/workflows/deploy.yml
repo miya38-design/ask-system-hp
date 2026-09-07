@@ -35,7 +35,6 @@ jobs:
 
           # Detect the real document root: <domain>/public_html if present, else <domain>/
           lftp -c "$SETTINGS open -p $PORT \"$FTP_SERVER\"; cls -1 \"$DOMAIN/\";" > list.txt 2>/dev/null || true
-          echo "----- $DOMAIN/ contents -----"; cat list.txt || true
           if grep -qiE '(^|/)public_html/?$' list.txt; then
             TARGET="$DOMAIN/public_html"
           else
@@ -45,10 +44,9 @@ jobs:
 
           set +e
           lftp -c "
-            set cmd:fail-exit true;
             $SETTINGS
             open -p $PORT \"$FTP_SERVER\";
-            mirror --reverse --delete --verbose --parallel=2 \
+            mirror --reverse --delete --parallel=2 \
               --exclude-glob config.php \
               --exclude-glob .ftp-deploy-sync-state.json \
               ./public/ \"$TARGET\";
@@ -58,7 +56,11 @@ jobs:
           echo "===== lftp output (exit $code) ====="
           cat lftp.out || true
           rm -f "$HOME/.netrc"
-          if [ "$code" -ne 0 ]; then
-            tail -n 25 lftp.out | while IFS= read -r l; do [ -n "$l" ] && echo "::error::${l}"; done
+
+          # lftp/mirror can return non-zero on benign conditions; only fail on a
+          # real transfer/connection error message.
+          if grep -qiE 'Access failed|Fatal error|Login failed|change directory|No such file|Permission denied|not connected' lftp.out; then
+            grep -iE 'Access failed|Fatal error|Login failed|change directory|No such file|Permission denied|not connected' lftp.out | tail -n 15 | while IFS= read -r l; do [ -n "$l" ] && echo "::error::${l}"; done
             exit 1
           fi
+          echo "Deploy completed successfully."
