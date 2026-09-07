@@ -47,6 +47,9 @@
   .kid h3{font-size:16px;font-weight:900;margin-bottom:8px;}
   .kid .meta{display:flex;gap:18px;flex-wrap:wrap;font-size:14px;color:#4a5568;}
   .kid .meta b{color:var(--blue-dark);}
+  .btn-mini{border:1px solid var(--line);background:#fff;color:var(--blue-dark);font-family:inherit;font-weight:700;font-size:13px;padding:8px 14px;border-radius:999px;cursor:pointer;}
+  .btn-mini:hover{background:#eef5fc;}
+  .abs-input{width:100%;padding:9px 11px;font-size:15px;font-family:inherit;border:1.5px solid #d3dce6;border-radius:8px;background:#fff;margin-top:4px;}
   .foot{margin-top:26px;text-align:center;font-size:13px;}
   .foot a{color:var(--blue);font-weight:700;text-decoration:none;}
   @media(max-width:640px){.grid{grid-template-columns:1fr;}}
@@ -133,12 +136,27 @@ async function loadParent(){
   const kids = (fam.children||[]);
   const kidsHtml = kids.length ? kids.map(k => {
     const next=Number(k.exp_to_next)||100, exp=Number(k.exp)||0, pct=Math.max(0,Math.min(100,Math.round(exp/next*100)));
-    return `<div class="kid">
+    return `<div class="kid" data-kid="${k.id}">
       <h3>${esc(k.display_name)}</h3>
       <div class="meta"><span>レベル <b>Lv.${Number(k.level)||1}</b></span>
         <span>スタンプ <b>${k.stamps||0}</b> 個</span>
         <span>最終出席 <b>${k.last_attended?fmt(k.last_attended):'—'}</b></span></div>
       <div class="bar" style="margin-top:10px;"><span style="width:${pct}%"></span></div>
+      <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="btn-mini kid-qr" data-id="${k.id}">入退室QRを表示</button>
+        <button class="btn-mini kid-absence" data-id="${k.id}">欠席を連絡</button>
+      </div>
+      <div class="kid-qrbox" id="qrbox-${k.id}" style="display:none;justify-content:center;padding:12px;"></div>
+      <div class="abs-form" id="abs-${k.id}" style="display:none;margin-top:10px;background:#f7fafd;border:1px solid #e6ebf2;border-radius:10px;padding:14px;">
+        <label style="font-size:12px;font-weight:700;color:#33404f;">欠席する日</label>
+        <input type="date" class="abs-input abs-date">
+        <label style="font-size:12px;font-weight:700;color:#33404f;margin-top:8px;display:block;">理由（任意）</label>
+        <input type="text" class="abs-input abs-reason" placeholder="体調不良 など">
+        <div style="margin-top:12px;display:flex;align-items:center;gap:10px;">
+          <button class="btn-mini abs-send" data-id="${k.id}" style="background:var(--blue);color:#fff;border-color:var(--blue);">欠席を連絡する</button>
+          <span class="abs-msg" style="font-size:13px;font-weight:700;"></span>
+        </div>
+      </div>
     </div>`;
   }).join('') : '<p class="empty">お子さまのアカウントが登録されると、ここに表示されます。</p>';
   return `<div class="grid">
@@ -216,6 +234,35 @@ async function render(u){
         }
       }
     } catch(e){}
+
+    // お子さまのQR表示
+    c.querySelectorAll('.kid-qr').forEach(btn => btn.addEventListener('click', async () => {
+      const id = btn.dataset.id;
+      const box = document.getElementById('qrbox-'+id);
+      if (!box) return;
+      if (box.style.display !== 'none' && box.dataset.loaded) { box.style.display='none'; box.dataset.loaded=''; box.innerHTML=''; return; }
+      const q = await api('checkin.php?action=child_qr&student_id='+encodeURIComponent(id));
+      if (q.ok && window.QRCode) { box.innerHTML=''; new QRCode(box, {text:q.qr_token, width:168, height:168}); box.style.display='flex'; box.dataset.loaded='1'; }
+    }));
+    // 欠席連絡フォームの開閉
+    c.querySelectorAll('.kid-absence').forEach(btn => btn.addEventListener('click', () => {
+      const f = document.getElementById('abs-'+btn.dataset.id);
+      if (f) f.style.display = f.style.display==='none' ? 'block' : 'none';
+    }));
+    // 欠席連絡の送信
+    c.querySelectorAll('.abs-send').forEach(btn => btn.addEventListener('click', async () => {
+      const id = btn.dataset.id;
+      const f = document.getElementById('abs-'+id);
+      const date = f.querySelector('.abs-date').value;
+      const reason = f.querySelector('.abs-reason').value;
+      const out = f.querySelector('.abs-msg');
+      if (!date) { out.style.color='#c93866'; out.textContent='日付を選んでください'; return; }
+      btn.disabled = true;
+      const d = await api('attendance.php?action=report_absence', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({student_id:id, date, reason})});
+      btn.disabled = false;
+      if (d.ok) { out.style.color='#1f7a37'; out.textContent='欠席を連絡しました'; }
+      else { out.style.color='#c93866'; out.textContent=d.error||'送信に失敗しました'; }
+    }));
   }
 
   // お知らせクリックで既読

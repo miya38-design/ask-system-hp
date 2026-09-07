@@ -64,6 +64,7 @@
     <div id="line-warn" style="display:none;background:#fff4e2;border:1px solid #ffdca8;color:#8a5a00;border-radius:10px;padding:12px 14px;margin-bottom:16px;font-size:14px;font-weight:700;"></div>
     <div class="tabs">
       <button class="tab active" data-tab="accounts">アカウント</button>
+      <button class="tab" data-tab="applications">入会申込</button>
       <button class="tab" data-tab="attendance">出席入力</button>
       <button class="tab" data-tab="schedules">スケジュール</button>
       <button class="tab" data-tab="messages">お知らせ</button>
@@ -99,6 +100,18 @@
       </div>
     </div>
 
+    <!-- ===== 入会申込 ===== -->
+    <div class="panel" id="p-applications">
+      <div class="card">
+        <h2>入会申込一覧</h2>
+        <p class="hint">「承認」すると保護者＋生徒アカウントを発行します（初期パスワードは自動発行され、画面に表示されます）。お支払い確認後に承認してください。</p>
+        <div class="table-wrap"><table>
+          <thead><tr><th>申込日</th><th>保護者</th><th>お子さま</th><th>連絡先</th><th>希望</th><th>状態</th><th>操作</th></tr></thead>
+          <tbody id="app-rows"></tbody>
+        </table></div>
+      </div>
+    </div>
+
     <!-- ===== 出席入力 ===== -->
     <div class="panel" id="p-attendance">
       <div class="card">
@@ -119,6 +132,13 @@
       <div class="card">
         <h2>選択中の生徒の最近の出席</h2>
         <div id="att-recent"><p class="hint">生徒を選ぶと表示されます。</p></div>
+      </div>
+      <div class="card">
+        <h2>欠席連絡（保護者から・直近7日〜）</h2>
+        <div class="table-wrap"><table>
+          <thead><tr><th>日付</th><th>お子さま</th><th>理由</th></tr></thead>
+          <tbody id="absence-rows"></tbody>
+        </table></div>
       </div>
     </div>
 
@@ -208,7 +228,55 @@ document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () =>
   document.getElementById('p-'+t.dataset.tab).classList.add('active');
 }));
 
-function init(){ loadUsers(); loadSchedules(); loadSentMessages(); loadLineStatus(); }
+function init(){ loadUsers(); loadSchedules(); loadSentMessages(); loadLineStatus(); loadApplications(); loadAbsences(); }
+
+// ---- applications (入会申込) ----
+const APP_STATUS = {pending:'未処理', approved:'承認済', rejected:'却下'};
+async function loadApplications(){
+  const d = await api('applications.php?action=list');
+  if(!d.ok) return;
+  document.getElementById('app-rows').innerHTML = (d.applications||[]).map(a=>{
+    const acts = a.status==='pending'
+      ? `<button class="act" data-act="approve" data-id="${a.id}">承認</button><button class="act del" data-act="reject" data-id="${a.id}">却下</button>`
+      : '—';
+    return `<tr>
+      <td>${fmt(a.created_at)}</td>
+      <td>${esc(a.parent_name)}<br><span class="hint">${esc(a.parent_email)}</span></td>
+      <td>${esc(a.child_name)}${a.grade?'（'+esc(a.grade)+'）':''}</td>
+      <td>${esc(a.phone||'')}</td>
+      <td>${esc(a.plan||'')}${a.note?'<br><span class="hint">'+esc(a.note)+'</span>':''}</td>
+      <td>${APP_STATUS[a.status]||a.status}</td>
+      <td>${acts}</td></tr>`;
+  }).join('') || '<tr><td colspan="7" class="hint">申込はありません</td></tr>';
+}
+document.getElementById('app-rows').addEventListener('click', async e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  const id=b.dataset.id;
+  if(b.dataset.act==='approve'){
+    if(!confirm('この申込を承認し、保護者＋生徒アカウントを発行します。よろしいですか？')) return;
+    const d=await api('applications.php?action=approve',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})});
+    if(d.ok){
+      const c=d.credentials;
+      alert('アカウントを発行しました。以下をご本人にお伝えください：\n\n【ログインID（共通）】'+c.login_email+
+        '\n\n■保護者：'+c.parent_name+'\n　パスワード：'+c.parent_password+
+        '\n\n■生徒：'+c.student_name+'\n　パスワード：'+c.student_password);
+      loadApplications(); loadUsers();
+    } else alert('失敗：'+(d.error||''));
+  } else if(b.dataset.act==='reject'){
+    if(!confirm('この申込を却下しますか？')) return;
+    const d=await api('applications.php?action=reject',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id})});
+    if(d.ok) loadApplications(); else alert('失敗：'+(d.error||''));
+  }
+});
+
+// ---- absences (欠席連絡) ----
+async function loadAbsences(){
+  const d = await api('attendance.php?action=list_absences');
+  if(!d.ok) return;
+  document.getElementById('absence-rows').innerHTML = (d.absences||[]).map(x=>
+    `<tr><td>${fmt(x.date)}</td><td>${esc(x.display_name)}</td><td>${esc(x.absence_reason||'')}</td></tr>`).join('')
+    || '<tr><td colspan="3" class="hint">欠席連絡はありません</td></tr>';
+}
 
 async function loadLineStatus(){
   const d = await api('admin.php?action=line_status');

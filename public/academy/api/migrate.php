@@ -66,6 +66,7 @@ try {
     $ensureCol('users', 'line_user_id', 'line_user_id VARCHAR(64) NULL');
     $ensureCol('users', 'line_link_code', 'line_link_code VARCHAR(12) NULL');
     $ensureCol('users', 'qr_token', 'qr_token VARCHAR(32) NULL');
+    $ensureCol('attendance', 'absence_reason', 'absence_reason VARCHAR(255) NULL');
     try { $pdo->exec('ALTER TABLE users ADD UNIQUE KEY uq_users_qr (qr_token)'); } catch (Throwable $e) {}
     try { $pdo->exec('ALTER TABLE users ADD KEY idx_users_line (line_user_id)'); } catch (Throwable $e) {}
 

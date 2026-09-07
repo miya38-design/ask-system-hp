@@ -48,6 +48,24 @@ CREATE TABLE IF NOT EXISTS schedules (
   UNIQUE KEY uq_schedules_date (date)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS applications (
+  id              INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  parent_name     VARCHAR(100) NOT NULL,
+  parent_email    VARCHAR(255) NOT NULL,
+  phone           VARCHAR(40) DEFAULT NULL,
+  child_name      VARCHAR(100) NOT NULL,
+  grade           VARCHAR(40) DEFAULT NULL,
+  plan            VARCHAR(40) DEFAULT NULL,
+  note            TEXT,
+  status          ENUM('pending','approved','rejected') NOT NULL DEFAULT 'pending',
+  parent_user_id  INT UNSIGNED DEFAULT NULL,
+  student_user_id INT UNSIGNED DEFAULT NULL,
+  created_at      DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  processed_at    DATETIME DEFAULT NULL,
+  PRIMARY KEY (id),
+  KEY idx_app_status (status)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 CREATE TABLE IF NOT EXISTS checkins (
   id         INT UNSIGNED NOT NULL AUTO_INCREMENT,
   user_id    INT UNSIGNED NOT NULL,

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>入会申込｜ASKデジタルアカデミー</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{--blue:#1f5fbf;--blue-dark:#16498f;--green:#2bb24c;--ink:#1f2735;--muted:#6b7280;--line:#e5e9ef;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:"Noto Sans JP",sans-serif;color:var(--ink);min-height:100vh;padding:24px;
+       background:radial-gradient(900px 500px at 80% -10%,#e8f1fb,transparent 60%),radial-gradient(700px 400px at 0% 100%,#eafaef,transparent 60%),#f7fafd;}
+  .card{width:100%;max-width:520px;margin:0 auto;background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:0 18px 50px rgba(22,73,143,.12);padding:34px 28px;}
+  .brand{display:flex;flex-direction:column;align-items:center;gap:8px;margin-bottom:16px;text-align:center;}
+  .brand img{height:52px;}
+  h1{font-size:20px;font-weight:900;color:var(--blue-dark);text-align:center;}
+  p.lead{font-size:13px;color:var(--muted);text-align:center;margin-bottom:18px;line-height:1.8;}
+  label{display:block;font-size:13px;font-weight:700;color:#33404f;margin:14px 0 6px;}
+  .req{color:#c93866;font-size:11px;margin-left:4px;}
+  input,select,textarea{width:100%;padding:12px 13px;font-size:16px;font-family:inherit;border:1.5px solid #d3dce6;border-radius:10px;background:#fbfdff;}
+  textarea{min-height:90px;resize:vertical;}
+  input:focus,select:focus,textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(31,95,191,.12);}
+  .hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0;}
+  button{margin-top:22px;width:100%;padding:14px;border:0;border-radius:999px;font-family:inherit;font-weight:800;font-size:16px;color:#fff;background:linear-gradient(135deg,var(--blue),#2b7de0);cursor:pointer;}
+  button:disabled{opacity:.6;}
+  .msg{margin-top:16px;padding:12px 14px;border-radius:9px;font-size:14px;font-weight:700;display:none;}
+  .msg.ok{display:block;background:#eafaef;border:1px solid #bfe6c4;color:#1f7a37;}
+  .msg.err{display:block;background:#fdecef;border:1px solid #f6c4d5;color:#c93866;}
+  .foot{margin-top:20px;text-align:center;font-size:13px;} .foot a{color:var(--blue);font-weight:700;text-decoration:none;}
+  .note{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.7;}
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="brand"><img src="assets/images/logo.png" alt="ASKデジタルアカデミー"><h1>入会申込</h1></div>
+    <p class="lead">必要事項をご記入ください。内容を確認後、教室よりご連絡し、ご入会手続き（お支払い）をご案内します。</p>
+    <form id="reg-form" autocomplete="on">
+      <input type="text" name="hp" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <label>保護者のお名前<span class="req">必須</span></label>
+      <input type="text" name="parent_name" required placeholder="山田 太郎">
+      <label>メールアドレス<span class="req">必須</span>（ログインIDになります）</label>
+      <input type="email" name="parent_email" required placeholder="you@example.com">
+      <label>電話番号</label>
+      <input type="tel" name="phone" placeholder="090-1234-5678">
+      <label>お子さまのお名前<span class="req">必須</span></label>
+      <input type="text" name="child_name" required placeholder="山田 はな">
+      <label>学年</label>
+      <input type="text" name="grade" placeholder="小3 など">
+      <label>希望コース</label>
+      <select name="plan">
+        <option value="">未定・相談したい</option>
+        <option value="standard-a">週2回（火・木）</option>
+        <option value="standard-b">週3回（月・水・金）</option>
+        <option value="premium">週5回（通い放題）</option>
+      </select>
+      <label>ご質問・ご要望</label>
+      <textarea name="note" placeholder="ご不明点やご希望があればご記入ください"></textarea>
+      <button id="submit" type="submit">この内容で申し込む</button>
+      <div class="msg" id="msg"></div>
+      <p class="note">※送信後すぐにアカウントが有効になるわけではありません。教室での確認・お支払い後にご利用開始となります。</p>
+    </form>
+    <div class="foot"><a href="index.html">← アカデミートップへ戻る</a></div>
+  </div>
+<script>
+const form=document.getElementById('reg-form'), msg=document.getElementById('msg'), btn=document.getElementById('submit');
+form.addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  msg.style.display='none'; btn.disabled=true; btn.textContent='送信中…';
+  try{
+    const res=await fetch('api/register.php?action=submit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.fromEntries(new FormData(form).entries()))});
+    const d=await res.json();
+    if(d.ok){ form.reset(); msg.className='msg ok'; msg.textContent='お申し込みを受け付けました。教室よりご連絡いたします。ありがとうございます！'; }
+    else { msg.className='msg err'; msg.textContent=d.error||'送信に失敗しました。'; }
+  }catch(err){ msg.className='msg err'; msg.textContent='通信エラーが発生しました。時間をおいて再度お試しください。'; }
+  finally{ btn.disabled=false; btn.textContent='この内容で申し込む'; }
+});
+</script>
+</body>
+</html>

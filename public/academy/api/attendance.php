@@ -90,6 +90,39 @@ try {
             json_out(['ok' => true, 'summary' => attendance_summary($pdo, $sid)]);
             break;
 
+        case 'report_absence':
+            require_method('POST');
+            $b = json_body();
+            $sid = (int)($b['student_id'] ?? 0);
+            $date = trim((string)($b['date'] ?? ''));
+            $reason = trim((string)($b['reason'] ?? '')) ?: '（理由未記入）';
+            if ($sid <= 0 || !is_valid_date($date)) {
+                json_out(['ok' => false, 'error' => '生徒と日付を確認してください'], 400);
+            }
+            if (!can_view_student($me, $sid)) {
+                json_out(['ok' => false, 'error' => 'forbidden'], 403);
+            }
+            $pdo->prepare(
+                'INSERT INTO attendance (user_id, date, status, stamp_count, absence_reason)
+                 VALUES (?, ?, "absent", 0, ?)
+                 ON DUPLICATE KEY UPDATE status = "absent", absence_reason = VALUES(absence_reason)'
+            )->execute([$sid, $date, $reason]);
+            json_out(['ok' => true]);
+            break;
+
+        case 'list_absences':
+            require_role($me, 'instructor');
+            $rows = $pdo->prepare(
+                "SELECT a.date, a.absence_reason, u.display_name
+                 FROM attendance a JOIN users u ON u.id = a.user_id
+                 WHERE a.status = 'absent' AND a.absence_reason IS NOT NULL
+                   AND a.date >= (CURDATE() - INTERVAL 7 DAY)
+                 ORDER BY a.date DESC LIMIT 100"
+            );
+            $rows->execute();
+            json_out(['ok' => true, 'absences' => $rows->fetchAll()]);
+            break;
+
         default:
             json_out(['ok' => false, 'error' => 'unknown action'], 404);
     }

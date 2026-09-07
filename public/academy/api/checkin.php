@@ -84,6 +84,25 @@ try {
             json_out(['ok' => true, 'qr_token' => $tok, 'name' => $me['display_name']]);
             break;
 
+        case 'child_qr':
+            $sid = (int)($_GET['student_id'] ?? 0);
+            if ($sid <= 0 || !can_view_student($me, $sid)) {
+                json_out(['ok' => false, 'error' => 'forbidden'], 403);
+            }
+            $q = $pdo->prepare("SELECT display_name, qr_token FROM users WHERE id = ? AND role='student'");
+            $q->execute([$sid]);
+            $row = $q->fetch();
+            if (!$row) {
+                json_out(['ok' => false, 'error' => 'not found'], 404);
+            }
+            if (empty($row['qr_token'])) {
+                $tok = bin2hex(random_bytes(16));
+                $pdo->prepare('UPDATE users SET qr_token = ? WHERE id = ?')->execute([$tok, $sid]);
+                $row['qr_token'] = $tok;
+            }
+            json_out(['ok' => true, 'qr_token' => $row['qr_token'], 'name' => $row['display_name']]);
+            break;
+
         case 'history':
             $sid = (int)($_GET['student_id'] ?? 0);
             if ($sid <= 0 || !can_view_student($me, $sid)) {
