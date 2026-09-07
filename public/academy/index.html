@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASKデジタルアカデミー｜熊本の小学生向けAI学習塾</title>
+  <meta name="description" content="熊本のASKデジタルアカデミーは、小学生向けに5教科学習、タイピング、AI学習を組み合わせた学習塾・デジタルスクールです。一人ひとりのペースに合わせて、学校の学びにもつながる基礎学力とパソコン活用を楽しく伸ばし、考える力と自分で学ぶ力を育てます。">
+  <meta name="keywords" content="AI学習,タイピング,小学生,学習塾,デジタルスクール,熊本,ASKデジタルアカデミー">
+  <meta property="og:title" content="ASKデジタルアカデミー｜熊本の小学生向けAI学習塾">
+  <meta property="og:description" content="ASKデジタルアカデミーは、小学生向けの5教科学習・タイピング・AI学習を通して、自分で学ぶ力を育てます。">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="assets/images/ogp.png">
+  <meta property="og:site_name" content="ASKデジタルアカデミー">
+  <meta property="og:locale" content="ja_JP">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="ASKデジタルアカデミー｜熊本の小学生向けAI学習塾">
+  <meta name="twitter:description" content="ASKデジタルアカデミーは、小学生向けの5教科学習・タイピング・AI学習を通して、自分で学ぶ力を育てます。">
+  <meta name="twitter:image" content="assets/images/ogp.png">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/png" href="assets/images/logo.png">
+</head>
+<body id="top">
+
+  <!-- Particle Canvas Background -->
+  <canvas id="particle-canvas"></canvas>
+
+  <!-- ========== Header ========== -->
+  <header class="site-header" id="site-header">
+    <div class="container header-inner">
+      <a href="#top" class="logo">
+        <img src="assets/images/logo.png" alt="ASKデジタルアカデミー ロゴ" width="220" height="70">
+      </a>
+      <nav class="nav-links" id="nav-links">
+        <a href="#junior">ジュニアコース</a>
+        <a href="#summer">夏期講習</a>
+        <a href="#payment">決済・予約</a>
+        <a href="#access">アクセス</a>
+        <a href="dashboard.html" class="nav-cta">マイページ →</a>
+      </nav>
+      <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="メニュー" aria-expanded="false" aria-controls="nav-links">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+
+  <!-- ========== Hero ========== -->
+  <section class="hero" id="hero">
+    <div class="container">
+      <div class="hero-content">
+        <h1>
+          <span class="text-gradient">学ぶ楽しさ</span>を、<br>
+          すべての世代に。
+        </h1>
+        <p class="hero-description">
+          デジタル社会で置いてけぼりを作らない。<br>
+          小学生にはAI時代に必要な、自分自身で学ぶ力を。<br>
+          ASKデジタルアカデミーは、すべての世代の学びを支えます。
+        </p>
+        <div class="hero-buttons">
+          <a class="btn-primary is-disabled" id="hero-line-btn" aria-disabled="true" tabindex="-1">
+            <img class="button-icon" src="assets/icons/ask-line-consult.svg" alt="" aria-hidden="true"> LINE無料相談（準備中）
+          </a>
+          <a href="#junior" class="btn-secondary">
+            <img class="button-icon" src="assets/icons/course-book.svg" alt="" aria-hidden="true"> コース詳細
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="scroll-indicator">
+      <span>Scroll</span>
+      <div class="arrow"></div>
+    </div>
+  </section>
+
+  <!-- ========== Reasons Section ========== -->
+  <section class="section" id="reasons">
+    <div class="container">
+      <div class="fade-in">
+        <div class="section-title">学ぶ力が、未来を変える</div>
+        <h2 class="section-heading">
+          <span class="text-gradient">子どもの『学ぶ力』を育てる3つの特長</span>
+        </h2>
+      </div>
+
+      <div class="course-grid">
+        <div class="course-card fade-in">
+          <div class="course-icon blue"><img src="assets/icons/ask-card-ai-analysis.svg" alt="" aria-hidden="true"></div>
+          <h3>AI分析による最適な学習</h3>
+          <p>AI分析を活用し、一人ひとりに合った学び方を見つけ、自分で学ぶ力を育てます。</p>
+        </div>
+        <div class="course-card fade-in">
+          <div class="course-icon green"><img src="assets/icons/ask-card-self-learning.svg" alt="" aria-hidden="true"></div>
+          <h3>自分で学ぶ力を育てる</h3>
+          <p>考え、調べ、挑戦する。その積み重ねを通して、自ら学び続ける力を育みます。</p>
+        </div>
+        <div class="course-card fade-in">
+          <div class="course-icon blue"><img src="assets/icons/ask-card-monthly-event.svg" alt="" aria-hidden="true"></div>
+          <h3>毎月のイベント</h3>
+          <p>毎月開催するイベントを通して、学ぶ楽しさと新しい発見を広げます。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== Junior Section ========== -->
+  <section class="section section-junior" id="junior">
+    <div class="container">
+      <div class="fade-in">
+        <div class="section-title">Junior Course</div>
+        <h2 class="section-heading">
+          <span class="text-gradient">5教科＋AI学習</span>で「わかった！」を。
+        </h2>
+        <p class="section-description">
+          小3〜6年生対象。学校学習とPC・AI学習スキルを楽しく習得。月別に楽しいイベントもご用意。AI分析を活用し、自学習によって自ら考え成長する力を育成。
+        </p>
+      </div>
+
+      <div class="course-grid">
+        <div class="course-card fade-in">
+          <div class="course-icon blue"><img src="assets/icons/ask-card-five-subjects.svg" alt="" aria-hidden="true"></div>
+          <h3>5教科学習</h3>
+          <p>自学習を通して自分のペースで学べます</p>
+        </div>
+        <div class="course-card fade-in">
+          <div class="course-icon blue"><img src="assets/icons/ask-card-typing.svg" alt="" aria-hidden="true"></div>
+          <h3>タイピング</h3>
+          <p>キーボード操作を身につけ、正確でスムーズな入力を目指します。</p>
+        </div>
+        <div class="course-card fade-in">
+          <div class="course-icon green"><img src="assets/icons/ask-card-ai-learning.svg" alt="" aria-hidden="true"></div>
+          <h3>AI学習</h3>
+          <p>AIを安全に活用し、自分で考え、調べ、学ぶ力を育てます。</p>
+        </div>
+      </div>
+
+      <!-- Pricing -->
+      <div class="pricing-table fade-in" id="pricing">
+        <h3 class="section-heading">料金プラン</h3>
+        <p class="section-description">ご家庭のスケジュールに合わせ、3プランから選択。</p>
+
+        <div class="pricing-grid">
+          <div class="pricing-card featured fade-in">
+            <div class="pricing-name">週3回コース</div>
+            <div class="pricing-schedule">月・水・金</div>
+            <div class="pricing-amount">¥9,000<small>/月</small></div>
+            <ul class="pricing-features">
+              <li>週3日通学</li>
+              <li>5教科学習</li>
+              <li>AI学習カリキュラム</li>
+              <li>月別イベント参加</li>
+            </ul>
+          </div>
+          <div class="pricing-card fade-in">
+            <div class="pricing-name">週2回コース</div>
+            <div class="pricing-schedule">火・木</div>
+            <div class="pricing-amount">¥6,000<small>/月</small></div>
+            <ul class="pricing-features">
+              <li>週2日通学</li>
+              <li>5教科学習</li>
+              <li>AI学習カリキュラム</li>
+              <li>月別イベント参加</li>
+            </ul>
+          </div>
+          <div class="pricing-card fade-in">
+            <div class="pricing-name">通い放題コース</div>
+            <div class="pricing-schedule">月〜金</div>
+            <div class="pricing-amount">¥12,000<small>/月</small></div>
+            <ul class="pricing-features">
+              <li>平日通い放題</li>
+              <li>5教科学習</li>
+              <li>AI学習カリキュラム</li>
+              <li>月別イベント参加</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== Summer Course Section ========== -->
+  <section class="section section-summer" id="summer">
+    <div class="container">
+      <div class="fade-in">
+        <div class="section-title summer-label">夏期特別</div>
+        <div class="summer-badge-container">
+          <span class="summer-limited-badge">夏限定</span>
+        </div>
+        <h2 class="section-heading">
+          <span class="text-gradient-summer">夏休みを有効活用</span>し、後期に自信を。
+        </h2>
+        <p class="section-description">
+          夏休み限定。前期の復習・苦手克服に集中。自習コースも。
+        </p>
+      </div>
+
+      <div class="summer-grid">
+        <!-- 夏期講習コース -->
+        <div class="summer-card fade-in">
+          <div class="summer-card-accent summer-accent-orange"></div>
+          <div class="summer-card-content">
+            <div class="summer-card-icon"><img src="assets/icons/ask-card-summer-course.svg" alt="" aria-hidden="true"></div>
+            <div class="summer-card-label">夏期講習コース</div>
+            <h3>苦手を克服、得意を伸ばす</h3>
+            <p class="summer-card-desc">
+              前期の復習と後期の予習。AI分析を活用し、苦手分野の克服を目指します。
+            </p>
+            <ul class="summer-features">
+              <li>5教科＋AI学習</li>
+              <li>AIによる学習分析</li>
+              <li>夏休みの宿題持ち込みOK</li>
+            </ul>
+            <div class="summer-pricing">
+              <div class="summer-period">開催時期未定</div>
+              <div class="summer-price">¥15,000<small>/期間</small></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 自習コース -->
+        <div class="summer-card fade-in">
+          <div class="summer-card-accent summer-accent-teal"></div>
+          <div class="summer-card-content">
+            <div class="summer-card-icon"><img src="assets/icons/ask-card-self-study.svg" alt="" aria-hidden="true"></div>
+            <div class="summer-card-label">自習コース</div>
+            <h3>涼しい教室で、自習</h3>
+            <p class="summer-card-desc">
+              エアコン完備の教室を自由に利用。
+            </p>
+            <ul class="summer-features">
+              <li>平日毎日利用</li>
+              <li>Wi-Fi・電源完備</li>
+              <li>給水設備完備</li>
+            </ul>
+            <div class="summer-pricing">
+              <div class="summer-period">開催時期未定</div>
+              <div class="summer-price">¥8,000<small>/期間</small></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="summer-cta fade-in">
+        <p>開催日程は決まり次第、ホームページと公式LINEでお知らせします。</p>
+        <a class="btn-primary summer-btn is-disabled" aria-disabled="true" tabindex="-1">
+          <img class="button-icon" src="assets/icons/ask-line-apply.svg" alt="" aria-hidden="true"> 夏期講習をLINEで申込（準備中）
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== Payment Section ========== -->
+  <section class="section section-payment" id="payment">
+    <div class="container">
+      <div class="fade-in">
+        <div class="section-title">決済・予約</div>
+        <h2 class="section-heading">
+          予約はマイページから、<br>
+          <span class="text-gradient">お支払いはご来校時に</span>
+        </h2>
+        <p class="section-description">
+          マイページからコースと日時を選択し、予約内容を確認できます。お支払い方法の詳細は、正式決定後にご案内します。
+        </p>
+      </div>
+
+      <div class="payment-flows-wrapper">
+        <div class="payment-flow fade-in">
+          <div class="payment-step">
+            <div class="step-number">STEP 01</div>
+            <div class="step-icon"><img src="assets/icons/ask-step-login.svg" alt="" aria-hidden="true"></div>
+            <div class="step-label">マイページへログイン</div>
+          </div>
+          <div class="payment-arrow">→</div>
+          <div class="payment-step">
+            <div class="step-number">STEP 02</div>
+            <div class="step-icon"><img src="assets/icons/ask-step-select.svg" alt="" aria-hidden="true"></div>
+            <div class="step-label">コース・日時を選択</div>
+          </div>
+          <div class="payment-arrow">→</div>
+          <div class="payment-step">
+            <div class="step-number">STEP 03</div>
+            <div class="step-icon"><img src="assets/icons/ask-step-review.svg" alt="" aria-hidden="true"></div>
+            <div class="step-label">予約内容を確認</div>
+          </div>
+          <div class="payment-arrow">→</div>
+          <div class="payment-step">
+            <div class="step-number">STEP 04</div>
+            <div class="step-icon"><img src="assets/icons/ask-step-complete.svg" alt="" aria-hidden="true"></div>
+            <div class="step-label">予約完了</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="payment-methods fade-in">
+        <div class="payment-method">
+          <a href="dashboard.html" class="btn-primary">マイページを開く</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== Map Section ========== -->
+  <section class="section section-access" id="access">
+    <div class="container">
+      <!-- Google Map -->
+      <div class="map-container fade-in">
+        <p>Google Map（準備中）</p>
+      </div>
+    </div>
+  </section>
+
+  </main>
+
+  <!-- ========== Footer ========== -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <img src="assets/images/logo.png" alt="ASKデジタルアカデミー ロゴ" width="180" height="57" style="margin-bottom: 1rem;">
+          <p>デジタル社会で置いてけぼりを作らない。</p>
+          <div class="social-links" style="margin-top: 1.5rem;">
+            <a class="is-disabled" aria-disabled="true" tabindex="-1" aria-label="LINE（準備中）" title="LINE（準備中）">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M19.365 9.864c.58 0 1.05.47 1.05 1.05s-.47 1.05-1.05 1.05h-1.743v1.114h1.743c.58 0 1.05.47 1.05 1.05s-.47 1.05-1.05 1.05h-2.793c-.58 0-1.05-.47-1.05-1.05V8.814c0-.58.47-1.05 1.05-1.05h2.793c.58 0 1.05.47 1.05 1.05s-.47 1.05-1.05 1.05h-1.743v1.114h1.743zm-4.558 4.264c0 .436-.266.826-.672.987-.406.16-.866.053-1.163-.272l-2.394-2.836v2.121c0 .58-.47 1.05-1.05 1.05s-1.05-.47-1.05-1.05V8.814c0-.436.266-.826.672-.987.406-.16.866-.053 1.163.272l2.394 2.836V8.814c0-.58.47-1.05 1.05-1.05s1.05.47 1.05 1.05v5.314zm-6.746 1.05c-.58 0-1.05-.47-1.05-1.05V8.814c0-.58.47-1.05 1.05-1.05s1.05.47 1.05 1.05v5.314c0 .58-.47 1.05-1.05 1.05zm-2.175 0H3.093c-.58 0-1.05-.47-1.05-1.05V8.814c0-.58.47-1.05 1.05-1.05s1.05.47 1.05 1.05v4.264h1.743c.58 0 1.05.47 1.05 1.05s-.47 1.05-1.05 1.05zM24 10.208C24 4.573 18.627.001 12 .001S0 4.573 0 10.208c0 5.044 4.478 9.272 10.525 10.065.41.089.966.27 1.108.619.127.317.083.812.04 1.131l-.178 1.069c-.055.316-.254 1.24 1.087.676 1.34-.564 7.234-4.261 9.87-7.295C23.915 14.774 24 12.567 24 10.208z"/></svg>
+            </a>
+          </div>
+        </div>
+        <div class="footer-column">
+          <h4>コース</h4>
+          <a href="#junior">ジュニアコース</a>
+          <a href="#summer">夏期講習</a>
+          <a href="#pricing">料金プラン</a>
+        </div>
+        <div class="footer-column">
+          <h4>ご利用案内</h4>
+          <a href="#payment">決済・予約方法</a>
+          <a href="#access">教室アクセス</a>
+          <a href="dashboard.html">マイページ</a>
+        </div>
+        <div class="footer-column">
+          <h4>お問い合わせ</h4>
+          <a class="is-disabled" aria-disabled="true" tabindex="-1">LINE公式アカウント（準備中）よりお知らせします。</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 ASK Digital Academy. All rights reserved.</p>
+        <div class="sponsor">
+          <span>協賛:</span>
+          <strong style="color: rgba(255,255,255,0.7);">アスクシステム</strong>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========== Share Section ========== -->
+  <section class="share-section" id="share">
+    <div class="container">
+      <div class="share-inner">
+        <div class="share-text">
+          <h3>サイト共有</h3>
+          <p>ADA情報をシェア！</p>
+        </div>
+        <div class="share-buttons">
+          <button class="share-btn share-line" id="share-line" title="LINEでシェア">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19.365 9.864c.58 0 1.05.47 1.05 1.05s-.47 1.05-1.05 1.05h-1.743v1.114h1.743c.58 0 1.05.47 1.05 1.05s-.47 1.05-1.05 1.05h-2.793c-.58 0-1.05-.47-1.05-1.05V8.814c0-.58.47-1.05 1.05-1.05h2.793c.58 0 1.05.47 1.05 1.05s-.47 1.05-1.05 1.05h-1.743v1.114h1.743zm-4.558 4.264c0 .436-.266.826-.672.987-.406.16-.866.053-1.163-.272l-2.394-2.836v2.121c0 .58-.47 1.05-1.05 1.05s-1.05-.47-1.05-1.05V8.814c0-.436.266-.826.672-.987.406-.16.866-.053 1.163.272l2.394 2.836V8.814c0-.58.47-1.05 1.05-1.05s1.05.47 1.05 1.05v5.314zm-6.746 1.05c-.58 0-1.05-.47-1.05-1.05V8.814c0-.58.47-1.05 1.05-1.05s1.05.47 1.05 1.05v5.314c0 .58-.47 1.05-1.05 1.05zm-2.175 0H3.093c-.58 0-1.05-.47-1.05-1.05V8.814c0-.58.47-1.05 1.05-1.05s1.05.47 1.05 1.05v4.264h1.743c.58 0 1.05.47 1.05 1.05s-.47 1.05-1.05 1.05zM24 10.208C24 4.573 18.627.001 12 .001S0 4.573 0 10.208c0 5.044 4.478 9.272 10.525 10.065.41.089.966.27 1.108.619.127.317.083.812.04 1.131l-.178 1.069c-.055.316-.254 1.24 1.087.676 1.34-.564 7.234-4.261 9.87-7.295C23.915 14.774 24 12.567 24 10.208z"/></svg>
+            LINE
+          </button>
+          <button class="share-btn share-x" id="share-x" title="Xでシェア">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            X
+          </button>
+          <button class="share-btn share-facebook" id="share-facebook" title="Facebookでシェア">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            Facebook
+          </button>
+          <button class="share-btn share-copy" id="share-copy" title="URLをコピー">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            URLコピー
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LINE Fixed Button -->
+  <a class="line-btn-fixed is-disabled" id="line-fixed-btn" aria-disabled="true" tabindex="-1">
+    <img class="line-icon" src="assets/icons/chat.svg" alt="" aria-hidden="true">
+    <span>LINE相談（準備中）</span>
+  </a>
+
+  <!-- Scripts -->
+  <script src="js/particle.js"></script>
+  <script src="js/main.js"></script>
+
+</body>
+</html>
