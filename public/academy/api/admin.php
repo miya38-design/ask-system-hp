@@ -48,12 +48,13 @@ try {
             if ($id <= 0) {
                 json_out(['ok' => false, 'error' => 'IDが不正です'], 400);
             }
-            $chk = $pdo->prepare('SELECT role FROM users WHERE id = ?');
+            $chk = $pdo->prepare('SELECT role, course_type, plan FROM users WHERE id = ?');
             $chk->execute([$id]);
-            $role = $chk->fetchColumn();
-            if (!$role) {
+            $cur = $chk->fetch();
+            if (!$cur) {
                 json_out(['ok' => false, 'error' => '対象が見つかりません'], 404);
             }
+            $role = $cur['role'];
             $sets = [];
             $args = [];
             if (isset($b['display_name']) && trim((string)$b['display_name']) !== '') {
@@ -72,10 +73,17 @@ try {
                     $sets[] = 'parent_id = ?'; $args[] = $pv;
                 }
             }
+            // Course/plan changes mid-term move the monthly fee, so log old -> new.
+            $courseChanges = [];
             foreach (['course_type' => ['junior','senior'], 'plan' => ['standard-a','standard-b','premium']] as $f => $allow) {
                 if (array_key_exists($f, $b) && $role === 'student') {
+                    $new = null;
                     if ($b[$f] === '' || $b[$f] === null) { $sets[] = "$f = NULL"; }
-                    elseif (in_array($b[$f], $allow, true)) { $sets[] = "$f = ?"; $args[] = $b[$f]; }
+                    elseif (in_array($b[$f], $allow, true)) { $sets[] = "$f = ?"; $args[] = $b[$f]; $new = $b[$f]; }
+                    else { continue; }
+                    if ((string)($cur[$f] ?? '') !== (string)($new ?? '')) {
+                        $courseChanges[] = $f . ':' . (($cur[$f] ?? '') ?: '未設定') . '->' . (($new ?? '') ?: '未設定');
+                    }
                 }
             }
             if (array_key_exists('area', $b)) {
@@ -103,6 +111,9 @@ try {
             }
             $args[] = $id;
             $pdo->prepare('UPDATE users SET ' . implode(', ', $sets) . ' WHERE id = ?')->execute($args);
+            if ($courseChanges) {
+                ada_audit('user_course_change', "id={$id} " . implode(' ', $courseChanges));
+            }
             ada_audit('user_update', "id={$id} " . implode(',', array_map(fn($s)=>explode(' ',$s)[0], $sets)));
             json_out(['ok' => true]);
             break;

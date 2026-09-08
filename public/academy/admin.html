@@ -99,7 +99,7 @@
       <div class="card">
         <h2>登録アカウント一覧</h2>
         <div class="table-wrap"><table>
-          <thead><tr><th>お名前</th><th>メール</th><th>ロール</th><th>保護者 / LINE</th><th>状態</th><th>登録日</th><th>操作</th></tr></thead>
+          <thead><tr><th>お名前</th><th>メール</th><th>ロール</th><th>保護者 / LINE</th><th>コース</th><th>状態</th><th>登録日</th><th>操作</th></tr></thead>
           <tbody id="user-rows"></tbody>
         </table></div>
       </div>
@@ -298,6 +298,14 @@ const ROLE = {instructor:['講師','r-instructor'], parent:['保護者','r-paren
 const SCH = {open:'受付中', few:'残りわずか', full:'満席', closed:'休講'};
 const fmt = s => s ? String(s).slice(0,10) : '';
 let USERS = [];
+let COURSES = [];
+// users.plan is an ENUM, so these three are the storable values. Labels follow
+// the コース tab when a course_plan row shares the same code.
+const PLAN_DEFAULT = {'standard-a':'週2回','standard-b':'週3回','premium':'週5回'};
+const planLabel = code => {
+  const c = COURSES.find(x => x.code === code);
+  return c ? c.name : (PLAN_DEFAULT[code] || code);
+};
 
 // ゲート：講師のみ
 api('auth.php?action=me').then(d => {
@@ -350,6 +358,7 @@ function buildWeekdayChecks(){
 }
 async function loadCourses(){
   const d=await api('courses.php?action=list'); if(!d.ok) return;
+  COURSES = d.courses || [];
   document.getElementById('crs-rows').innerHTML=(d.courses||[]).map(c=>{
     const wd=String(c.allowed_weekdays||'').split(',').filter(x=>x!=='').map(n=>WDNAME[n]).join('・');
     return `<tr><td>${esc(c.code)}</td><td>${esc(c.name)}</td><td>${wd}</td><td>${Number(c.active)?'有効':'無効'}</td>
@@ -503,6 +512,9 @@ function toggleStudent(){ document.querySelectorAll('.student-only').forEach(el=
 roleSel.addEventListener('change', toggleStudent); toggleStudent();
 
 async function loadUsers(){
+  // init() fires both in parallel, so make sure the course master is in before
+  // we label the plan dropdowns with the names set on the コース tab.
+  if (!COURSES.length) { try { await loadCourses(); } catch(e) {} }
   const d = await api('admin.php?action=list_users');
   if (!d.ok) return;
   USERS = d.users;
@@ -538,9 +550,23 @@ async function loadUsers(){
           <option value="staff" ${u.admin_role==='staff'?'selected':''}>スタッフ</option>
           <option value="owner" ${u.admin_role==='owner'?'selected':''}>オーナー</option>
         </select>` : '';
+    // Students switch plans mid-term, so make it editable straight from the list.
+    let courseCell = '—';
+    if (u.role==='student'){
+      const planOpts = ['standard-a','standard-b','premium'].map(code =>
+        `<option value="${code}" ${u.plan===code?'selected':''}>${esc(planLabel(code))}</option>`).join('');
+      courseCell = `<select class="course-sel" data-id="${u.id}" data-field="plan" style="padding:5px 8px;border:1px solid var(--line);border-radius:8px;font-family:inherit;">
+          <option value="" ${!u.plan?'selected':''}>（未設定）</option>${planOpts}
+        </select>
+        <select class="course-sel" data-id="${u.id}" data-field="course_type" style="margin-top:6px;padding:5px 8px;border:1px solid var(--line);border-radius:8px;font-family:inherit;font-size:13px;">
+          <option value="" ${!u.course_type?'selected':''}>（区分なし）</option>
+          <option value="junior" ${u.course_type==='junior'?'selected':''}>ジュニア</option>
+          <option value="senior" ${u.course_type==='senior'?'selected':''}>シニア/大人</option>
+        </select>`;
+    }
     const dim = u.status!=='active' ? 'opacity:.55;' : '';
     return `<tr style="${dim}"><td>${esc(u.display_name)}</td><td>${esc(u.email)}</td><td><span class="role-badge ${cls}">${lbl}</span></td>
-      <td>${relCell}</td><td>${statusSel}${roleSel}</td><td>${fmt(u.created_at)}</td>
+      <td>${relCell}</td><td>${courseCell}</td><td>${statusSel}${roleSel}</td><td>${fmt(u.created_at)}</td>
       <td><button class="act" data-act="pw" data-id="${u.id}" data-name="${esc(u.display_name)}">PW再発行</button>
       <button class="act del" data-act="del" data-id="${u.id}" data-name="${esc(u.display_name)}">削除</button></td></tr>`;
   }).join('');
@@ -553,6 +579,23 @@ async function loadUsers(){
     const d = await api('admin.php?action=update_user',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:sel.dataset.id, admin_role: sel.value})});
     if(!d.ok) alert('権限の変更に失敗：'+(d.error||''));
   }));
+
+  // コース変更（在籍途中の週2→週3などをその場で反映）
+  document.querySelectorAll('.course-sel').forEach(sel => {
+    sel.dataset.prev = sel.value;
+    sel.addEventListener('change', async ()=>{
+      const field = sel.dataset.field;
+      const label = field==='plan' ? 'コース' : '区分';
+      const shown = sel.options[sel.selectedIndex].text;
+      const name  = sel.closest('tr').firstElementChild.textContent;
+      if(!confirm(`${name} さんの${label}を「${shown}」に変更します。よろしいですか？`)){
+        sel.value = sel.dataset.prev; return;
+      }
+      const body = {id: sel.dataset.id}; body[field] = sel.value;
+      const d = await api('admin.php?action=update_user',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+      if(d.ok){ loadUsers(); } else { sel.value = sel.dataset.prev; alert(label+'の変更に失敗：'+(d.error||'')); }
+    });
+  });
 
   // 生徒の保護者をその場で紐付け
   document.querySelectorAll('.parent-sel').forEach(sel => sel.addEventListener('change', async ()=>{
