@@ -100,15 +100,29 @@ ul{list-style:none;}
 .crumb a:hover{color:#0c2749;text-decoration:underline;}
 .crumb .sep{margin:0 8px;color:#9db3cf;}
 .detail-hero h1{
-  color:#0c2749;font-size:52px;font-weight:900;line-height:1.3;margin-bottom:16px;
+  position:relative;z-index:2;
+  color:#0c2749;font-size:52px;font-weight:900;line-height:1.3;margin-bottom:0;
+  text-shadow:0 2px 12px rgba(220,237,252,.9),0 1px 3px rgba(255,255,255,.95);
 }
 .detail-hero h1 .div{color:rgba(12,39,73,.4);margin:0 10px;font-weight:400;}
 .detail-hero-lead{color:#20395c;font-size:20px;line-height:1.9;margin:0 auto 28px;max-width:680px;}
 .detail-hero-cta{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;}
 .detail-hero .btn-outline{border:2px solid #1f5fbf;color:#1f5fbf;background:transparent;}
 .detail-hero .btn-outline:hover{background:rgba(31,95,191,.1);}
-.detail-hero-img{display:block;max-width:640px;margin:22px auto 28px;}
-.detail-hero-img img{width:100%;height:auto;display:block;border-radius:16px;}
+/* Illustration: the source PNG has ~30% empty space on its left, so crop it
+   (object-position:right) to bring the people/icons to the centre. The top
+   ~13% of the artwork is empty sky, so the h1 is pulled down into it. */
+.detail-hero-img{
+  position:relative;z-index:0;display:block;
+  width:100%;max-width:840px;
+  aspect-ratio:1172 / 941;
+  margin:-66px auto 28px;
+}
+.detail-hero-img img{
+  width:100%;height:100%;display:block;
+  object-fit:cover;object-position:right center;
+  border-radius:18px;
+}
 
 /* ===== Features ===== */
 .detail-features{padding:60px 0;background:#fafbfd;}
@@ -221,7 +235,9 @@ footer a:hover{color:var(--blue);}
 /* ===== Responsive ===== */
 @media (max-width:960px){
   .detail-hero{padding:32px 0 40px;}
-  .detail-hero-img{margin:18px auto 22px;}
+  /* image width == container width here, so a % keeps the overlap inside the
+     artwork's empty top band (13.3% of its height) at every phone size */
+  .detail-hero-img{max-width:none;margin:-7% auto 22px;}
   .detail-hero-img img{border-radius:14px;}
   .feature-grid{grid-template-columns:1fr;}
   .contact .grid{grid-template-columns:1fr;}
