@@ -442,9 +442,36 @@ button {
   box-shadow: var(--shadow-md);
 }
 
+/* Existing-student entry point. Tinted rather than outlined so it reads as a
+   real button on mobile, where My Page was previously only in the burger menu. */
+.btn-mypage {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-8);
+  background: var(--primary-50);
+  color: var(--primary-dark);
+  border: 1.5px solid var(--primary-200);
+  border-radius: var(--radius-xl);
+  font-weight: 600;
+  font-size: var(--font-size-base);
+  transition: all var(--transition-fast);
+}
+
+.btn-mypage:hover {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--white);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
 /* Scroll indicator */
 .scroll-indicator {
   position: absolute;
+  /* Purely decorative, and it sits on top of the hero buttons on short/narrow
+     viewports - never let it swallow their clicks. */
+  pointer-events: none;
   bottom: var(--space-10);
   left: 50%;
   transform: translateX(-50%);
@@ -1600,7 +1627,7 @@ button {
   }
 
   .hero {
-    padding: var(--space-20) 0 var(--space-12);
+    padding: var(--space-20) 0 var(--space-20);
   }
 
   .hero-buttons {
@@ -1608,7 +1635,8 @@ button {
   }
 
   .hero-buttons .btn-primary,
-  .hero-buttons .btn-secondary {
+  .hero-buttons .btn-secondary,
+  .hero-buttons .btn-mypage {
     justify-content: center;
   }
 
