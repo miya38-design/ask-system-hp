@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>マイページの使い方｜ASKデジタルアカデミー</title>
+<meta name="description" content="ASKデジタルアカデミーのマイページ操作マニュアル。ログイン方法、LINE連携、欠席のご連絡、入退室カードの表示・印刷、パスワード変更までを画面付きで説明します。">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="assets/images/logo.png">
+<style>
+:root{
+  --ink:#1E293B; --sub:#475569; --muted:#64748B;
+  --bg:#F8FAFC; --card:#FFFFFF; --line:#E2E8F0;
+  --blue:#2563EB; --blue-dark:#1E40AF; --blue-50:#EFF6FF; --blue-200:#BFDBFE;
+  --green:#10B981; --green-50:#ECFDF5; --amber-50:#FFFBEB; --amber-bd:#FDE68A;
+  --red:#EF4444; --red-50:#FEF2F2;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:"Noto Sans JP",-apple-system,BlinkMacSystemFont,sans-serif;
+  color:var(--ink);background:var(--bg);line-height:1.95;-webkit-font-smoothing:antialiased;}
+img{display:block;max-width:100%;height:auto;}
+a{color:var(--blue);}
+.wrap{max-width:880px;margin:0 auto;padding:24px 20px 70px;}
+
+.top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:22px;flex-wrap:wrap;}
+.top img.logo{height:42px;width:auto;}
+.top .actions{display:flex;gap:10px;flex-wrap:wrap;}
+.top a,.top button{font-family:inherit;font-weight:700;font-size:14px;cursor:pointer;text-decoration:none;
+  border-radius:999px;padding:10px 18px;border:1.5px solid var(--line);background:#fff;color:var(--sub);}
+.top button.print{background:var(--blue);border-color:var(--blue);color:#fff;}
+
+.title{margin-bottom:26px;}
+.title h1{font-size:clamp(24px,4.2vw,34px);font-weight:900;line-height:1.45;margin-bottom:10px;}
+.title h1 .hl{color:var(--blue);}
+.title p{color:var(--sub);}
+
+.toc{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 24px;margin-bottom:26px;}
+.toc h2{font-size:13px;font-weight:800;color:var(--blue);letter-spacing:.08em;margin-bottom:10px;}
+.toc ol{list-style:none;counter-reset:t;margin:0;padding:0;columns:2;column-gap:26px;}
+.toc li{counter-increment:t;margin-bottom:5px;break-inside:avoid;}
+.toc a{text-decoration:none;color:var(--sub);font-size:14.5px;font-weight:600;}
+.toc a::before{content:counter(t) ". ";color:var(--blue);font-weight:800;}
+.toc a:hover{color:var(--blue-dark);text-decoration:underline;}
+
+section{background:var(--card);border:1px solid var(--line);border-radius:18px;
+  padding:28px 30px;margin-bottom:22px;box-shadow:0 4px 14px rgba(30,58,138,.05);scroll-margin-top:20px;}
+section > h2{font-size:20px;font-weight:900;margin-bottom:8px;display:flex;align-items:center;gap:12px;}
+section > h2 .n{width:34px;height:34px;border-radius:10px;background:var(--blue);color:#fff;
+  display:inline-flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;flex:0 0 auto;}
+section > .sub{color:var(--muted);font-size:14.5px;margin-bottom:18px;padding-left:46px;}
+section p{color:var(--sub);margin-bottom:12px;}
+
+ol.steps{list-style:none;counter-reset:s;margin:0 0 6px;padding:0;}
+ol.steps > li{counter-increment:s;position:relative;padding-left:44px;margin-bottom:18px;color:var(--sub);}
+ol.steps > li::before{content:counter(s);position:absolute;left:0;top:1px;width:28px;height:28px;border-radius:50%;
+  background:var(--blue-50);color:var(--blue-dark);border:1.5px solid var(--blue-200);
+  font-weight:900;font-size:14px;display:flex;align-items:center;justify-content:center;}
+ol.steps > li b{display:block;color:var(--ink);font-size:15.5px;margin-bottom:2px;}
+
+ul.plain{list-style:none;margin:0 0 12px;padding:0;}
+ul.plain li{position:relative;padding-left:1.6em;color:var(--sub);margin-bottom:6px;}
+ul.plain li::before{content:"●";position:absolute;left:0;top:.55em;color:var(--green);font-size:.7em;}
+
+figure{margin:16px 0 18px;}
+figure img{border:1px solid var(--line);border-radius:12px;box-shadow:0 6px 18px rgba(30,58,138,.09);width:100%;}
+figure img.narrow{max-width:520px;}
+figcaption{margin-top:8px;font-size:13.5px;color:var(--muted);text-align:center;}
+
+.box{border-radius:14px;padding:16px 20px;margin:14px 0;font-size:14.8px;line-height:1.9;}
+.box h4{font-weight:800;margin-bottom:5px;font-size:15.5px;}
+.box.blue{background:var(--blue-50);border:1px solid var(--blue-200);color:#1E3A8A;}
+.box.amber{background:var(--amber-50);border:1px solid var(--amber-bd);color:#78350F;}
+.box.red{background:var(--red-50);border:1px solid #FECACA;color:#991B1B;}
+.box.green{background:var(--green-50);border:1px solid #A7F3D0;color:#065F46;}
+
+.kv{display:grid;grid-template-columns:auto 1fr;gap:8px 18px;background:#F1F5F9;border-radius:12px;
+  padding:16px 18px;font-size:14.8px;margin:12px 0;}
+.kv dt{font-weight:800;color:var(--ink);white-space:nowrap;}
+.kv dd{color:var(--sub);}
+
+.trouble{border-top:1px solid var(--line);padding-top:14px;margin-top:14px;}
+.trouble:first-of-type{border-top:0;padding-top:0;margin-top:0;}
+.trouble .q{font-weight:800;color:var(--ink);margin-bottom:5px;}
+.trouble .a{color:var(--sub);font-size:15px;}
+
+.contact{background:#0F172A;color:#E2E8F0;border-radius:18px;padding:26px 30px;}
+.contact h2{color:#fff;font-size:19px;font-weight:900;margin-bottom:12px;}
+.contact dl{display:grid;grid-template-columns:auto 1fr;gap:8px 22px;font-size:15px;}
+.contact dt{font-weight:700;color:#94A3B8;white-space:nowrap;}
+.contact dd{color:#E2E8F0;}
+.contact a{color:#7DD3FC;font-weight:700;}
+
+@media (max-width:700px){
+  section{padding:22px 18px;}
+  section > .sub{padding-left:0;}
+  .toc ol{columns:1;}
+  .kv,.contact dl{grid-template-columns:1fr;gap:2px 0;}
+  .kv dd,.contact dd{margin-bottom:9px;}
+}
+@media print{
+  @page{size:A4;margin:14mm;}
+  body{background:#fff;}
+  .wrap{max-width:none;padding:0;}
+  .top{display:none;}
+  section,.contact{box-shadow:none;break-inside:avoid;}
+  figure img{box-shadow:none;}
+  .contact{background:#fff;color:#1E293B;border:1px solid #cbd5e1;}
+  .contact h2{color:#1E293B;} .contact dt{color:#475569;}
+  .contact dd,.contact a{color:#1E293B;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="top">
+    <img class="logo" src="assets/images/logo.png" alt="ASKデジタルアカデミー">
+    <div class="actions">
+      <a href="index.html">← トップへ</a>
+      <a href="mypage.html">マイページを開く</a>
+      <button class="print" onclick="window.print()">🖨 印刷する</button>
+    </div>
+  </div>
+
+  <div class="title">
+    <h1><span class="hl">マイページ</span>の使い方</h1>
+    <p>ログインの方法から、LINE連携・欠席のご連絡・入退室カードの表示まで、実際の画面で説明します。
+       この資料は印刷してお手元に置いていただけます。</p>
+  </div>
+
+  <nav class="toc">
+    <h2>もくじ</h2>
+    <ol>
+      <li><a href="#s1">マイページでできること</a></li>
+      <li><a href="#s2">ログインする</a></li>
+      <li><a href="#s3">保護者の画面</a></li>
+      <li><a href="#s4">LINE連携（最初に必ず）</a></li>
+      <li><a href="#s5">欠席を連絡する</a></li>
+      <li><a href="#s6">入退室カードを表示・印刷</a></li>
+      <li><a href="#s7">お子さまの画面</a></li>
+      <li><a href="#s8">メール・パスワードの変更</a></li>
+      <li><a href="#s9">困ったときは</a></li>
+    </ol>
+  </nav>
+
+  <section id="s1">
+    <h2><span class="n">1</span>マイページでできること</h2>
+    <p class="sub">保護者さまとお子さまで、表示される内容が変わります。</p>
+    <div class="kv">
+      <dt>保護者さま</dt>
+      <dd>お子さまの学習状況の確認／欠席のご連絡／LINE連携／入退室カードの表示・印刷／スケジュール・お知らせの確認</dd>
+      <dt>お子さま</dt>
+      <dd>学習レベルとスタンプの確認／入退室カードの表示／スケジュール・お知らせの確認</dd>
+    </div>
+    <div class="box blue">
+      <h4>ログインIDは共通、パスワードは別々です</h4>
+      ご入会時にお渡しした<strong>メールアドレスは保護者・お子さま共通</strong>で、
+      <strong>パスワードだけがそれぞれ別</strong>です。どちらのパスワードでログインしたかで、表示される画面が変わります。
+    </div>
+  </section>
+
+  <section id="s2">
+    <h2><span class="n">2</span>ログインする</h2>
+    <p class="sub">スマホでもパソコンでも同じようにお使いいただけます。</p>
+    <ol class="steps">
+      <li><b>ログインページを開く</b>
+        アカデミーのトップページにある「マイページはコチラ」ボタン、または
+        <a href="mypage.html">こちらのリンク</a>から開きます。</li>
+      <li><b>メールアドレスとパスワードを入力</b>
+        ご入会時のご案内メールに記載のものを入力してください。</li>
+      <li><b>「ログイン」を押す</b>
+        保護者用パスワードなら保護者の画面、お子さま用パスワードならお子さまの画面が開きます。</li>
+    </ol>
+    <figure>
+      <img class="narrow" style="margin:0 auto;" src="assets/manual/login.png" alt="ログイン画面。メールアドレスとパスワードの入力欄、ログインボタンがある">
+      <figcaption>ログイン画面</figcaption>
+    </figure>
+    <div class="box amber">
+      <h4>スマホのホーム画面に置いておくと便利です</h4>
+      ログイン後の画面で、ブラウザの共有メニューから「ホーム画面に追加」をしておくと、
+      次回からアプリのように1タップで開けます。
+    </div>
+  </section>
+
+  <section id="s3">
+    <h2><span class="n">3</span>保護者の画面</h2>
+    <p class="sub">ログインすると、この画面が表示されます。</p>
+    <figure>
+      <img src="assets/manual/parent-child.png" alt="お子さまの状況カード。名前、レベル、スタンプ数、最終出席日、欠席を連絡するボタン、入退室カードを開くボタン">
+      <figcaption>「お子さまの状況」— お子さまごとに表示されます</figcaption>
+    </figure>
+    <ul class="plain">
+      <li><b>レベル</b>／<b>スタンプ</b>：通って学習するとたまっていきます。お子さまの励みになります。</li>
+      <li><b>最終出席</b>：直近で教室に来た日です。</li>
+      <li><b>欠席を連絡する</b>：お休みのご連絡はここから（→ <a href="#s5">5</a>）。</li>
+      <li><b>入退室カードを開く</b>：QRコードのカードを表示・印刷できます（→ <a href="#s6">6</a>）。</li>
+    </ul>
+    <p>画面を下にスクロールすると、<b>LINE連携</b>・<b>スケジュール</b>・<b>お知らせ</b>・
+       <b>メール／パスワードの変更</b>が並んでいます。</p>
+    <div class="box green">
+      <h4>お子さまが複数いる場合</h4>
+      「お子さまの状況」に、お子さまの人数分だけカードが並びます。欠席連絡やカード表示は、それぞれのカードから行えます。
+    </div>
+  </section>
+
+  <section id="s4">
+    <h2><span class="n">4</span>LINE連携（最初に必ず行ってください）</h2>
+    <p class="sub">入退室のお知らせをLINEで受け取るために必要です。最初の1回だけの作業です。</p>
+    <figure>
+      <img src="assets/manual/parent-line.png" alt="LINE連携カード。手順1〜3と、4桁の連携コード、コードをコピーボタン、公式LINEを友だち追加ボタンが表示されている">
+      <figcaption>「LINE連携」— 連携がお済みでない場合はこの画面になります</figcaption>
+    </figure>
+    <ol class="steps">
+      <li><b>「① 公式LINEを友だち追加」を押す</b>
+        LINEアプリが開きます。ASKデジタルアカデミーの公式アカウントを友だち追加してください。</li>
+      <li><b>連携コードをコピーする</b>
+        マイページに戻り、大きく表示されている数字（連携コード）の横の<b>「コードをコピー」</b>を押します。</li>
+      <li><b>LINEのトークにコードを貼り付けて送信</b>
+        友だち追加した公式LINEのトーク画面を開き、コピーしたコードを貼り付けて送信します。</li>
+      <li><b>「連携しました」の返信が来たら完了</b>
+        以降、お子さまの入退室がLINEに届くようになります。マイページの表示も「✅ LINE連携済みです」に変わります。</li>
+    </ol>
+    <div class="box amber">
+      <h4>連携コードは、その保護者さま専用です</h4>
+      他の方に教えないでください。うまく送れない、返信が来ないときは、コードをコピーし直してもう一度お試しください。
+      それでも解決しない場合は教室までご連絡ください。
+    </div>
+    <div class="box red">
+      <h4>通知だけに頼らないでください</h4>
+      通信状況やLINE側の状態によって、通知が<strong>遅れたり届かないことがあります</strong>。
+      お子さまの所在が気になるときは、通知を待たずに教室へお電話ください。
+    </div>
+  </section>
+
+  <section id="s5">
+    <h2><span class="n">5</span>欠席を連絡する</h2>
+    <p class="sub">お休みが決まったら、マイページからご連絡ください。公式LINEでも承ります。</p>
+    <ol class="steps">
+      <li><b>「📩 欠席を連絡する」を押す</b>お子さまのカードにあるオレンジ色のボタンです。</li>
+      <li><b>お休みする日を選ぶ</b>
+        ご契約のコースの登校日が一覧で出ます。休校日は自動的に除かれています。</li>
+      <li><b>「この日で連絡する」を押す</b>「欠席を連絡しました」と表示されれば完了です。</li>
+    </ol>
+    <figure>
+      <img src="assets/manual/parent-absence.png" alt="欠席連絡フォームが開いた状態。欠席する日を選ぶプルダウンと、この日で連絡するボタンが表示されている">
+      <figcaption>「欠席を連絡する」を押すと、日付を選ぶ欄が開きます</figcaption>
+    </figure>
+    <div class="box blue">
+      <h4>当日の急なお休みは、お電話か公式LINEが確実です</h4>
+      マイページからのご連絡でも届きますが、開校時間直前・直後は、お電話（0966-63-4253）か公式LINEをおすすめします。
+    </div>
+    <p style="font-size:14px;color:var(--muted);">※ご都合による欠席分の受講料の返金・繰越はありません。振替の可否は教室にご相談ください。</p>
+  </section>
+
+  <section id="s6">
+    <h2><span class="n">6</span>入退室カードを表示・印刷する</h2>
+    <p class="sub">教室の受付でかざす、QRコード付きのカードです。</p>
+    <ol class="steps">
+      <li><b>「🎫 入退室カードを開く」を押す</b>保護者の画面・お子さまの画面のどちらからでも開けます。</li>
+      <li><b>受付でQRをかざす</b>スマホに表示したままかざしてもかまいません。</li>
+      <li><b>紙で持たせたいときは「印刷する」</b>
+        右上の「印刷する」から印刷できます。厚紙に印刷してお子さまに持たせると便利です。</li>
+    </ol>
+    <figure>
+      <img class="narrow" style="margin:0 auto;" src="assets/manual/card.png" alt="入退室カードの画面。お名前、学年、コース、QRコードが表示され、印刷するボタンがある">
+      <figcaption>入退室カード（QRを受付端末で読み取ります）</figcaption>
+    </figure>
+    <div class="box amber">
+      <h4>QRコードは大切に扱ってください</h4>
+      このQRはお子さま本人のものです。SNSなどに写り込まないようご注意ください。
+      紛失や、他の人に見られたかもしれないときは教室までお知らせください。再発行します。
+    </div>
+  </section>
+
+  <section id="s7">
+    <h2><span class="n">7</span>お子さまの画面</h2>
+    <p class="sub">お子さま用のパスワードでログインすると、この画面になります。</p>
+    <figure>
+      <img src="assets/manual/student.png" alt="生徒のマイページ画面。学習レベル、スタンプカード、入退室カード、スケジュール、お知らせが並んでいる">
+      <figcaption>お子さまの画面（学習レベル・スタンプカード・入退室カードなど）</figcaption>
+    </figure>
+    <ul class="plain">
+      <li><b>学習レベル</b>：通って学習すると経験値がたまり、レベルが上がります。</li>
+      <li><b>スタンプカード</b>：出席するとスタンプがたまります。</li>
+      <li><b>入退室カード</b>：受付でかざすQRカードを開けます。</li>
+      <li><b>スケジュール／お知らせ</b>：教室からの連絡を確認できます。</li>
+    </ul>
+    <div class="box green">
+      <h4>お子さまには「自分の画面」を見せてあげてください</h4>
+      レベルやスタンプが増えていくのは、通い続ける大きな励みになります。
+      おうちで一緒に見ていただけると嬉しいです。
+    </div>
+  </section>
+
+  <section id="s8">
+    <h2><span class="n">8</span>メールアドレス・パスワードを変更する</h2>
+    <p class="sub">画面をいちばん下までスクロールしたところにあります。</p>
+    <figure>
+      <img src="assets/manual/parent-settings.png" alt="メールアドレス変更とパスワード変更のフォーム">
+      <figcaption>「メールアドレス変更」「パスワード変更」</figcaption>
+    </figure>
+    <ul class="plain">
+      <li><b>メールアドレスの変更</b>：新しいアドレスと、<b>現在のパスワード</b>を入力して「メールを変更」。</li>
+      <li><b>パスワードの変更</b>：現在のパスワードと、新しいパスワード（<b>8文字以上</b>）を入力して「パスワードを変更」。</li>
+    </ul>
+    <div class="box blue">
+      <h4>最初のパスワードは変更をおすすめします</h4>
+      ご入会時にお渡ししたパスワードは、ご家庭で覚えやすいものに変更いただけます。
+      保護者用とお子さま用は、<strong>別々のものにしてください</strong>。
+    </div>
+  </section>
+
+  <section id="s9">
+    <h2><span class="n">9</span>困ったときは</h2>
+
+    <div class="trouble">
+      <div class="q">ログインできない</div>
+      <div class="a">メールアドレスの打ち間違い（全角になっていないか）、パスワードの大文字・小文字をご確認ください。
+        保護者用とお子さま用でパスワードが違う点にもご注意ください。それでも入れない場合は教室で再発行します。</div>
+    </div>
+
+    <div class="trouble">
+      <div class="q">パスワードを忘れた</div>
+      <div class="a">教室までご連絡ください。ご本人確認のうえ、新しいパスワードを発行します。</div>
+    </div>
+
+    <div class="trouble">
+      <div class="q">入退室のLINEが届かない</div>
+      <div class="a">まずマイページの「LINE連携」が「✅ 連携済み」になっているかご確認ください。
+        未連携の場合は<a href="#s4">4</a>の手順をやり直してください。
+        連携済みでも届かない場合は、LINEアプリの通知設定と、公式アカウントをブロックしていないかをご確認ください。</div>
+    </div>
+
+    <div class="trouble">
+      <div class="q">欠席連絡の日付一覧に、休みたい日が出てこない</div>
+      <div class="a">ご契約のコースの登校曜日と休校日から自動で作られています。
+        コース変更をご希望の場合、または一覧にない日のご連絡は、公式LINEか教室までお願いします。</div>
+    </div>
+
+    <div class="trouble">
+      <div class="q">画面が古いまま更新されない</div>
+      <div class="a">ブラウザの再読み込み（スマホは画面を下に引っ張る、パソコンは Ctrl+F5）をお試しください。</div>
+    </div>
+
+    <div class="trouble">
+      <div class="q">入退室カードをなくした</div>
+      <div class="a">マイページからいつでも再表示・再印刷できます。他の人に見られた可能性がある場合は、教室にご連絡ください。</div>
+    </div>
+  </section>
+
+  <div class="contact">
+    <h2>それでも解決しないときは</h2>
+    <dl>
+      <dt>電話</dt><dd><a href="tel:0966634253">0966-63-4253</a>（受付 9:00〜18:00）</dd>
+      <dt>公式LINE</dt><dd><a href="https://lin.ee/xaSJRVQ" target="_blank" rel="noopener noreferrer">友だち追加・お問い合わせ</a></dd>
+      <dt>メール</dt><dd><a href="mailto:info@ask-system.net">info@ask-system.net</a></dd>
+      <dt>開校時間</dt><dd>16:00〜19:00</dd>
+    </dl>
+  </div>
+
+</div>
+</body>
+</html>

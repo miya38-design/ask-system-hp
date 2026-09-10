@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>保護者のみなさまへ｜ASKデジタルアカデミー</title>
+<meta name="description" content="ASKデジタルアカデミーの保護者向けご案内。教室の考え方、学習の進め方、コースと料金、1日の流れ、AIの使い方の方針、安全とご連絡の方法、よくあるご質問をまとめています。">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="assets/images/logo.png">
+<style>
+:root{
+  --ink:#1E293B; --sub:#475569; --muted:#64748B;
+  --bg:#F8FAFC; --card:#FFFFFF; --line:#E2E8F0;
+  --blue:#2563EB; --blue-dark:#1E40AF; --blue-50:#EFF6FF; --blue-200:#BFDBFE;
+  --green:#10B981; --green-50:#ECFDF5; --green-dark:#047857;
+  --amber:#F59E0B; --amber-50:#FFFBEB; --amber-bd:#FDE68A; --orange:#EA580C;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:"Noto Sans JP",-apple-system,BlinkMacSystemFont,sans-serif;
+  color:var(--ink);background:var(--bg);line-height:1.95;-webkit-font-smoothing:antialiased;}
+img{display:block;max-width:100%;height:auto;}
+a{color:var(--blue);}
+.wrap{max-width:900px;margin:0 auto;padding:24px 20px 70px;}
+
+.top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:20px;flex-wrap:wrap;}
+.top img.logo{height:42px;width:auto;}
+.top .actions{display:flex;gap:10px;}
+.top a,.top button{font-family:inherit;font-weight:700;font-size:14px;cursor:pointer;text-decoration:none;
+  border-radius:999px;padding:10px 18px;border:1.5px solid var(--line);background:#fff;color:var(--sub);}
+.top button.print{background:var(--blue);border-color:var(--blue);color:#fff;}
+
+.hero{background:var(--card);border:1px solid var(--line);border-radius:20px;overflow:hidden;
+  box-shadow:0 10px 28px rgba(30,58,138,.07);margin-bottom:32px;}
+.hero img{width:100%;}
+.hero .cap{padding:26px 28px 28px;}
+.hero h1{font-size:clamp(24px,4.2vw,34px);font-weight:900;line-height:1.5;margin-bottom:10px;}
+.hero h1 .hl{color:var(--blue);}
+.hero p{color:var(--sub);font-size:clamp(14.5px,1.8vw,16px);}
+.hero .meta{margin-top:16px;display:flex;flex-wrap:wrap;gap:10px;font-size:13.5px;}
+.hero .meta span{background:var(--blue-50);color:var(--blue-dark);border:1px solid var(--blue-200);
+  border-radius:999px;padding:5px 14px;font-weight:700;}
+
+section{background:var(--card);border:1px solid var(--line);border-radius:18px;
+  padding:28px 30px;margin-bottom:22px;box-shadow:0 4px 14px rgba(30,58,138,.05);}
+section > h2{font-size:20px;font-weight:900;color:var(--ink);margin-bottom:16px;
+  padding-bottom:12px;border-bottom:2px solid var(--blue-50);display:flex;align-items:center;gap:10px;}
+section > h2 .ic{width:32px;height:32px;border-radius:10px;background:var(--blue-50);color:var(--blue);
+  display:inline-flex;align-items:center;justify-content:center;font-size:17px;flex:0 0 auto;}
+section p{color:var(--sub);margin-bottom:12px;}
+section p:last-child{margin-bottom:0;}
+h3{font-size:16px;font-weight:800;color:var(--ink);margin:20px 0 8px;}
+
+ul.plain{list-style:none;margin:0 0 12px;padding:0;}
+ul.plain li{position:relative;padding-left:1.7em;color:var(--sub);margin-bottom:7px;}
+ul.plain li::before{content:"●";position:absolute;left:0;color:var(--green);font-size:.7em;top:.55em;}
+
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.box{border-radius:14px;padding:18px 20px;font-size:14.8px;line-height:1.9;}
+.box h4{font-weight:800;margin-bottom:6px;font-size:15.5px;}
+.box.blue{background:var(--blue-50);border:1px solid var(--blue-200);color:#1E3A8A;}
+.box.green{background:var(--green-50);border:1px solid #A7F3D0;color:#065F46;}
+.box.amber{background:var(--amber-50);border:1px solid var(--amber-bd);color:#78350F;}
+
+table{width:100%;border-collapse:collapse;font-size:15px;margin:6px 0 12px;}
+th,td{border:1px solid var(--line);padding:12px 14px;text-align:left;}
+th{background:var(--blue-50);color:var(--blue-dark);font-weight:800;white-space:nowrap;}
+td.fee{font-weight:900;white-space:nowrap;color:var(--ink);}
+.tscroll{overflow-x:auto;}
+
+.flow{list-style:none;counter-reset:f;margin:0;padding:0;}
+.flow li{counter-increment:f;position:relative;padding-left:52px;margin-bottom:16px;color:var(--sub);}
+.flow li::before{content:counter(f);position:absolute;left:0;top:2px;width:34px;height:34px;border-radius:50%;
+  background:var(--blue);color:#fff;font-weight:900;display:flex;align-items:center;justify-content:center;font-size:15px;}
+.flow li b{display:block;color:var(--ink);font-size:16px;margin-bottom:2px;}
+
+.faq{border-top:1px solid var(--line);padding-top:16px;margin-top:16px;}
+.faq:first-of-type{border-top:0;padding-top:0;margin-top:0;}
+.faq .q{font-weight:800;color:var(--ink);margin-bottom:6px;display:flex;gap:10px;}
+.faq .q span{color:var(--blue);font-weight:900;flex:0 0 auto;}
+.faq .a{color:var(--sub);display:flex;gap:10px;}
+.faq .a span{color:var(--green);font-weight:900;flex:0 0 auto;}
+
+.contact{background:#0F172A;color:#E2E8F0;border-radius:18px;padding:28px 30px;}
+.contact h2{color:#fff;font-size:19px;font-weight:900;margin-bottom:14px;border:0;padding:0;}
+.contact dl{display:grid;grid-template-columns:auto 1fr;gap:9px 22px;font-size:15px;}
+.contact dt{font-weight:700;color:#94A3B8;white-space:nowrap;}
+.contact dd{color:#E2E8F0;}
+.contact a{color:#7DD3FC;font-weight:700;}
+.contact .note{margin-top:16px;font-size:13.5px;color:#94A3B8;line-height:1.85;}
+
+@media (max-width:700px){
+  section{padding:22px 18px;}
+  .cols{grid-template-columns:1fr;}
+  .contact dl{grid-template-columns:1fr;gap:2px 0;}
+  .contact dd{margin-bottom:9px;}
+}
+@media print{
+  @page{size:A4;margin:14mm;}
+  body{background:#fff;}
+  .wrap{max-width:none;padding:0;}
+  .top{display:none;}
+  section,.hero,.contact{box-shadow:none;break-inside:avoid;}
+  .hero img{max-height:48mm;object-fit:cover;}
+  .contact{background:#fff;color:#1E293B;border:1px solid #cbd5e1;}
+  .contact h2{color:#1E293B;} .contact dt{color:#475569;} .contact dd{color:#1E293B;}
+  .contact a{color:#1E293B;} .contact .note{color:#475569;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="top">
+    <img class="logo" src="assets/images/logo.png" alt="ASKデジタルアカデミー">
+    <div class="actions">
+      <a href="index.html">← トップへ</a>
+      <a href="mypage-guide.html">マイページの使い方</a>
+      <button class="print" onclick="window.print()">🖨 印刷する</button>
+    </div>
+  </div>
+
+  <div class="hero">
+    <img src="assets/guide/parent-header.jpg" alt="ご家庭と教室をつなぐイメージイラスト">
+    <div class="cap">
+      <h1>保護者のみなさまへ<br><span class="hl">ASKデジタルアカデミー</span>のご案内</h1>
+      <p>お子さまが「自分で学ぶ力」を身につけるために、教室が何をして、ご家庭に何をお願いするのか。
+         入会前・入会後に知っておいていただきたいことをまとめました。</p>
+      <div class="meta">
+        <span>対象：小学3〜6年生</span>
+        <span>開校：16:00〜19:00</span>
+        <span>月額 6,000円〜</span>
+      </div>
+    </div>
+  </div>
+
+  <section>
+    <h2><span class="ic">◎</span>この教室が大切にしていること</h2>
+    <p>ASKデジタルアカデミーは、<strong>講師が前に立って一斉に教える塾ではありません</strong>。
+       お子さま一人ひとりが自分のペースで教材に向かい、わからないところを自分で調べ、考える——
+       その「自学習」を支える環境と道具を用意する教室です。</p>
+    <div class="cols">
+      <div class="box blue">
+        <h4>めざすもの</h4>
+        わからないことに出会ったとき、自分で調べて、考えて、前に進める力。
+        これは中学・高校、そして大人になってからも使える力です。
+      </div>
+      <div class="box amber">
+        <h4>お約束できないこと</h4>
+        成績や合格を保証するものではありません。
+        短期間の点数アップをお求めの場合は、目的に合った塾をおすすめすることもあります。
+      </div>
+    </div>
+    <p style="margin-top:14px;">ICT支援を20年以上続けてきたアスクシステムが運営しています。
+       「デジタル社会で置いてけぼりを作らない」——これが、子ども向けの教室を始めた理由です。</p>
+  </section>
+
+  <section>
+    <h2><span class="ic">✎</span>学習の3つの柱</h2>
+    <h3>1. 5教科学習</h3>
+    <p>国語・算数・理科・社会・英語を、自学習形式で進めます。学校の進度や、お子さまの理解度に合わせて調整します。</p>
+    <h3>2. タイピング</h3>
+    <p>キーボードを見ずに正確に打てることは、これからの学習すべての土台になります。楽しみながら少しずつ習得します。</p>
+    <h3>3. AI学習</h3>
+    <p>生成AIを「安全に、正しく使う」練習をします。調べ方、聞き方、そして<strong>出てきた答えを鵜呑みにしない姿勢</strong>を身につけます。</p>
+    <div class="box green" style="margin-top:14px;">
+      <h4>毎月のイベント</h4>
+      タイピング大会など、月ごとに楽しいイベントを用意しています。どのコースの方も参加いただけます。
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="ic">🤖</span>AIの使い方について（教室の方針）</h2>
+    <p>「子どもにAIを使わせて大丈夫ですか」というご質問をよくいただきます。教室では次のルールで運用しています。</p>
+    <ul class="plain">
+      <li><strong>AIは「答えを写す道具」ではなく「考えるための道具」</strong>だと、繰り返し伝えています。</li>
+      <li>まず自分で考える時間を取ってから、AIに聞く。この順番を守るよう声をかけます。</li>
+      <li>AIの答えは間違うことがある——これを実際に体験させ、確かめる習慣をつけます。</li>
+    </ul>
+    <div class="box amber">
+      <h4>個人情報は入力させません</h4>
+      名前・住所・電話番号・学校名・顔写真など、本人やお友だちを特定できる情報は
+      <strong>絶対にAIに入力しない</strong>よう指導し、教室でも確認しています。
+      ご家庭でも同じルールを共有していただけると安心です。
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="ic">◷</span>教室での1日の流れ</h2>
+    <ol class="flow">
+      <li><b>とうこう・カードを「ピッ」</b>受付で入退室カードのQRをかざします。読み取ると、保護者のLINEに到着のお知らせが届きます。</li>
+      <li><b>今日やることを決める</b>その日の学習内容を自分で決め、取りかかります。迷うときはスタッフが一緒に考えます。</li>
+      <li><b>自学習・タイピング・AI学習</b>自分のペースで進めます。手が止まっていたらスタッフが声をかけます。</li>
+      <li><b>ふりかえり</b>できたことを確認します。出席のスタンプがたまり、レベルが上がっていきます。</li>
+      <li><b>かたづけて、カードを「ピッ」</b>退室も記録され、保護者のLINEにお知らせが届きます。</li>
+    </ol>
+    <p style="font-size:14px;color:var(--muted);">※教室でのお子さまのルールは
+      <a href="kids-rules.html">「きょうしつのやくそく」</a>にまとめています。ご家庭でも一度ご覧ください。</p>
+  </section>
+
+  <section>
+    <h2><span class="ic">¥</span>コースと料金</h2>
+    <div class="tscroll">
+      <table>
+        <thead><tr><th>コース</th><th>通学曜日</th><th>月額</th></tr></thead>
+        <tbody>
+          <tr><td>週2回コース</td><td>火・木</td><td class="fee">6,000円</td></tr>
+          <tr><td>週3回コース</td><td>月・水・金</td><td class="fee">9,000円</td></tr>
+          <tr><td>通い放題コース</td><td>月〜金</td><td class="fee">12,000円</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <ul class="plain">
+      <li>受講料は月額制で、原則としてご来校時に教室でお支払いいただきます。</li>
+      <li>教材費やイベント費が別途必要な場合は、必ず事前にご案内します。</li>
+      <li><strong>コース変更はいつでも可能です。</strong>前月末までにお申し出いただくと、翌月から切り替わります。</li>
+      <li>休会は前月末までのお申し出で、最大6か月まで。休会中の受講料はいただきません。</li>
+    </ul>
+    <p style="font-size:14px;color:var(--muted);">詳しい条件は<a href="terms.html">利用規約</a>をご確認ください。</p>
+  </section>
+
+  <section>
+    <h2><span class="ic">♡</span>安全とご連絡について</h2>
+    <h3>お子さまの安全</h3>
+    <ul class="plain">
+      <li>教室が安全に配慮する範囲は、<strong>開校時間中の教室内</strong>です。</li>
+      <li>教室までの行き帰り（送迎を含む）は、保護者さまの管理をお願いします。</li>
+      <li>体調不良やけがのときは応急対応のうえ、すぐにご連絡します。緊急時は連絡より先に救急要請することがあります。</li>
+      <li>緊急連絡先が変わった場合は、必ずお知らせください。</li>
+    </ul>
+    <h3>入退室のお知らせ</h3>
+    <p>QRの読み取りで、到着・退室が保護者さまのLINEに届きます。ご利用には<strong>LINE連携（初回のみ）</strong>が必要です。
+       手順は<a href="mypage-guide.html">マイページの使い方</a>をご覧ください。</p>
+    <div class="box amber">
+      <h4>通知だけに頼らないでください</h4>
+      通信状況やLINE側の状態によって、通知が遅れたり届かないことがあります。
+      気になるときは教室までお電話ください。
+    </div>
+    <h3>欠席のご連絡</h3>
+    <p>マイページから、登校予定日を選んで送信できます。公式LINEでも承ります。</p>
+  </section>
+
+  <section>
+    <h2><span class="ic">?</span>よくあるご質問</h2>
+
+    <div class="faq">
+      <div class="q"><span>Q.</span>パソコンが初めてでも大丈夫ですか？</div>
+      <div class="a"><span>A.</span>大丈夫です。電源の入れ方、マウス、キーボードから始めます。ご家庭にパソコンがなくても問題ありません。</div>
+    </div>
+
+    <div class="faq">
+      <div class="q"><span>Q.</span>学校の宿題を持ち込んでもいいですか？</div>
+      <div class="a"><span>A.</span>はい。自学習の時間に取り組んでいただけます。わからないところは一緒に考えます。</div>
+    </div>
+
+    <div class="faq">
+      <div class="q"><span>Q.</span>途中でコースを変えられますか？</div>
+      <div class="a"><span>A.</span>できます。前月末までにお申し出いただければ翌月から変更します。回数の制限はありません。</div>
+    </div>
+
+    <div class="faq">
+      <div class="q"><span>Q.</span>休んだ分の振替はありますか？</div>
+      <div class="a"><span>A.</span>コースや教室の混み具合によります。まずはご相談ください。なお、ご都合による欠席分の返金や繰越はありません。</div>
+    </div>
+
+    <div class="faq">
+      <div class="q"><span>Q.</span>子どもがAIに頼りきりにならないか心配です。</div>
+      <div class="a"><span>A.</span>そこが一番大事な点だと考えています。「まず自分で考える」「AIの答えを確かめる」を徹底し、丸写しにならないよう声をかけています。</div>
+    </div>
+
+    <div class="faq">
+      <div class="q"><span>Q.</span>保護者も教室の様子を見られますか？</div>
+      <div class="a"><span>A.</span>マイページでレベル・スタンプ・最終出席日をご確認いただけます。教室の見学もいつでも歓迎です。</div>
+    </div>
+
+    <div class="faq">
+      <div class="q"><span>Q.</span>兄弟で通わせたいのですが。</div>
+      <div class="a"><span>A.</span>可能です。マイページでは、お子さまごとに状況を確認・欠席連絡ができます。</div>
+    </div>
+  </section>
+
+  <div class="contact">
+    <h2>お問い合わせ</h2>
+    <dl>
+      <dt>運営</dt><dd>アスクシステム（代表 中村 慶治）</dd>
+      <dt>電話</dt><dd><a href="tel:0966634253">0966-63-4253</a>（受付 9:00〜18:00）</dd>
+      <dt>メール</dt><dd><a href="mailto:info@ask-system.net">info@ask-system.net</a></dd>
+      <dt>公式LINE</dt><dd><a href="https://lin.ee/xaSJRVQ" target="_blank" rel="noopener noreferrer">友だち追加はこちら</a>（無料体験・ご相談・入会申込）</dd>
+      <dt>開校時間</dt><dd>16:00〜19:00</dd>
+    </dl>
+    <p class="note">無料体験・入会のご相談は、公式LINEからが一番スムーズです。
+      「まず話を聞いてみたい」だけでも、お気軽にどうぞ。</p>
+  </div>
+
+</div>
+</body>
+</html>
