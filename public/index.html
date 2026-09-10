@@ -239,6 +239,14 @@ ul{list-style:none;}
 .svc-detail-btn.pink{background:linear-gradient(135deg,#e74e7c,#f5789e);box-shadow:0 8px 20px rgba(231,78,124,.30);}
 .mission-btn{position:relative;z-index:2;display:inline-flex;align-items:center;gap:8px;margin-top:18px;padding:14px 28px;border-radius:999px;font-weight:800;font-size:16px;color:var(--blue-dark);background:#fff;text-decoration:none;box-shadow:0 6px 16px rgba(0,0,0,.22);}
 .mission-btn:hover{filter:brightness(1.03);transform:translateY(-1px);}
+/* 開講準備中の案内（アカデミーのローンチ保留中に表示） */
+.svc-coming{background:#fff;border:1px dashed #f0a8c2;border-radius:12px;padding:22px 24px;margin-top:6px;}
+.svc-coming .badge{display:inline-block;background:var(--pink);color:#fff;font-size:14px;font-weight:800;
+  border-radius:999px;padding:4px 14px;margin-bottom:10px;}
+.svc-coming .t{font-size:21px;font-weight:900;color:var(--pink);margin-bottom:8px;}
+.svc-coming .d{font-size:17px;color:#4a5568;line-height:1.8;margin-bottom:10px;}
+.svc-coming .q{font-size:15px;color:var(--muted);line-height:1.8;}
+.svc-coming .q a{color:var(--blue);font-weight:700;text-decoration:underline;}
 .svc-card .hero-img{display:flex;align-items:flex-end;justify-content:center;}
 .svc-card .hero-img img{max-height:240px;object-fit:contain;}
 
@@ -615,6 +623,17 @@ footer a:hover{color:var(--blue);}
             <h3>ICT教育<span class="div">｜</span>アスクデジタルアカデミー</h3>
           </div>
           <p class="lead">未来をつくるスキルを楽しく学べるICT塾</p>
+          <!-- 開講準備中。ローンチ時は下の .svc-coming を消し、
+               PRICES-AND-CTA のコメントを外せば元の料金表＋詳細ボタンに戻ります。 -->
+          <div class="svc-coming">
+            <span class="badge">準備中</span>
+            <p class="t">近日開講予定です</p>
+            <p class="d">小学生向けのICT塾＋AI活用コースを準備しています。<br>
+              開講日・募集の詳細が決まり次第、このページでお知らせします。</p>
+            <p class="q">先行してご質問・ご相談をご希望の方は、
+              <a href="#contact">お問い合わせ</a>または公式LINEまでお気軽にどうぞ。</p>
+          </div>
+          <!-- PRICES-AND-CTA
           <div class="b-prices">
             <div class="b-price">
               <h4>小中学生向け ICT塾＋AI活用（小3〜／16:00〜19:00）</h4>
@@ -626,6 +645,7 @@ footer a:hover{color:var(--blue);}
           <div class="svc-cta">
             <a href="academy/index.html" class="svc-detail-btn pink">アカデミーの詳細はこちら →</a>
           </div>
+          -->
         </div>
         <div class="hero-img"><img src="assets/two-kids-tablet.png" alt=""></div>
       </div>
