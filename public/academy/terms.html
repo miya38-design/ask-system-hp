@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>利用規約｜ASKデジタルアカデミー</title>
+  <meta name="description" content="ASKデジタルアカデミーの利用規約です。入会・受講料・コース変更・休会・退会・安全管理・生成AIの利用・個人情報の取扱いなどを定めています。">
+  <meta name="robots" content="index,follow">
+  <meta property="og:title" content="利用規約｜ASKデジタルアカデミー">
+  <meta property="og:description" content="ASKデジタルアカデミーの利用規約です。">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="ASKデジタルアカデミー">
+  <meta property="og:locale" content="ja_JP">
+  <link rel="stylesheet" href="css/style.css?v=202609081505">
+  <link rel="icon" type="image/png" href="assets/images/logo.png">
+<style>
+/* ===== Legal document page ===== */
+.legal-hero{
+  background:linear-gradient(135deg,#EFF6FF 0%,#ECFDF5 100%);
+  padding:160px 0 var(--space-12);
+  border-bottom:1px solid var(--border-color);
+}
+.legal-hero h1{font-size:clamp(28px,4.4vw,42px);font-weight:800;color:var(--text-dark);margin-bottom:var(--space-3);}
+.legal-hero .lead{color:#475569;font-size:1rem;line-height:1.9;max-width:62ch;}
+.legal-meta{display:flex;flex-wrap:wrap;gap:var(--space-3);margin-top:var(--space-5);font-size:.875rem;color:#64748B;}
+.legal-meta span{background:var(--white);border:1px solid var(--border-color);border-radius:999px;padding:6px 14px;font-weight:600;}
+
+.legal-wrap{padding:var(--space-12) 0 var(--space-20);}
+.legal-layout{display:grid;grid-template-columns:250px 1fr;gap:var(--space-10);align-items:start;}
+
+.legal-toc{position:sticky;top:133px;background:var(--white);border:1px solid var(--border-color);
+  border-radius:var(--radius-xl);padding:var(--space-5);max-height:calc(100vh - 165px);overflow:auto;}
+.legal-toc h2{font-size:.8rem;font-weight:800;color:var(--primary);letter-spacing:.08em;margin-bottom:var(--space-3);}
+.legal-toc ol{list-style:none;margin:0;padding:0;}
+.legal-toc li{margin-bottom:2px;}
+.legal-toc a{display:block;font-size:.83rem;line-height:1.5;color:#475569;padding:5px 8px;border-radius:8px;
+  text-decoration:none;transition:background .15s,color .15s;}
+.legal-toc a:hover{background:var(--primary-50);color:var(--primary-dark);}
+
+.legal-body{background:var(--white);border:1px solid var(--border-color);border-radius:var(--radius-xl);
+  padding:var(--space-10) var(--space-10) var(--space-12);}
+.legal-body > p.intro{color:#475569;line-height:2;margin-bottom:var(--space-8);
+  background:#F8FAFC;border-left:4px solid var(--primary);border-radius:0 10px 10px 0;padding:var(--space-5);}
+.legal-body section{scroll-margin-top:133px;margin-bottom:var(--space-8);}
+.legal-body h2{font-size:1.06rem;font-weight:800;color:var(--text-dark);
+  padding-bottom:10px;margin-bottom:var(--space-4);border-bottom:2px solid var(--primary-100);}
+.legal-body h2 .num{color:var(--primary);margin-right:.5em;font-variant-numeric:tabular-nums;}
+.legal-body p{color:#334155;line-height:2;margin-bottom:var(--space-3);}
+.legal-body ol.items{list-style:none;counter-reset:it;margin:0 0 var(--space-3);padding:0;}
+.legal-body ol.items > li{counter-increment:it;position:relative;padding-left:2em;
+  color:#334155;line-height:2;margin-bottom:var(--space-2);}
+.legal-body ol.items > li::before{content:counter(it) ".";position:absolute;left:0;top:0;
+  color:var(--primary);font-weight:700;font-variant-numeric:tabular-nums;}
+.legal-body ol.sub{list-style:none;margin:var(--space-2) 0;padding:0;counter-reset:sb;}
+.legal-body ol.sub > li{counter-increment:sb;position:relative;padding-left:2.4em;
+  color:#475569;line-height:1.95;margin-bottom:4px;font-size:.95rem;}
+.legal-body ol.sub > li::before{content:"(" counter(sb) ")";position:absolute;left:0;top:0;color:#94A3B8;font-weight:600;}
+
+.legal-table{width:100%;border-collapse:collapse;margin:var(--space-4) 0;font-size:.95rem;}
+.legal-table th,.legal-table td{border:1px solid var(--border-color);padding:12px 14px;text-align:left;}
+.legal-table th{background:var(--primary-50);color:var(--primary-dark);font-weight:700;white-space:nowrap;}
+.legal-table td.fee{font-weight:800;color:var(--text-dark);white-space:nowrap;}
+.table-scroll{overflow-x:auto;}
+
+.callout{border-radius:12px;padding:var(--space-4) var(--space-5);margin:var(--space-4) 0;line-height:1.95;font-size:.95rem;}
+.callout.note{background:var(--primary-50);border:1px solid var(--primary-200);color:#1E3A8A;}
+.callout.warn{background:#FFFBEB;border:1px solid #FDE68A;color:#78350F;}
+
+.legal-contact{background:#F8FAFC;border:1px solid var(--border-color);border-radius:12px;padding:var(--space-5);}
+.legal-contact dl{display:grid;grid-template-columns:auto 1fr;gap:10px var(--space-5);margin:0;}
+.legal-contact dt{font-weight:700;color:var(--text-dark);white-space:nowrap;}
+.legal-contact dd{margin:0;color:#475569;}
+.legal-contact a{color:var(--primary);font-weight:600;}
+
+.legal-foot{margin-top:var(--space-8);padding-top:var(--space-5);border-top:1px solid var(--border-color);
+  color:#64748B;font-size:.9rem;line-height:1.9;}
+.back-top{display:inline-flex;align-items:center;gap:8px;margin-top:var(--space-6);
+  padding:12px 24px;border-radius:999px;background:var(--primary-50);color:var(--primary-dark);
+  border:1.5px solid var(--primary-200);font-weight:600;text-decoration:none;transition:all .15s;}
+.back-top:hover{background:var(--primary);border-color:var(--primary);color:var(--white);}
+
+@media (max-width:1024px){
+  .legal-layout{grid-template-columns:1fr;gap:var(--space-6);}
+  .legal-toc{position:static;max-height:none;}
+  .legal-toc ol{columns:2;column-gap:var(--space-5);}
+}
+@media (max-width:768px){
+  .legal-hero{padding-top:140px;}
+  .legal-body{padding:var(--space-6) var(--space-5) var(--space-8);}
+  .legal-toc ol{columns:1;}
+  .legal-contact dl{grid-template-columns:1fr;gap:2px var(--space-3);}
+  .legal-contact dd{margin-bottom:10px;}
+}
+</style>
+</head>
+<body id="top">
+
+  <header class="site-header" id="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo">
+        <img src="assets/images/logo.png" alt="ASKデジタルアカデミー ロゴ" width="220" height="70">
+      </a>
+      <nav class="nav-links" id="nav-links">
+        <a href="index.html#junior">ジュニアコース</a>
+        <a href="index.html#trial">無料体験・入会相談</a>
+        <a href="index.html#payment">ご入会・お支払い</a>
+        <a href="mypage.html" class="nav-cta">マイページ →</a>
+      </nav>
+      <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="メニュー" aria-expanded="false" aria-controls="nav-links">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <section class="legal-hero">
+    <div class="container">
+      <h1>利用規約</h1>
+      <p class="lead">この規約は、ASKデジタルアカデミーをご利用いただくうえでのお約束をまとめたものです。
+        お子さまが安心して学べる場を保つため、ご入会前に保護者の方が必ずお読みください。</p>
+      <div class="legal-meta">
+        <span>制定日：2026年9月10日</span>
+        <span>最終更新：2026年9月10日</span>
+        <span>対象：小学3〜6年生</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="legal-wrap">
+    <div class="container legal-layout">
+
+      <nav class="legal-toc" aria-label="目次">
+        <h2>目次</h2>
+        <ol>
+          <li><a href="#a1">第1条 目的・適用</a></li>
+          <li><a href="#a2">第2条 定義</a></li>
+          <li><a href="#a3">第3条 対象・入会資格</a></li>
+          <li><a href="#a4">第4条 入会手続き</a></li>
+          <li><a href="#a5">第5条 契約期間・自動更新</a></li>
+          <li><a href="#a6">第6条 コースと受講料</a></li>
+          <li><a href="#a7">第7条 受講料のお支払い</a></li>
+          <li><a href="#a8">第8条 コースの変更</a></li>
+          <li><a href="#a9">第9条 休会</a></li>
+          <li><a href="#a10">第10条 退会</a></li>
+          <li><a href="#a11">第11条 開校日・休校</a></li>
+          <li><a href="#a12">第12条 欠席・振替</a></li>
+          <li><a href="#a13">第13条 学習方法と生成AIの利用</a></li>
+          <li><a href="#a14">第14条 会員機能・アカウント管理</a></li>
+          <li><a href="#a15">第15条 入退室の記録と通知</a></li>
+          <li><a href="#a16">第16条 安全管理・送迎</a></li>
+          <li><a href="#a17">第17条 写真・動画の利用</a></li>
+          <li><a href="#a18">第18条 禁止事項</a></li>
+          <li><a href="#a19">第19条 利用停止・退会処分</a></li>
+          <li><a href="#a20">第20条 免責事項</a></li>
+          <li><a href="#a21">第21条 個人情報の取扱い</a></li>
+          <li><a href="#a22">第22条 反社会的勢力の排除</a></li>
+          <li><a href="#a23">第23条 法令に基づく解約</a></li>
+          <li><a href="#a24">第24条 規約の変更</a></li>
+          <li><a href="#a25">第25条 準拠法・管轄</a></li>
+          <li><a href="#info">事業者情報・お問い合わせ</a></li>
+        </ol>
+      </nav>
+
+      <main class="legal-body">
+        <p class="intro">本規約は、アスクシステム（以下「当校」といいます）が運営する学習教室「ASKデジタルアカデミー」（以下「本教室」といいます）のご利用条件を定めるものです。
+          入会をお申し込みいただいた時点で、保護者の方および会員本人に本規約へご同意いただいたものとみなします。</p>
+
+        <section id="a1">
+          <h2><span class="num">第1条</span>目的・適用</h2>
+          <ol class="items">
+            <li>本規約は、本教室が提供するサービスの利用に関し、当校と保護者および会員との間に適用されます。</li>
+            <li>当校がウェブサイト、公式LINE、マイページ等で掲示する個別のご案内は、本規約の一部を構成します。</li>
+            <li>個別のご案内の内容が本規約と異なる場合は、個別のご案内が優先して適用されます。</li>
+          </ol>
+        </section>
+
+        <section id="a2">
+          <h2><span class="num">第2条</span>定義</h2>
+          <ol class="sub">
+            <li>「本教室」とは、当校が運営する学習教室「ASKデジタルアカデミー」をいいます。</li>
+            <li>「会員」とは、本規約に同意し、当校の承認を得て入会したお子さまをいいます。</li>
+            <li>「保護者」とは、会員の親権者または法定代理人をいいます。</li>
+            <li>「本サービス」とは、本教室が提供する学習環境、教材、設備、およびマイページ等の会員向けオンライン機能の総称をいいます。</li>
+          </ol>
+        </section>
+
+        <section id="a3">
+          <h2><span class="num">第3条</span>対象・入会資格</h2>
+          <ol class="items">
+            <li>本教室の対象は、小学3年生から小学6年生までのお子さまです。</li>
+            <li>入会には保護者の同意が必要です。</li>
+            <li>次のいずれかに該当する場合、当校は入会をお断りすることがあります。
+              <ol class="sub">
+                <li>お申し込み内容に事実と異なる記載があった場合</li>
+                <li>過去に本規約違反により退会処分を受けたことがある場合</li>
+                <li>その他、本サービスの運営に支障があると当校が合理的に判断した場合</li>
+              </ol>
+            </li>
+          </ol>
+        </section>
+
+        <section id="a4">
+          <h2><span class="num">第4条</span>入会手続き</h2>
+          <ol class="items">
+            <li>入会のお申し込みは、当校の公式LINEアカウントから行っていただきます。</li>
+            <li>当校がお申し込み内容と初回受講料のお支払いを確認した時点で入会が成立し、会員機能をご利用いただけるようになります。</li>
+            <li>入会後、保護者用と会員用のログイン情報を発行します。ログインIDは共通、パスワードはそれぞれ別のものをお渡しします。</li>
+          </ol>
+        </section>
+
+        <section id="a5">
+          <h2><span class="num">第5条</span>契約期間・自動更新</h2>
+          <ol class="items">
+            <li>契約期間は、入会日の属する月の末日までとします。</li>
+            <li>休会または退会のお申し出がない限り、契約は1か月単位で自動的に更新されます。長期の契約期間を設定するものではありません。</li>
+            <li>会員資格は、小学校をご卒業される年度の3月末日をもって終了します。継続をご希望の場合は別途ご相談ください。</li>
+          </ol>
+        </section>
+
+        <section id="a6">
+          <h2><span class="num">第6条</span>コースと受講料</h2>
+          <p>コースおよび月額受講料は次のとおりです。</p>
+          <div class="table-scroll">
+            <table class="legal-table">
+              <thead><tr><th>コース</th><th>通学曜日</th><th>月額受講料</th></tr></thead>
+              <tbody>
+                <tr><td>週2回コース</td><td>火・木</td><td class="fee">6,000円</td></tr>
+                <tr><td>週3回コース</td><td>月・水・金</td><td class="fee">9,000円</td></tr>
+                <tr><td>通い放題コース</td><td>月〜金</td><td class="fee">12,000円</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <ol class="items">
+            <li>開校時間は16:00〜19:00です。</li>
+            <li>教材費、イベント参加費等が別途必要となる場合は、事前にご案内します。事前のご案内なく費用を申し受けることはありません。</li>
+            <li>受講料および諸費用を変更する場合は、変更の少なくとも1か月前までに、公式LINE、マイページまたは本ウェブサイトにてお知らせします。</li>
+          </ol>
+        </section>
+
+        <section id="a7">
+          <h2><span class="num">第7条</span>受講料のお支払い</h2>
+          <ol class="items">
+            <li>受講料は月額制です。原則として、ご来校時に教室でお支払いいただきます。</li>
+            <li>月の途中でご入会いただいた場合の初月の受講料は、お申し込み時に個別にご案内します。</li>
+            <li>お支払いいただいた受講料は、本規約に定める場合および法令に基づく場合を除き、返金いたしません。</li>
+          </ol>
+        </section>
+
+        <section id="a8">
+          <h2><span class="num">第8条</span>コースの変更</h2>
+          <ol class="items">
+            <li>コースの変更をご希望の場合は、変更を希望される月の前月末日までに、公式LINEまたは教室窓口へお申し出ください。</li>
+            <li>変更は、お申し出のあった翌月分から適用されます。</li>
+            <li>月の途中でのコース変更および受講料の差額精算は、原則として行いません。</li>
+          </ol>
+          <div class="callout note">ご家庭のご予定や学年の変化に合わせて、在籍中のコース変更は何度でも承ります。まずはお気軽にご相談ください。</div>
+        </section>
+
+        <section id="a9">
+          <h2><span class="num">第9条</span>休会</h2>
+          <ol class="items">
+            <li>休会をご希望の場合は、休会を開始される月の前月末日までにお申し出ください。</li>
+            <li>休会期間中の受講料はいただきません。</li>
+            <li>休会期間は連続して最大6か月とします。6か月を経過した場合は自動的に復会となり、受講料が発生します。復会の前に、当校から保護者へご連絡します。</li>
+          </ol>
+        </section>
+
+        <section id="a10">
+          <h2><span class="num">第10条</span>退会</h2>
+          <ol class="items">
+            <li>退会をご希望の場合は、退会を希望される月の前月末日までにお申し出ください。</li>
+            <li>当月に入ってからお申し出いただいた場合、当月分の受講料は返金いたしかねます。翌月以降の受講料は発生しません。</li>
+            <li>退会後は、マイページ等の会員機能をご利用いただけなくなります。</li>
+          </ol>
+        </section>
+
+        <section id="a11">
+          <h2><span class="num">第11条</span>開校日・休校</h2>
+          <ol class="items">
+            <li>開校曜日はコースにより異なります。祝日、年末年始、夏季休業のほか、当校が定める休校日があります。</li>
+            <li>あらかじめ定められた休校日は、公式LINEおよびマイページでご案内します。</li>
+            <li>気象警報の発表、災害、感染症の流行、設備の不具合その他やむを得ない事情により、臨時に休校し、または開校時間を変更することがあります。この場合、可能な限り速やかにご連絡します。</li>
+            <li>臨時休校について受講料の返金は原則として行いませんが、休校が長期にわたる場合は、当校が定める方法により受講料の減額または期間の延長等の調整を行います。</li>
+          </ol>
+        </section>
+
+        <section id="a12">
+          <h2><span class="num">第12条</span>欠席・振替</h2>
+          <ol class="items">
+            <li>欠席される場合は、事前に公式LINEまたはマイページからご連絡ください。</li>
+            <li>ご都合による欠席について、受講料の返金または翌月への繰越は行いません。</li>
+            <li>振替の可否および方法は、ご在籍のコースおよび教室の受入状況により異なります。詳しくは教室にご相談ください。</li>
+          </ol>
+        </section>
+
+        <section id="a13">
+          <h2><span class="num">第13条</span>学習方法と生成AIの利用</h2>
+          <ol class="items">
+            <li>本教室は、講師による一斉指導ではなく、教材とICT環境を活用した自学習を中心とする学習の場を提供します。</li>
+            <li>本教室では、学習支援を目的として、生成AIを含むICTツールを利用します。会員は、当校が定める利用ルールに従ってこれらを利用するものとします。</li>
+            <li>会員は、氏名、住所、電話番号、学校名、顔写真など、本人または第三者を特定できる情報を生成AIに入力してはなりません。当校は、この点について会員へ継続的に指導します。</li>
+            <li>生成AIの回答には誤りが含まれる可能性があります。当校は、生成AIの出力内容の正確性および完全性を保証しません。</li>
+            <li>当校は、学習の環境と機会を提供するものであり、会員の学力の向上、学校の成績、進学試験の結果等を保証するものではありません。</li>
+          </ol>
+          <div class="callout warn">生成AIは「答えを写す道具」ではなく「自分で考えるための道具」として使うことを、本教室の基本方針としています。ご家庭でもご理解とご協力をお願いします。</div>
+        </section>
+
+        <section id="a14">
+          <h2><span class="num">第14条</span>会員機能・アカウント管理</h2>
+          <ol class="items">
+            <li>会員および保護者は、マイページ等の会員機能をご利用いただけます。</li>
+            <li>ログイン情報は、保護者の責任において適切に管理してください。第三者への貸与、譲渡または共有はできません。</li>
+            <li>ログイン情報の管理が不十分であったこと、または第三者に使用されたこと等により生じた損害について、当校の責めに帰すべき事由がある場合を除き、当校は責任を負いません。</li>
+            <li>当校は、システムの保守、障害対応その他必要がある場合、事前の通知なく会員機能の全部または一部を一時的に停止することがあります。</li>
+          </ol>
+        </section>
+
+        <section id="a15">
+          <h2><span class="num">第15条</span>入退室の記録と通知</h2>
+          <ol class="items">
+            <li>本教室では、QRコード等による入退室の記録を行い、保護者へ通知する機能を提供する場合があります。</li>
+            <li>この通知は、通信環境、端末の状態または外部サービス（LINE等）の状況により、遅延し、または届かないことがあります。</li>
+            <li>通知のみをもってお子さまの所在の確認とせず、必要に応じて教室へお問い合わせください。当校は、通知の遅延または不達のみを理由として責任を負うものではありません。</li>
+          </ol>
+        </section>
+
+        <section id="a16">
+          <h2><span class="num">第16条</span>安全管理・送迎</h2>
+          <ol class="items">
+            <li>当校が安全に配慮する責任の範囲は、開校時間中の教室内に限られます。</li>
+            <li>教室までの往復（送迎を含みます）の安全については、保護者の責任において管理してください。</li>
+            <li>会員に体調不良、けが等が生じた場合、当校は応急的な対応を行うとともに、速やかに保護者へご連絡します。緊急を要する場合には、保護者へのご連絡に先立ち救急要請を行うことがあります。</li>
+            <li>保護者は、緊急連絡先を常に最新の状態に保つものとします。</li>
+            <li>教室内での私物の紛失または破損について、当校の責めに帰すべき事由がある場合を除き、当校は責任を負いません。高価な物品のお持ち込みはご遠慮ください。</li>
+          </ol>
+        </section>
+
+        <section id="a17">
+          <h2><span class="num">第17条</span>写真・動画の利用</h2>
+          <ol class="items">
+            <li>当校は、教室の様子やイベントの記録として、会員の写真または動画を撮影することがあります。</li>
+            <li>撮影した写真または動画を、当校のウェブサイト、SNSおよび広報物に利用する場合があります。</li>
+            <li>前項の利用を希望されない場合は、いつでも公式LINEまたは教室窓口へお申し出ください。お申し出以降、速やかに対応します。すでに配布または掲載済みのものについては、可能な範囲で対応します。</li>
+          </ol>
+        </section>
+
+        <section id="a18">
+          <h2><span class="num">第18条</span>禁止事項</h2>
+          <p>会員および保護者は、次の行為を行ってはなりません。</p>
+          <ol class="sub">
+            <li>他の会員、当校のスタッフその他の第三者に対する暴力、暴言、いじめまたは差別的な言動</li>
+            <li>教室の設備、備品または教材を故意に破損し、または無断で持ち出す行為</li>
+            <li>他の会員の学習を妨げる行為</li>
+            <li>当校の許可なく教室内で撮影もしくは録音し、またはこれを公開する行為</li>
+            <li>生成AIその他のICTツールを、当校の定めるルールに反して利用する行為</li>
+            <li>会員機能への不正アクセス、または他人のログイン情報を使用する行為</li>
+            <li>当校の教材またはカリキュラムを無断で複製、転載し、または第三者に提供する行為</li>
+            <li>法令または公序良俗に反する行為</li>
+            <li>その他、当校が不適切と合理的に判断する行為</li>
+          </ol>
+        </section>
+
+        <section id="a19">
+          <h2><span class="num">第19条</span>利用停止・退会処分</h2>
+          <ol class="items">
+            <li>次のいずれかに該当する場合、当校は、本サービスの利用の停止または退会の処分を行うことがあります。処分にあたっては、緊急やむを得ない場合を除き、あらかじめ保護者へご説明します。
+              <ol class="sub">
+                <li>前条の禁止事項に違反した場合</li>
+                <li>お申し込み内容に事実と異なる記載があった場合</li>
+                <li>受講料のお支払いが2か月以上遅延した場合</li>
+                <li>本規約に違反し、改善の見込みがないと当校が判断した場合</li>
+              </ol>
+            </li>
+            <li>前項による処分の場合も、すでにお支払いいただいた受講料は返金いたしかねます。</li>
+          </ol>
+        </section>
+
+        <section id="a20">
+          <h2><span class="num">第20条</span>免責事項</h2>
+          <ol class="items">
+            <li>当校は、相当の注意をもって本サービスを運営しますが、次の事由により生じた損害について、当校の故意または過失による場合を除き、責任を負いません。
+              <ol class="sub">
+                <li>天災、感染症の流行、停電、通信回線の障害その他の不可抗力</li>
+                <li>会員または保護者が使用する端末または通信環境に起因する不具合</li>
+                <li>外部サービス（LINE、生成AIサービス等）の仕様変更、提供停止または障害</li>
+              </ol>
+            </li>
+            <li>当校が損害賠償責任を負う場合、その範囲は当校の責めに帰すべき事由により現実に生じた通常の損害に限られ、その額は、損害の原因となった事由が生じた月の受講料相当額を上限とします。</li>
+            <li>前項の定めは、当校の故意または重大な過失による場合、会員の生命または身体に生じた損害の場合、および消費者契約法その他の法令により無効とされる場合には適用しません。</li>
+          </ol>
+        </section>
+
+        <section id="a21">
+          <h2><span class="num">第21条</span>個人情報の取扱い</h2>
+          <ol class="items">
+            <li>当校は、入会のお申し込みその他により取得した個人情報を、次の目的の範囲で利用します。
+              <ol class="sub">
+                <li>本サービスの提供、会員管理、出席および入退室の管理</li>
+                <li>保護者への連絡、通知および受講料等のご請求</li>
+                <li>本教室の運営に関する各種ご案内</li>
+                <li>個人を特定できない形での統計処理およびサービスの改善</li>
+              </ol>
+            </li>
+            <li>当校は、法令に基づく場合を除き、あらかじめご本人の同意を得ることなく個人情報を第三者に提供しません。</li>
+            <li>当校は、業務の一部を外部に委託する場合、委託先に対して適切な監督を行います。</li>
+            <li>個人情報の開示、訂正、利用停止、削除等をご希望の場合は、本規約末尾の窓口へご連絡ください。法令に従い速やかに対応します。</li>
+            <li>退会後の個人情報は、法令に定める保存期間を経過した後、当校の定める方法により適切に廃棄します。</li>
+          </ol>
+        </section>
+
+        <section id="a22">
+          <h2><span class="num">第22条</span>反社会的勢力の排除</h2>
+          <p>保護者および会員は、暴力団、暴力団員その他これらに準ずる者（以下「反社会的勢力」といいます）に該当せず、かつ将来にわたっても該当しないことを表明し、保証します。これに反することが判明した場合、当校は、何らの催告を要することなく、直ちに契約を解除することができます。</p>
+        </section>
+
+        <section id="a23">
+          <h2><span class="num">第23条</span>法令に基づく解約</h2>
+          <ol class="items">
+            <li>本契約が特定商取引法に定める「特定継続的役務提供」（学習塾については、契約期間が2か月を超え、かつ契約金額が5万円を超えるもの）に該当する場合、保護者は、法定の書面を受領した日を1日目として8日間以内であれば、書面または電磁的記録により契約を解除（クーリング・オフ）することができます。この場合、当校はすでに受領した金銭を速やかに返還し、損害賠償または違約金を請求しません。</li>
+            <li>前項の期間が経過した後も、保護者は、契約期間中いつでも将来に向かって契約を解除することができます。この場合に当校が請求できる額は、法令に定める上限（役務の提供開始前は11,000円、提供開始後はすでに提供した役務の対価に加えて、2万円または1か月分の受講料相当額のいずれか低い額）を超えないものとします。</li>
+            <li>本条の定めは、法令の定めが本規約の他の条項に優先して適用されることを確認するものです。本規約のいずれかの条項が法令に反する場合、その限りにおいて当該条項は適用されず、法令の定めによります。</li>
+          </ol>
+        </section>
+
+        <section id="a24">
+          <h2><span class="num">第24条</span>規約の変更</h2>
+          <ol class="items">
+            <li>当校は、必要がある場合、本規約を変更することがあります。</li>
+            <li>本規約を変更する場合、変更後の内容および効力発生日を、効力発生日の少なくとも14日前までに、公式LINE、マイページまたは本ウェブサイトにて周知します。</li>
+            <li>周知の後、効力発生日以降に本サービスをご利用いただいた場合、変更後の本規約にご同意いただいたものとみなします。</li>
+            <li>変更の内容が保護者にとって重大な不利益となる場合は、個別にご案内し、ご同意をいただくよう努めます。</li>
+          </ol>
+        </section>
+
+        <section id="a25">
+          <h2><span class="num">第25条</span>準拠法・管轄</h2>
+          <ol class="items">
+            <li>本規約は、日本法に準拠し、日本法に従って解釈されます。</li>
+            <li>本サービスに関して当校と保護者または会員との間に紛争が生じた場合、まず誠意をもって協議するものとします。</li>
+            <li>協議によって解決しない場合、熊本地方裁判所八代支部を第一審の合意管轄裁判所とします。</li>
+          </ol>
+        </section>
+
+        <section id="info">
+          <h2>事業者情報・お問い合わせ窓口</h2>
+          <div class="legal-contact">
+            <dl>
+              <dt>運営事業者</dt><dd>アスクシステム</dd>
+              <dt>運営教室</dt><dd>ASKデジタルアカデミー</dd>
+              <dt>代表者</dt><dd>中村 慶治</dd>
+              <dt>電話</dt><dd><a href="tel:0966634253">0966-63-4253</a>（受付 9:00〜18:00）</dd>
+              <dt>メール</dt><dd><a href="mailto:info@ask-system.net">info@ask-system.net</a></dd>
+              <dt>お問い合わせ</dt><dd><a href="https://lin.ee/xaSJRVQ" target="_blank" rel="noopener noreferrer">公式LINEアカウント</a>（無料体験・ご相談も承ります）</dd>
+              <dt>開校時間</dt><dd>16:00〜19:00</dd>
+            </dl>
+          </div>
+        </section>
+
+        <p class="legal-foot">
+          附則：本規約は2026年9月10日から実施します。<br>
+          本規約についてご不明な点は、上記のお問い合わせ窓口までお気軽にご連絡ください。
+        </p>
+
+        <a href="index.html" class="back-top">← ASKデジタルアカデミー トップへ</a>
+      </main>
+
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <img src="assets/images/logo.png" alt="ASKデジタルアカデミー ロゴ" width="180" height="57" style="margin-bottom: 1rem;">
+          <p>デジタル社会で置いてけぼりを作らない。</p>
+        </div>
+        <div class="footer-column">
+          <h4>コース</h4>
+          <a href="index.html#junior">ジュニアコース</a>
+          <a href="index.html#trial">無料体験・入会相談</a>
+          <a href="index.html#pricing">料金プラン</a>
+        </div>
+        <div class="footer-column">
+          <h4>ご利用案内</h4>
+          <a href="index.html#payment">ご入会・お支払い方法</a>
+          <a href="terms.html">利用規約</a>
+        </div>
+        <div class="footer-column">
+          <h4>お問い合わせ</h4>
+          <p>無料体験・ご相談はLINE公式アカウントで受け付けています。開校時間は16:00〜19:00です。</p>
+          <a href="https://lin.ee/xaSJRVQ" target="_blank" rel="noopener noreferrer">友だち追加はこちら</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 ASK Digital Academy. All rights reserved.</p>
+        <div class="sponsor">
+          <span>協賛:</span>
+          <strong style="color: rgba(255,255,255,0.7);">アスクシステム</strong>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+<script>
+(function(){
+  var btn = document.getElementById('mobile-menu-btn');
+  var nav = document.getElementById('nav-links');
+  if(!btn || !nav) return;
+  btn.addEventListener('click', function(){
+    var open = nav.classList.toggle('active');
+    btn.classList.toggle('active', open);
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    document.body.style.overflow = open ? 'hidden' : '';
+  });
+  nav.addEventListener('click', function(e){
+    if(e.target.closest('a')){
+      nav.classList.remove('active'); btn.classList.remove('active');
+      btn.setAttribute('aria-expanded','false'); document.body.style.overflow = '';
+    }
+  });
+})();
+</script>
+</body>
+</html>
