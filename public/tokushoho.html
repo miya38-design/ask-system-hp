@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>特定商取引法に基づく表記｜アスクシステム</title>
+<meta name="description" content="アスクシステムの特定商取引法に基づく表記。事業者情報、役務の対価、お支払い方法・時期、サービスの提供時期、キャンセルの取扱いを記載しています。">
+<meta name="robots" content="index,follow">
+<meta property="og:title" content="特定商取引法に基づく表記｜アスクシステム">
+<meta property="og:description" content="アスクシステムの特定商取引法に基づく表記です。">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="アスクシステム">
+<meta property="og:locale" content="ja_JP">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue:#1f5fbf; --blue-dark:#16498f; --blue-soft:#e8f1fb; --blue-line:#bcd6f0;
+  --orange:#f08222; --green:#2bb24c;
+  --ink:#1f2735; --muted:#6b7280; --line:#e5e9ef;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:"Noto Sans JP",-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
+  color:var(--ink);background:#fff;line-height:1.9;-webkit-font-smoothing:antialiased;
+}
+img{display:block;max-width:100%;height:auto;}
+a{color:inherit;text-decoration:none;}
+.container{max-width:1080px;margin:0 auto;padding:0 24px;}
+
+/* ===== Sub header ===== */
+.sub-header{
+  position:sticky;top:0;z-index:50;
+  background:rgba(255,255,255,.94);backdrop-filter:blur(6px);
+  border-bottom:1px solid var(--line);
+}
+.sub-header .inner{
+  max-width:1200px;margin:0 auto;padding:14px 24px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+}
+.brand{display:flex;align-items:center;gap:10px;}
+.brand img{width:40px;height:40px;}
+.brand span{font-weight:900;font-size:23px;letter-spacing:.02em;color:var(--blue-dark);}
+.back-link{
+  display:flex;align-items:center;gap:6px;font-size:17px;font-weight:700;color:var(--blue);
+  border:1px solid var(--blue-line);border-radius:999px;padding:8px 16px;transition:background .15s;
+}
+.back-link:hover{background:var(--blue-soft);}
+
+/* ===== Hero ===== */
+.tk-hero{background:linear-gradient(135deg,#eef5fc 0%,#e8f6f0 100%);
+  padding:56px 0 44px;border-bottom:1px solid var(--line);}
+.tk-hero h1{font-size:clamp(25px,4.2vw,38px);font-weight:900;color:var(--ink);margin-bottom:12px;}
+.tk-hero p{color:#3f5a7d;font-size:clamp(14.5px,1.9vw,16.5px);line-height:1.95;max-width:64ch;}
+.tk-meta{margin-top:18px;display:flex;flex-wrap:wrap;gap:10px;font-size:13.5px;}
+.tk-meta span{background:#fff;border:1px solid var(--line);border-radius:999px;padding:6px 15px;
+  font-weight:700;color:var(--muted);}
+
+/* ===== Body ===== */
+.tk-wrap{padding:44px 0 72px;}
+.tk-card{max-width:900px;margin:0 auto;background:#fff;border:1px solid var(--line);
+  border-radius:16px;overflow:hidden;}
+.tk-table{width:100%;border-collapse:collapse;}
+.tk-table th,.tk-table td{border-bottom:1px solid var(--line);padding:20px 24px;
+  text-align:left;vertical-align:top;font-size:16px;line-height:1.95;}
+.tk-table tr:last-child th,.tk-table tr:last-child td{border-bottom:0;}
+.tk-table th{background:#f7fafd;color:var(--blue-dark);font-weight:800;width:32%;
+  white-space:nowrap;border-right:1px solid var(--line);}
+.tk-table td{color:#3b4554;}
+.tk-table td a{color:var(--blue);font-weight:700;text-decoration:underline;}
+.tk-table ul{list-style:none;margin:0;padding:0;}
+.tk-table ul li{position:relative;padding-left:1.5em;margin-bottom:6px;}
+.tk-table ul li:last-child{margin-bottom:0;}
+.tk-table ul li::before{content:"●";position:absolute;left:0;top:.5em;color:var(--green);font-size:.65em;}
+.tk-table .sub{display:block;font-size:14.5px;color:var(--muted);margin-top:6px;line-height:1.85;}
+.tk-table .tag{display:inline-block;background:var(--blue-soft);color:var(--blue-dark);
+  border:1px solid var(--blue-line);border-radius:6px;font-size:13.5px;font-weight:800;
+  padding:2px 10px;margin-right:8px;}
+
+.tk-note{max-width:900px;margin:24px auto 0;background:#fffbf3;border:1px solid #f1d8a3;
+  border-radius:12px;padding:20px 24px;color:#7a5a20;font-size:15px;line-height:1.95;}
+.tk-note b{display:block;margin-bottom:5px;color:#5d4315;font-size:16px;}
+
+.tk-foot{max-width:900px;margin:26px auto 0;color:var(--muted);font-size:14.5px;line-height:1.95;}
+.tk-back{display:inline-flex;align-items:center;gap:8px;margin-top:22px;padding:12px 26px;
+  border-radius:999px;background:var(--blue-soft);color:var(--blue-dark);
+  border:1.5px solid var(--blue-line);font-weight:800;transition:all .15s;}
+.tk-back:hover{background:var(--blue);border-color:var(--blue);color:#fff;}
+
+/* ===== Footer ===== */
+footer{padding:24px 0;border-top:1px solid var(--line);background:#fff;}
+footer .inner{display:flex;justify-content:space-between;font-size:16px;color:var(--muted);
+  max-width:1080px;margin:0 auto;padding:0 24px;align-items:center;gap:16px;flex-wrap:wrap;}
+footer a{margin:0 10px;}
+footer a:hover{color:var(--blue);}
+
+@media (max-width:640px){
+  .tk-table th,.tk-table td{display:block;width:auto;white-space:normal;border-right:0;}
+  .tk-table th{border-bottom:0;padding:16px 18px 0;background:#fff;font-size:15px;}
+  .tk-table td{padding:6px 18px 18px;}
+  .sub-header .inner{padding:12px 16px;}
+  .brand span{font-size:19px;}
+  .back-link{font-size:14px;padding:7px 13px;}
+}
+@media print{
+  @page{size:A4;margin:14mm;}
+  .sub-header,.tk-back,footer{display:none!important;}
+  .tk-hero{background:#fff;border-bottom:1px solid #ccc;padding:0 0 18px;}
+  .tk-wrap{padding:18px 0 0;}
+  .tk-card{border:1px solid #ccc;}
+  .tk-table tr{break-inside:avoid;}
+}
+</style>
+</head>
+<body>
+
+<header class="sub-header">
+  <div class="inner">
+    <a href="index.html" class="brand">
+      <img src="assets/logo-ask.png" alt="ASK アスクシステム">
+      <span>アスクシステム</span>
+    </a>
+    <a href="index.html" class="back-link">← トップページへ戻る</a>
+  </div>
+</header>
+
+<section class="tk-hero">
+  <div class="container">
+    <h1>特定商取引法に基づく表記</h1>
+    <p>特定商取引に関する法律に基づき、当社の事業者情報および取引条件を掲載しています。
+      ご不明な点は、お申し込み前にお気軽にお問い合わせください。</p>
+    <div class="tk-meta">
+      <span>制定日：2026年9月17日</span>
+      <span>表示価格はすべて税込</span>
+    </div>
+  </div>
+</section>
+
+<div class="tk-wrap">
+  <div class="container">
+
+    <div class="tk-card">
+      <table class="tk-table">
+        <tbody>
+          <tr>
+            <th>販売事業者名</th>
+            <td>アスクシステム</td>
+          </tr>
+          <tr>
+            <th>運営統括責任者</th>
+            <td>中村　慶治</td>
+          </tr>
+          <tr>
+            <th>所在地</th>
+            <td>熊本県水俣市大迫447-7</td>
+          </tr>
+          <tr>
+            <th>電話番号</th>
+            <td>
+              <a href="tel:0966634253">0966-63-4253</a>
+              <span class="sub">受付時間 9:00〜18:00（年中無休）</span>
+            </td>
+          </tr>
+          <tr>
+            <th>メールアドレス</th>
+            <td><a href="mailto:info@ask-system.net">info@ask-system.net</a></td>
+          </tr>
+          <tr>
+            <th>ホームページ</th>
+            <td><a href="https://asksystem.jp/">https://asksystem.jp/</a></td>
+          </tr>
+          <tr>
+            <th>販売価格<br>（役務の対価）</th>
+            <td>
+              サービスごとに料金ページに表示します。
+              <span class="sub">
+                ICTサポート／AI活用支援の料金は
+                <a href="ict-support.html#price">料金一覧</a>をご覧ください。<br>
+                表示価格はすべて消費税を含んだ総額です。<br>
+                「要見積」のサービスは、内容をお伺いしたうえで個別にお見積りします。
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <th>対価以外に必要な費用</th>
+            <td>
+              部材費・機器代・出張費等が別途必要となる場合があります。
+              <span class="sub">
+                これらの費用が発生する場合は、必ず<b>事前にお見積りをご提示し、ご了承いただいてから</b>作業に着手します。
+                お客様の承諾なく費用を追加することはありません。
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <th>お支払い方法</th>
+            <td>
+              <ul>
+                <li>現金</li>
+                <li>銀行振込（振込手数料はお客様のご負担となります）</li>
+                <li>クレジットカード</li>
+                <li>QRコード決済（PayPay 等）</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <th>お支払い時期</th>
+            <td>
+              ご契約の内容により異なります。
+              <ul style="margin-top:8px;">
+                <li><span class="tag">個人のお客様</span>作業完了後にお支払いいただきます。</li>
+                <li><span class="tag">法人のお客様</span>ご契約に基づき、当月分を翌月末日までにお支払いいただきます。</li>
+              </ul>
+              <span class="sub">いずれの場合も、金額は作業前のお見積りでご確認いただきます。</span>
+            </td>
+          </tr>
+          <tr>
+            <th>役務の提供時期</th>
+            <td>
+              内容により異なります。
+              <ul style="margin-top:8px;">
+                <li>設定・トラブル対応などのサポート … お申し込み後、ご都合を伺って日程を調整のうえ実施します（最短即日）。</li>
+                <li>ネットワーク構築・ホームページ制作・DX導入など … お見積りにご契約いただいた後、別途ご案内する日程で着手します。</li>
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <th>キャンセル・解約について</th>
+            <td>
+              <ul>
+                <li><b>作業着手前</b>のキャンセルは無料です。費用は一切いただきません。</li>
+                <li><b>作業着手後</b>のキャンセルは、すでに実施した作業分および発注済みの部材費等の実費をご負担いただきます。</li>
+              </ul>
+              <span class="sub">
+                本サービスは役務（サービス）の提供であり、商品の売買ではないため、
+                特定商取引法の通信販売における返品制度（商品の返品）の対象とはなりません。<br>
+                なお、法令に基づくクーリング・オフその他の解除権が適用される取引については、法令の定めに従います。
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <th>お申し込みの<br>有効期限</th>
+            <td>
+              お見積りの有効期限は、特に記載のない限り<b>提示日から30日間</b>とします。
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="tk-note">
+      <b>お申し込み前に、必ずお見積りをご確認ください</b>
+      当社は、作業内容と金額をお見積りでご提示し、ご了承をいただいてから作業を開始します。
+      内容や金額にご不明な点がある場合は、着手前に必ずお問い合わせください。
+      お電話（<a href="tel:0966634253" style="color:#7a5a20;font-weight:700;">0966-63-4253</a>）または
+      <a href="index.html#contact" style="color:#7a5a20;font-weight:700;">お問い合わせフォーム</a>で承ります。
+    </div>
+
+    <p class="tk-foot">
+      本表記の内容は、法令の改正やサービス内容の変更に伴い、予告なく変更する場合があります。<br>
+      最新の内容は本ページにてご確認ください。
+    </p>
+
+    <div style="max-width:900px;margin:0 auto;">
+      <a href="index.html" class="tk-back">← トップページへ戻る</a>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <div class="inner">
+    <div>
+      <a href="index.html">トップページ</a>｜<a href="privacy.html">プライバシーポリシー</a>｜<a href="tokushoho.html">特定商取引法に基づく表記</a>
+    </div>
+    <div>© アスクシステム</div>
+  </div>
+</footer>
+
+</body>
+</html>
