@@ -109,18 +109,18 @@ ul{list-style:none;}
 .detail-hero-cta{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;}
 .detail-hero .btn-outline{border:2px solid #1f5fbf;color:#1f5fbf;background:transparent;}
 .detail-hero .btn-outline:hover{background:rgba(31,95,191,.1);}
-/* Illustration: the source PNG has ~30% empty space on its left, so crop it
-   (object-position:right) to bring the people/icons to the centre. The top
-   ~13% of the artwork is empty sky, so the h1 is pulled down into it. */
+/* Illustration: the artwork is already framed 5:4 with the group centred, so
+   no cropping is needed. The top ~20% is empty background, which is where the
+   h1 sits - hence the negative top margin. */
 .detail-hero-img{
   position:relative;z-index:0;display:block;
   width:100%;max-width:840px;
-  aspect-ratio:1172 / 941;
+  aspect-ratio:5 / 4;
   margin:-66px auto 28px;
 }
 .detail-hero-img img{
   width:100%;height:100%;display:block;
-  object-fit:cover;object-position:right center;
+  object-fit:cover;object-position:center;
   border-radius:18px;
 }
 
@@ -236,7 +236,7 @@ footer a:hover{color:var(--blue);}
 @media (max-width:960px){
   .detail-hero{padding:32px 0 40px;}
   /* image width == container width here, so a % keeps the overlap inside the
-     artwork's empty top band (13.3% of its height) at every phone size */
+     artwork's empty top band (~20% of its height) at every phone size */
   .detail-hero-img{max-width:none;margin:-7% auto 22px;}
   .detail-hero-img img{border-radius:14px;}
   .feature-grid{grid-template-columns:1fr;}
@@ -268,7 +268,7 @@ footer a:hover{color:var(--blue);}
     <div class="detail-hero-text">
       <p class="crumb"><a href="index.html">トップ</a><span class="sep">/</span><a href="index.html#services">サービス</a><span class="sep">/</span>ICTサポート｜AI活用支援</p>
       <h1>ICTサポート<span class="div">｜</span>AI活用支援</h1>
-      <div class="detail-hero-img"><img src="assets/ict-hero.png" alt="ICTサポート・AI活用支援イメージ"></div>
+      <div class="detail-hero-img"><img src="assets/ict-hero.jpg" alt="ICTサポート・AI活用支援イメージ"></div>
       <p class="detail-hero-lead">パソコン・Wi-Fi・スマートホーム化から、DX化・AI導入、SNS運用まで。<br>ご家庭のICTから企業のIT課題まで、まるごとサポートします。</p>
       <div class="detail-hero-cta">
         <a href="#price" class="btn btn-pink">料金を見る</a>
