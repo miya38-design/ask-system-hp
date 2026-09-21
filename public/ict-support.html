@@ -241,7 +241,6 @@ footer .f-nap a{margin:0;color:var(--blue);font-weight:700;}
    carries that much extra padding once the bar is visible */
 @media (max-width:960px){
   footer{padding-bottom:calc(24px + 57px + env(safe-area-inset-bottom));}
-  #price,#contact,#contact-form,#line{scroll-margin-top:122px;}
 }
 footer .inner{display:flex;justify-content:space-between;font-size:20px;color:var(--muted);max-width:1080px;margin:0 auto;padding:0 24px;align-items:center;}
 footer a{margin:0 12px;}
@@ -256,6 +255,9 @@ footer a:hover{color:var(--blue);}
 /* .sub-header is sticky (78px on desktop, 108px at phone width), so anchor
    targets need to stop short of it or their heading lands underneath. */
 #price,#contact,#contact-form,#line{scroll-margin-top:92px;}
+@media (max-width:960px){/* header grows to 108px at phone width */
+  #price,#contact,#contact-form,#line{scroll-margin-top:122px;}
+}
 .mobile-cta .m-cta-btn{flex:1;display:flex;align-items:center;justify-content:center;}
 .mobile-cta .m-cta-btn img{height:48px;width:auto;object-fit:contain;}
 @media (max-width:960px){.mobile-cta{display:flex;}.floating-cta{display:none;}}
