@@ -1,4 +1,20 @@
+# https://asksystem.jp/robots.txt
+
+# 1つのグループに User-agent をまとめて書くと、同じルールが全員に適用されます。
+# 下の AI 系クローラーも通常の検索エンジンと同じ扱いです（AI検索からの流入を想定）。
+# 学習・引用を拒否したくなった場合は、該当の User-agent だけ別グループにして
+# Disallow: / を書いてください。
 User-agent: *
+User-agent: Googlebot
+User-agent: Bingbot
+User-agent: GPTBot
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: ClaudeBot
+User-agent: Claude-SearchBot
+User-agent: PerplexityBot
+User-agent: Google-Extended
+User-agent: Applebot-Extended
 Allow: /
 Disallow: /academy/api/
 

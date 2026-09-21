@@ -233,6 +233,10 @@ ul{list-style:none;}
 
 /* ===== Footer ===== */
 footer{padding:24px 0;border-top:1px solid var(--line);background:#fff;}
+footer .f-nap{max-width:1080px;margin:0 auto 14px;padding:0 24px 14px;border-bottom:1px solid var(--line);
+  font-size:14px;line-height:1.9;color:var(--muted);text-align:center;}
+footer .f-nap .f-name{font-weight:900;color:var(--blue-dark);font-size:16px;}
+footer .f-nap a{margin:0;color:var(--blue);font-weight:700;}
 /* the fixed .mobile-cta bar (57px) sits on top of the page, so the footer
    carries that much extra padding once the bar is visible */
 @media (max-width:960px){
@@ -464,6 +468,13 @@ footer a:hover{color:var(--blue);}
 </section>
 
 <footer>
+    <div class="f-nap">
+      <p class="f-name">アスクシステム</p>
+      <p>熊本県水俣市大迫447-7　代表 中村 慶治</p>
+      <p>TEL <a href="tel:0966634253">0966-63-4253</a>（受付 9:00〜18:00／年中無休）　
+         Eメール <a href="mailto:info@ask-system.net">info@ask-system.net</a></p>
+      <p>対応エリア：熊本県 八代市・水俣市・芦北町・津奈木町／鹿児島県 出水市</p>
+    </div>
   <div class="inner">
     <div>
       <a href="index.html">トップページ</a>｜<a href="privacy.html">プライバシーポリシー</a>｜<a href="tokushoho.html">特定商取引法に基づく表記</a>
@@ -522,5 +533,186 @@ footer a:hover{color:var(--blue);}
 })();
 </script>
 
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "@id": "https://asksystem.jp/ict-support.html#service",
+  "name": "ICTサポート／AI活用支援",
+  "serviceType": "ICTサポート・DX/AI導入支援",
+  "provider": {
+    "@id": "https://asksystem.jp/#business"
+  },
+  "areaServed": [
+    {
+      "@type": "City",
+      "name": "八代市"
+    },
+    {
+      "@type": "City",
+      "name": "水俣市"
+    },
+    {
+      "@type": "City",
+      "name": "芦北町"
+    },
+    {
+      "@type": "City",
+      "name": "津奈木町"
+    },
+    {
+      "@type": "City",
+      "name": "出水市"
+    }
+  ],
+  "description": "パソコン・Wi-Fi・スマートホーム化から、DX化・AI導入、SNS運用まで。ご家庭のICTから企業のIT課題までまるごとサポートします。表示価格はすべて税込です。",
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "ICTサポート 料金一覧",
+    "itemListElement": [
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Wi-Fiルーター設定・PC/スマホ初期設定・メール等",
+          "description": "インターネット接続設定/変更サポート・Wi-Fi設定/機種変更/速度改善・PC・スマホ各種設定/操作サポートなど"
+        },
+        "priceSpecification": {
+          "@type": "PriceSpecification",
+          "price": 6600,
+          "priceCurrency": "JPY",
+          "valueAddedTaxIncluded": true,
+          "description": "最低料金（税込）。部材費・機器代・出張費は別途。"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "デジタル家電設置/設定・スマートホーム化サポート",
+          "description": "ネットワークカメラ・スマートリモコン・スマートスピーカー等の設置と設定"
+        },
+        "priceSpecification": {
+          "@type": "PriceSpecification",
+          "price": 11000,
+          "priceCurrency": "JPY",
+          "valueAddedTaxIncluded": true,
+          "description": "最低料金（税込）。部材費・機器代・出張費は別途。"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "ネットワーク構築・ホームページ作成",
+          "description": "オフィスのネットワーク構築、ホームページの制作"
+        },
+        "priceSpecification": {
+          "@type": "PriceSpecification",
+          "price": 55000,
+          "priceCurrency": "JPY",
+          "valueAddedTaxIncluded": true,
+          "description": "最低料金（税込）。部材費・機器代・出張費は別途。"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "業務効率化・システム構築・AI導入支援",
+          "description": "業務のデジタル化、システム構築、生成AIの導入支援"
+        },
+        "priceSpecification": {
+          "@type": "PriceSpecification",
+          "price": 11000,
+          "priceCurrency": "JPY",
+          "valueAddedTaxIncluded": true,
+          "description": "最低料金（税込）。部材費・機器代・出張費は別途。"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "公式LINE構築/運用サポート・SNS運用サポート・ライブ配信サポート",
+          "description": "公式LINEの構築と運用、SNS運用、ライブ配信の支援"
+        },
+        "priceSpecification": {
+          "@type": "PriceSpecification",
+          "price": 22000,
+          "priceCurrency": "JPY",
+          "valueAddedTaxIncluded": true,
+          "description": "最低料金（税込）。部材費・機器代・出張費は別途。"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "建設業電子納品作成",
+          "description": "建設業の電子納品データの作成"
+        },
+        "priceSpecification": {
+          "@type": "PriceSpecification",
+          "price": 55000,
+          "priceCurrency": "JPY",
+          "valueAddedTaxIncluded": true,
+          "description": "最低料金（税込）。部材費・機器代・出張費は別途。"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "プライバシーマーク取得支援（コンサルティング）",
+          "description": "Pマーク取得のコンサルティングと取得後サポート"
+        },
+        "priceSpecification": {
+          "@type": "PriceSpecification",
+          "price": 330000,
+          "priceCurrency": "JPY",
+          "valueAddedTaxIncluded": true,
+          "description": "最低料金（税込）。部材費・機器代・出張費は別途。"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "イベント開催支援",
+          "description": "音響/ライブ配信等機材一式、準備、オペレーション対応"
+        },
+        "priceSpecification": {
+          "@type": "PriceSpecification",
+          "price": 33000,
+          "priceCurrency": "JPY",
+          "valueAddedTaxIncluded": true,
+          "description": "最低料金（税込）。部材費・機器代・出張費は別途。"
+        }
+      }
+    ]
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "トップ",
+      "item": "https://asksystem.jp/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "ICTサポート｜AI活用支援",
+      "item": "https://asksystem.jp/ict-support.html"
+    }
+  ]
+}
+</script>
 </body>
 </html>
