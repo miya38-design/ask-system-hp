@@ -184,6 +184,8 @@ ul{list-style:none;}
 .cf-title{font-size:26px;font-weight:900;color:var(--blue-dark);text-align:center;margin-bottom:8px;}
 .cf-note{font-size:18px;color:var(--muted);text-align:center;line-height:1.8;margin-bottom:24px;}
 .cf-note a{color:var(--blue);font-weight:700;}
+.cf-privacy{font-size:15px;color:var(--muted);text-align:center;line-height:1.8;margin:-14px 0 22px;}
+.cf-privacy a{color:var(--blue);font-weight:700;}
 .cf-field{margin-bottom:18px;}
 .cf-field label{display:block;font-size:18px;font-weight:700;color:#33404f;margin-bottom:7px;}
 .cf-req{display:inline-block;background:var(--pink);color:#fff;font-size:15px;font-weight:700;padding:1px 7px;border-radius:4px;margin-left:6px;vertical-align:middle;}
@@ -218,6 +220,12 @@ ul{list-style:none;}
 
 /* ===== Footer ===== */
 footer{padding:24px 0;border-top:1px solid var(--line);background:#fff;}
+/* the fixed .mobile-cta bar (57px) sits on top of the page, so the footer
+   carries that much extra padding once the bar is visible */
+@media (max-width:960px){
+  footer{padding-bottom:calc(24px + 57px + env(safe-area-inset-bottom));}
+  #price,#contact,#contact-form,#line{scroll-margin-top:122px;}
+}
 footer .inner{display:flex;justify-content:space-between;font-size:20px;color:var(--muted);max-width:1080px;margin:0 auto;padding:0 24px;align-items:center;}
 footer a{margin:0 12px;}
 footer a:hover{color:var(--blue);}
@@ -228,6 +236,9 @@ footer a:hover{color:var(--blue);}
 .floating-cta a:hover{transform:translateX(-2px);filter:brightness(1.05);}
 .floating-cta a img{width:88px;height:auto;display:block;filter:drop-shadow(0 4px 10px rgba(0,0,0,.18));}
 .mobile-cta{display:none;position:fixed;bottom:0;left:0;right:0;z-index:60;background:#fff;border-top:1px solid var(--line);padding:8px;gap:8px;}
+/* .sub-header is sticky (78px on desktop, 108px at phone width), so anchor
+   targets need to stop short of it or their heading lands underneath. */
+#price,#contact,#contact-form,#line{scroll-margin-top:92px;}
 .mobile-cta .m-cta-btn{flex:1;display:flex;align-items:center;justify-content:center;}
 .mobile-cta .m-cta-btn img{height:48px;width:auto;object-fit:contain;}
 @media (max-width:960px){.mobile-cta{display:flex;}.floating-cta{display:none;}}
@@ -255,7 +266,7 @@ footer a:hover{color:var(--blue);}
 <header class="sub-header">
   <div class="inner">
     <a href="index.html" class="brand">
-      <img src="assets/logo-ask.png" alt="ASK アスクシステム">
+      <img src="assets/logo-ask.png" alt="ASK アスクシステム" width="128" height="128" loading="eager" decoding="async">
       <span>アスクシステム</span>
     </a>
     <a href="index.html" class="back-link">← トップページへ戻る</a>
@@ -268,7 +279,7 @@ footer a:hover{color:var(--blue);}
     <div class="detail-hero-text">
       <p class="crumb"><a href="index.html">トップ</a><span class="sep">/</span><a href="index.html#services">サービス</a><span class="sep">/</span>ICTサポート｜AI活用支援</p>
       <h1>ICTサポート<span class="div">｜</span>AI活用支援</h1>
-      <div class="detail-hero-img"><img src="assets/ict-hero.jpg" alt="ICTサポート・AI活用支援イメージ"></div>
+      <div class="detail-hero-img"><img src="assets/ict-hero.jpg" alt="ICTサポート・AI活用支援イメージ" width="1400" height="1120" loading="lazy" decoding="async"></div>
       <p class="detail-hero-lead">パソコン・Wi-Fi・スマートホーム化から、DX化・AI導入、SNS運用まで。<br>ご家庭のICTから企業のIT課題まで、まるごとサポートします。</p>
       <div class="detail-hero-cta">
         <a href="#price" class="btn btn-pink">料金を見る</a>
@@ -287,17 +298,17 @@ footer a:hover{color:var(--blue);}
     </div>
     <div class="feature-grid">
       <div class="feature-card">
-        <div class="ic"><img src="assets/line-icon-laptop.png" alt=""></div>
+        <div class="ic"><img src="assets/line-icon-laptop.png" alt="" width="105" height="97" loading="lazy" decoding="async"></div>
         <h3>パソコン・スマートホームサポート＋AI活用</h3>
         <p>各種設定・トラブル解決・操作サポート・デジタル家電設置/設定・家電遠隔操作・生成AI活用支援</p>
       </div>
       <div class="feature-card">
-        <div class="ic"><img src="assets/line-icon-wifi.png" alt=""></div>
+        <div class="ic"><img src="assets/line-icon-wifi.png" alt="" width="101" height="89" loading="lazy" decoding="async"></div>
         <h3>インターネット/Wi-Fi / ネットワーク</h3>
         <p>ネット接続設定・サポート・Wi-Fi設定・速度改善・トラブル対応・ネットワーク構築</p>
       </div>
       <div class="feature-card">
-        <div class="ic"><img src="assets/line-icon-ai-bubble.png" alt=""></div>
+        <div class="ic"><img src="assets/line-icon-ai-bubble.png" alt="" width="92" height="109" loading="lazy" decoding="async"></div>
         <h3>システム / DX＋AI導入支援</h3>
         <p>業務効率化・システム導入・DX支援・AI導入支援</p>
       </div>
@@ -314,42 +325,42 @@ footer a:hover{color:var(--blue);}
     </div>
     <div class="price-table">
       <div class="price-table-row">
-        <div class="pt-icon"><img src="assets/icon-wifi-label.png" alt=""></div>
+        <div class="pt-icon"><img src="assets/icon-wifi-label.png" alt="" width="90" height="77" loading="lazy" decoding="async"></div>
         <div class="pt-name">Wi-Fiルーター設定・PC/スマホ初期設定・メール等<small>インターネット接続設定/変更サポート・Wi-Fi設定/機種変更/速度改善・PCスマホ各種設定/操作サポートなど</small></div>
         <div class="pt-price">6,600<small>円〜</small></div>
       </div>
       <div class="price-table-row">
-        <div class="pt-icon"><img src="assets/line-icon-building.png" alt=""></div>
+        <div class="pt-icon"><img src="assets/line-icon-building.png" alt="" width="86" height="99" loading="lazy" decoding="async"></div>
         <div class="pt-name">デジタル家電設置/設定・スマートホーム化サポート<small>ネットワークカメラ・人感センサー設置/設定・家電遠隔操作・スマートロックなど</small></div>
         <div class="pt-price">11,000<small>円〜</small></div>
       </div>
       <div class="price-table-row">
-        <div class="pt-icon"><img src="assets/icon-pc-label.png" alt=""></div>
+        <div class="pt-icon"><img src="assets/icon-pc-label.png" alt="" width="93" height="80" loading="lazy" decoding="async"></div>
         <div class="pt-name">PC修理・ネットワーク構築・HP作成<small>部品交換/修理・社内ネットワーク構築/VPN構築・HP/ECサイト作成など</small><small class="pt-eg">例：ネットワーク構築55,000円〜／HP作成55,000円〜</small></div>
         <div class="pt-price quote">要見積</div>
       </div>
       <div class="price-table-row">
-        <div class="pt-icon"><img src="assets/icon-ai-label.png" alt=""></div>
+        <div class="pt-icon"><img src="assets/icon-ai-label.png" alt="" width="85" height="85" loading="lazy" decoding="async"></div>
         <div class="pt-name">DX化・AI導入<small>業務効率化サポート/システム構築・クラウド化サポート・AI導入/操作サポートなど</small><small class="pt-eg">例：業務効率化22,000円〜／システム構築55,000円〜／AI導入11,000円〜</small></div>
         <div class="pt-price quote">要見積</div>
       </div>
       <div class="price-table-row">
-        <div class="pt-icon"><img src="assets/icon-chat-label.png" alt=""></div>
+        <div class="pt-icon"><img src="assets/icon-chat-label.png" alt="" width="80" height="81" loading="lazy" decoding="async"></div>
         <div class="pt-name">公式LINE構築/運用サポート・SNS運用サポート・ライブ配信サポート<small class="pt-eg">例：LINE構築55,000円〜／運用サポート22,000円〜</small></div>
         <div class="pt-price quote">要見積</div>
       </div>
       <div class="price-table-row">
-        <div class="pt-icon"><img src="assets/line-icon-printer.png" alt=""></div>
+        <div class="pt-icon"><img src="assets/line-icon-printer.png" alt="" width="107" height="106" loading="lazy" decoding="async"></div>
         <div class="pt-name">建設業電子納品作成<small class="pt-eg">例：1現場55,000円〜</small></div>
         <div class="pt-price quote">要見積</div>
       </div>
       <div class="price-table-row">
-        <div class="pt-icon"><img src="assets/icon-idea-label.png" alt=""></div>
+        <div class="pt-icon"><img src="assets/icon-idea-label.png" alt="" width="86" height="92" loading="lazy" decoding="async"></div>
         <div class="pt-name">プライバシーマーク取得支援（コンサルティング）<small class="pt-eg">例：取得330,000〜440,000円／取得後サポート月22,000円〜</small></div>
         <div class="pt-price quote">要見積</div>
       </div>
       <div class="price-table-row">
-        <div class="pt-icon"><img src="assets/line-icon-mail.png" alt=""></div>
+        <div class="pt-icon"><img src="assets/line-icon-mail.png" alt="" width="94" height="78" loading="lazy" decoding="async"></div>
         <div class="pt-name">イベント開催支援<small>音響/ライブ配信等機材一式、準備、オペレーション対応</small><small class="pt-eg">例：音響33,000円〜／ライブ配信33,000円〜</small></div>
         <div class="pt-price quote">要見積</div>
       </div>
@@ -373,11 +384,11 @@ footer a:hover{color:var(--blue);}
         <div class="btn-row">
           <a href="https://lin.ee/nnTSbq1" target="_blank" rel="noopener" class="btn-img btn-img-line" aria-label="アスクシステム公式LINE 無料相談">
             <span class="btn-img-label"><b>アスクシステム公式LINE</b><small>（無料相談はこちら）</small></span>
-            <img src="assets/btn-line-free-consult.png" alt="">
+            <img src="assets/btn-line-free-consult.png" alt="" width="192" height="68" loading="lazy" decoding="async">
           </a>
         </div>
         <div class="line-qr-wrap">
-          <img class="line-qr" src="assets/line-qr.png" alt="LINE友だち追加QRコード">
+          <img class="line-qr" src="assets/line-qr.png" alt="LINE友だち追加QRコード" width="360" height="360" loading="lazy" decoding="async">
           <span class="line-qr-cap">QRコードで友だち追加</span>
         </div>
       </div>
@@ -386,14 +397,14 @@ footer a:hover{color:var(--blue);}
         <div class="tel-num">0966-63-4253</div>
         <div class="tel-meta">受付時間 9:00〜18:00（年中無休）</div>
         <div class="btn-row">
-          <a href="tel:0966634253" class="btn-img" aria-label="電話する"><img src="assets/btn-tel-call.png" alt="電話する"></a>
+          <a href="tel:0966634253" class="btn-img" aria-label="電話する"><img src="assets/btn-tel-call.png" alt="電話する" width="190" height="68" loading="lazy" decoding="async"></a>
         </div>
       </div>
       <div class="card">
         <h3>お問い合わせフォーム</h3>
         <p>24時間受付中！<br>下のフォームからどうぞ。</p>
         <div class="btn-row">
-          <a href="#contact-form" class="btn-img" aria-label="フォームへ"><img src="assets/btn-form-consult.png" alt="フォームで相談"></a>
+          <a href="#contact-form" class="btn-img" aria-label="フォームへ"><img src="assets/btn-form-consult.png" alt="フォームで相談" width="194" height="48" loading="lazy" decoding="async"></a>
         </div>
       </div>
     </div>
@@ -402,6 +413,7 @@ footer a:hover{color:var(--blue);}
     <div class="contact-form-wrap" id="contact-form">
       <h3 class="cf-title">お問い合わせフォーム</h3>
       <p class="cf-note">必要事項をご記入のうえ送信してください。2営業日以内にご返信します。<br>メールでも受け付けています：<a href="mailto:info@ask-system.net">info@ask-system.net</a></p>
+      <p class="cf-privacy">送信された内容は、お問い合わせへの回答のみに利用します。送信には外部サービス（Web3Forms）を利用しています。詳しくは<a href="privacy.html#a13">プライバシーポリシー</a>をご覧ください。<br>パスワードやクレジットカード番号などの機微な情報は入力しないでください。</p>
       <form class="contact-form" action="https://api.web3forms.com/submit" method="POST">
         <input type="hidden" name="access_key" value="8aff8c3c-02b9-42df-b5c0-7c246f49538a">
         <input type="hidden" name="subject" value="【ICTサポート】お問い合わせ">
@@ -443,16 +455,16 @@ footer a:hover{color:var(--blue);}
 
 <!-- Floating right CTA -->
 <aside class="floating-cta">
-  <a href="#line" aria-label="LINE 無料相談"><img src="assets/btn-line-floating.png" alt="LINE 無料相談"></a>
-  <a href="tel:0966634253" aria-label="電話する"><img src="assets/btn-tel-floating.png" alt="電話する"></a>
-  <a href="#contact" aria-label="お問い合わせ"><img src="assets/btn-mail-floating.png" alt="お問い合わせ"></a>
+  <a href="#line" aria-label="LINE 無料相談"><img src="assets/btn-line-floating.png" alt="LINE 無料相談" width="119" height="68" loading="lazy" decoding="async"></a>
+  <a href="tel:0966634253" aria-label="電話する"><img src="assets/btn-tel-floating.png" alt="電話する" width="143" height="68" loading="lazy" decoding="async"></a>
+  <a href="#contact" aria-label="お問い合わせ"><img src="assets/btn-mail-floating.png" alt="お問い合わせ" width="153" height="68" loading="lazy" decoding="async"></a>
 </aside>
 
 <!-- Mobile sticky -->
 <div class="mobile-cta">
-  <a href="#line" class="m-cta-btn" aria-label="LINEで相談"><img src="assets/btn-line-floating.png" alt="LINEで相談"></a>
-  <a href="tel:0966634253" class="m-cta-btn" aria-label="電話する"><img src="assets/btn-tel-floating.png" alt="電話する"></a>
-  <a href="#contact" class="m-cta-btn" aria-label="お問い合わせ"><img src="assets/btn-mail-floating.png" alt="お問い合わせ"></a>
+  <a href="#line" class="m-cta-btn" aria-label="LINEで相談"><img src="assets/btn-line-floating.png" alt="LINEで相談" width="119" height="68" loading="lazy" decoding="async"></a>
+  <a href="tel:0966634253" class="m-cta-btn" aria-label="電話する"><img src="assets/btn-tel-floating.png" alt="電話する" width="143" height="68" loading="lazy" decoding="async"></a>
+  <a href="#contact" class="m-cta-btn" aria-label="お問い合わせ"><img src="assets/btn-mail-floating.png" alt="お問い合わせ" width="153" height="68" loading="lazy" decoding="async"></a>
 </div>
 
 <script>

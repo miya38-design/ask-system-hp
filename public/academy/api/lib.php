@@ -31,13 +31,18 @@ function require_method(string $method): void
     }
 }
 
-/** セッション開始（httponly / https時secure / SameSite=Lax） */
+/** セッション開始（httponly / secure / SameSite=Lax） */
 function ada_session_start(): void
 {
     if (session_status() === PHP_SESSION_ACTIVE) {
         return;
     }
-    $secure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off');
+    // nginx が TLS を終端して PHP には HTTP で渡すため $_SERVER['HTTPS'] は空になる。
+    // それだけを見ていると Secure が一度も付かないので、プロキシのヘッダーも見る。
+    $proto = strtolower((string)($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? ''));
+    $secure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+           || $proto === 'https'
+           || (int)($_SERVER['SERVER_PORT'] ?? 0) === 443;
     session_name('ada_sess');
     session_set_cookie_params([
         'lifetime' => 0,
