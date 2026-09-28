@@ -23,7 +23,11 @@ function json_out($data, int $status = 200): void
  * 入退室スキャンのように「記録はもう終わっているのに、後処理（LINE通知）の
  * 完了を待たせている」処理で使う。LINE APIの往復は数百msかかり、遅い時は
  * curlのタイムアウト(10秒)まで待つため、受付端末の体感が大きく悪化する。
- * PHP-FPM では fastcgi_finish_request() で接続を切ってから後処理へ進める。
+ *
+ * 接続を先に閉じる関数はSAPIごとに名前が違う。このサーバーは LiteSpeed
+ * （health.php の sapi で確認）なので litespeed_finish_request() を使う。
+ * PHP-FPM の fastcgi_finish_request() も残してある。どちらも無い環境では
+ * フラッシュのみとなり、従来どおり後処理の完了まで待つ挙動に戻る。
  */
 function json_out_and_continue($data): void
 {
@@ -38,11 +42,13 @@ function json_out_and_continue($data): void
     // 後処理中にクライアントが切断しても最後まで走らせる
     ignore_user_abort(true);
 
-    if (function_exists('fastcgi_finish_request')) {
-        fastcgi_finish_request();
-        return;
+    foreach (['litespeed_finish_request', 'fastcgi_finish_request'] as $fn) {
+        if (function_exists($fn)) {
+            $fn();
+            return;
+        }
     }
-    // FPM以外でも、出力バッファを吐き出して可能な範囲で先に返す
+    // どちらも無い環境では、出力バッファを吐き出して可能な範囲で先に返す
     while (ob_get_level() > 0) { ob_end_flush(); }
     flush();
 }

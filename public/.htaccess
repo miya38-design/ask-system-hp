@@ -1,0 +1,36 @@
+# アスクシステム — セキュリティ関連のレスポンスヘッダー
+#
+# 前段が nginx のため、このファイルが効く構成かどうかは外から分からない。
+# そこで X-Ask-Htaccess を目印として出し、本番で効いているかを判定する。
+# すべて <IfModule> で囲ってあるので、モジュールが無い環境でも 500 にはならない。
+#
+# 効いていない場合（目印が出ない／このファイル自体がブラウザで読める）は、
+# Apache が介在しない構成なので、ホスティングの管理画面か nginx 側の設定で
+# 同じヘッダーを入れる必要がある。
+
+<IfModule mod_headers.c>
+  # 判定用の目印。動作確認が済んだら消してよい
+  Header always set X-Ask-Htaccess "on"
+
+  # 他サイトへの iframe 埋め込みを禁止（クリックジャッキング対策）
+  Header always set X-Frame-Options "DENY"
+  Header always set Content-Security-Policy "frame-ancestors 'none'"
+
+  # 外部サイトへ送るリファラを、同一オリジン以外ではドメインまでに留める
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+
+  # 使っていないブラウザ機能を明示的に無効化
+  # （カメラはアカデミーの受付端末で使うため、ここでは触らない）
+  Header always set Permissions-Policy "geolocation=(), microphone=(), payment=(), usb=()"
+</IfModule>
+
+# .htaccess 自体をブラウザから読めないようにする（Apache 既定でも禁止されている）
+<Files ".htaccess">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+  </IfModule>
+</Files>
