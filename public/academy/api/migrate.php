@@ -68,6 +68,9 @@ try {
     $ensureCol('users', 'qr_token', 'qr_token VARCHAR(32) NULL');
     $ensureCol('users', 'grade', 'grade VARCHAR(40) NULL');
     $ensureCol('attendance', 'absence_reason', 'absence_reason VARCHAR(255) NULL');
+    // 入会申込時の規約同意の記録（いつ・どの版に同意したか）
+    $ensureCol('applications', 'terms_version', 'terms_version VARCHAR(20) NULL');
+    $ensureCol('applications', 'terms_agreed_at', 'terms_agreed_at DATETIME NULL');
     // ① 在籍・利用状態 / 学校名 / 在籍期間、⑥ 管理者権限
     $ensureCol('users', 'status', "status ENUM('active','suspended','withdrawn') NOT NULL DEFAULT 'active'");
     $ensureCol('users', 'school_name', 'school_name VARCHAR(100) NULL');

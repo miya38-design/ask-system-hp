@@ -440,7 +440,7 @@ async function loadApplications(){
       ? `<div style="margin-top:6px;background:#fff4e2;border:1px solid #ffdca8;border-radius:8px;padding:8px 10px;color:#8a5a00;font-size:13px;">ご要望：${esc(a.note)}</div>`
       : '';
     return `<tr>
-      <td>${fmt(a.created_at)}</td>
+      <td>${fmt(a.created_at)}${a.terms_agreed_at ? `<br><span class="hint" title="利用規約 ${esc(a.terms_version||'')} 版に同意">規約同意 ${fmt(a.terms_agreed_at)}</span>` : '<br><span class="hint" style="color:#c93866;">規約同意の記録なし</span>'}</td>
       <td>${esc(a.parent_name)}<br><span class="hint">${contact}</span></td>
       <td>${esc(a.child_name)}${a.grade?'（'+esc(a.grade)+'）':''}</td>
       <td>${esc(a.phone||'')}</td>

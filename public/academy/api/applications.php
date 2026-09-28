@@ -30,9 +30,10 @@ function gen_pw(): string
 try {
     switch ($action) {
         case 'list':
+            ada_ensure_application_columns();
             $rows = $pdo->query(
                 "SELECT id, parent_name, parent_email, phone, child_name, grade, plan, note,
-                        status, created_at, processed_at
+                        status, created_at, processed_at, terms_version, terms_agreed_at
                  FROM applications
                  ORDER BY (status='pending') DESC, created_at DESC
                  LIMIT 200"

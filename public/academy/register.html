@@ -170,6 +170,7 @@
   </div>
 
 <script>
+const TERMS_VERSION = '2026-09-10';   // terms.html の制定日
 const PLAN_LABEL = {'':'未定・相談したい','standard-a':'週2回（火・木）','standard-b':'週3回（月・水・金）','premium':'週5回（通い放題）'};
 const form = document.getElementById('reg-form');
 const vForm = document.getElementById('view-form');
@@ -184,6 +185,9 @@ let payload = {};
 form.addEventListener('submit', (e) => {
   e.preventDefault();
   payload = Object.fromEntries(new FormData(form).entries());
+  // 同意は記録対象なので、確認画面をはさんでもサーバーまで運ぶ
+  payload.agree = document.getElementById('agree').checked;
+  payload.terms_version = TERMS_VERSION;
   const rows = [
     ['保護者のお名前', payload.parent_name],
     ['メールアドレス', payload.parent_email],

@@ -53,6 +53,31 @@ function json_out_and_continue($data): void
     flush();
 }
 
+/**
+ * applications に規約同意の列があることを保証する。
+ *
+ * 列は migrate.php でも追加されるが、デプロイ後に migrate を流し忘れると
+ * 公開中の入会フォームと講師コンソールが両方落ちる。実行コストは
+ * SHOW COLUMNS 1回なので、使う側で都度確かめる。
+ */
+function ada_ensure_application_columns(): void
+{
+    static $done = false;
+    if ($done) { return; }
+    $done = true;
+    try {
+        $pdo = ada_db();
+        $have = $pdo->query("SHOW COLUMNS FROM applications LIKE 'terms_agreed_at'")->fetch();
+        if (!$have) {
+            $pdo->exec("ALTER TABLE applications
+                          ADD COLUMN terms_version VARCHAR(20) NULL,
+                          ADD COLUMN terms_agreed_at DATETIME NULL");
+        }
+    } catch (Throwable $e) {
+        // 追加できなくても呼び出し側で処理を続けられるようにする
+    }
+}
+
 /** リクエストボディ(JSON)を配列で取得 */
 function json_body(): array
 {

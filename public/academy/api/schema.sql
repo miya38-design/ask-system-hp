@@ -58,6 +58,8 @@ CREATE TABLE IF NOT EXISTS applications (
   plan            VARCHAR(40) DEFAULT NULL,
   note            TEXT,
   status          ENUM('pending','approved','rejected') NOT NULL DEFAULT 'pending',
+  terms_version   VARCHAR(20) DEFAULT NULL,
+  terms_agreed_at DATETIME DEFAULT NULL,
   parent_user_id  INT UNSIGNED DEFAULT NULL,
   student_user_id INT UNSIGNED DEFAULT NULL,
   created_at      DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
