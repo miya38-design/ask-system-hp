@@ -53,6 +53,35 @@
   .done p{font-size:14px;color:#4a5568;line-height:1.9;margin-bottom:8px;}
   .done .box{background:#f7fafd;border:1px solid #e6ebf2;border-radius:12px;padding:14px;margin:16px 0;font-size:13px;color:#4a5568;line-height:1.9;text-align:left;}
   [hidden]{display:none!important;}
+
+/* ご利用案内の共通導線（guidenav） */
+.guide-nav{margin:44px auto 0;max-width:900px;background:#fff;border:1px solid #e5e9ef;
+  border-radius:16px;padding:22px 20px;box-shadow:0 6px 18px rgba(22,73,143,.05);}
+.guide-nav .gn-title{font-size:15px;font-weight:900;color:#16498f;margin:0 0 14px;text-align:center;
+  letter-spacing:.04em;}
+.guide-nav ul{list-style:none;margin:0;padding:0;display:grid;
+  grid-template-columns:repeat(3,1fr);gap:10px;}
+.guide-nav li{margin:0;}
+.guide-nav li::before{content:none;}
+.guide-nav a{display:block;padding:13px 15px;border:1px solid #dbe6f3;border-radius:12px;
+  background:#f7fafd;text-decoration:none;color:#16498f;font-weight:800;font-size:15px;line-height:1.5;
+  transition:background .15s,transform .15s;}
+.guide-nav a .gn-sub{display:block;font-weight:600;font-size:12px;color:#6b7280;margin-top:3px;line-height:1.6;}
+.guide-nav a:hover{background:#eef5fc;transform:translateY(-1px);}
+.guide-nav a[aria-current="page"]{background:#eef5fc;border-color:#9fc2ea;color:#7c8899;
+  pointer-events:none;box-shadow:none;}
+.guide-nav a[aria-current="page"] .gn-now{display:block;font-size:11px;font-weight:700;color:#9aa7b8;}
+.guide-nav .gn-now{display:none;}
+@media (max-width:700px){ .guide-nav ul{grid-template-columns:repeat(2,1fr);} }
+@media (max-width:420px){
+  .guide-nav{padding:18px 14px;border-radius:14px;}
+  .guide-nav ul{grid-template-columns:1fr;}
+}
+  .agree{display:flex;align-items:flex-start;gap:10px;margin:18px 0 6px;padding:13px 14px;
+    background:#f7fafd;border:1px solid #dbe6f3;border-radius:11px;font-size:14px;line-height:1.7;}
+  .agree input{margin-top:3px;width:18px;height:18px;flex-shrink:0;}
+  .agree a{color:#1f5fbf;font-weight:800;}
+  .agree .req{margin-left:6px;}
 </style>
 </head>
 <body>
@@ -94,9 +123,23 @@
         </select>
         <label>ご質問・ご要望</label>
         <textarea name="note" placeholder="ご不明点やご希望があればご記入ください"></textarea>
+        <label class="agree">
+          <input type="checkbox" id="agree" required>
+          <span><a href="terms.html" target="_blank" rel="noopener">利用規約</a>を確認し、同意します<span class="req">必須</span></span>
+        </label>
         <button class="btn btn-primary" type="submit">入力内容を確認する</button>
       </form>
       <p class="note">※送信した時点では、まだアカウントは使えません。教室での確認とお支払いが済んでから、ご利用いただけます。</p>
+      <nav class="guide-nav" aria-label="ご利用案内">
+        <p class="gn-title">お申し込み前にご確認ください</p>
+        <ul>
+          <li><a href="parent-guide.html">保護者のみなさまへ<span class="gn-now">（このページ）</span><span class="gn-sub">教室の方針・1日の流れ・料金・安全</span></a></li>
+          <li><a href="mypage-guide.html">マイページの使い方<span class="gn-now">（このページ）</span><span class="gn-sub">ログイン・欠席連絡・入退室カード</span></a></li>
+          <li><a href="kids-rules.html">きょうしつのやくそく<span class="gn-now">（このページ）</span><span class="gn-sub">お子さま向け・ふりがな付き</span></a></li>
+          <li><a href="terms.html">利用規約<span class="gn-now">（このページ）</span><span class="gn-sub">会員規約・休会・解約・返金</span></a></li>
+          <li><a href="index.html#payment">ご入会・お支払い<span class="gn-now">（このページ）</span><span class="gn-sub">入会の流れとお支払い方法</span></a></li>
+        </ul>
+      </nav>
       <p class="note" style="text-align:center;">ご不明な点は <a href="mailto:info@ask-system.net" style="color:var(--blue);font-weight:700;">info@ask-system.net</a> または公式LINEまで。</p>
     </div>
 

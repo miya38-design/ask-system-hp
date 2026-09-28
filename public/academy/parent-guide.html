@@ -106,6 +106,30 @@ td.fee{font-weight:900;white-space:nowrap;color:var(--ink);}
   .contact h2{color:#1E293B;} .contact dt{color:#475569;} .contact dd{color:#1E293B;}
   .contact a{color:#1E293B;} .contact .note{color:#475569;}
 }
+
+/* ご利用案内の共通導線（guidenav） */
+.guide-nav{margin:44px auto 0;max-width:900px;background:#fff;border:1px solid #e5e9ef;
+  border-radius:16px;padding:22px 20px;box-shadow:0 6px 18px rgba(22,73,143,.05);}
+.guide-nav .gn-title{font-size:15px;font-weight:900;color:#16498f;margin:0 0 14px;text-align:center;
+  letter-spacing:.04em;}
+.guide-nav ul{list-style:none;margin:0;padding:0;display:grid;
+  grid-template-columns:repeat(3,1fr);gap:10px;}
+.guide-nav li{margin:0;}
+.guide-nav li::before{content:none;}
+.guide-nav a{display:block;padding:13px 15px;border:1px solid #dbe6f3;border-radius:12px;
+  background:#f7fafd;text-decoration:none;color:#16498f;font-weight:800;font-size:15px;line-height:1.5;
+  transition:background .15s,transform .15s;}
+.guide-nav a .gn-sub{display:block;font-weight:600;font-size:12px;color:#6b7280;margin-top:3px;line-height:1.6;}
+.guide-nav a:hover{background:#eef5fc;transform:translateY(-1px);}
+.guide-nav a[aria-current="page"]{background:#eef5fc;border-color:#9fc2ea;color:#7c8899;
+  pointer-events:none;box-shadow:none;}
+.guide-nav a[aria-current="page"] .gn-now{display:block;font-size:11px;font-weight:700;color:#9aa7b8;}
+.guide-nav .gn-now{display:none;}
+@media (max-width:700px){ .guide-nav ul{grid-template-columns:repeat(2,1fr);} }
+@media (max-width:420px){
+  .guide-nav{padding:18px 14px;border-radius:14px;}
+  .guide-nav ul{grid-template-columns:1fr;}
+}
 </style>
 </head>
 <body>
@@ -292,6 +316,16 @@ td.fee{font-weight:900;white-space:nowrap;color:var(--ink);}
       「まず話を聞いてみたい」だけでも、お気軽にどうぞ。</p>
   </div>
 
+  <nav class="guide-nav" aria-label="ご利用案内">
+    <p class="gn-title">ご利用案内</p>
+    <ul>
+      <li><a href="parent-guide.html" aria-current="page">保護者のみなさまへ<span class="gn-now">（このページ）</span><span class="gn-sub">教室の方針・1日の流れ・料金・安全</span></a></li>
+      <li><a href="mypage-guide.html">マイページの使い方<span class="gn-now">（このページ）</span><span class="gn-sub">ログイン・欠席連絡・入退室カード</span></a></li>
+      <li><a href="kids-rules.html">きょうしつのやくそく<span class="gn-now">（このページ）</span><span class="gn-sub">お子さま向け・ふりがな付き</span></a></li>
+      <li><a href="terms.html">利用規約<span class="gn-now">（このページ）</span><span class="gn-sub">会員規約・休会・解約・返金</span></a></li>
+      <li><a href="index.html#payment">ご入会・お支払い<span class="gn-now">（このページ）</span><span class="gn-sub">入会の流れとお支払い方法</span></a></li>
+    </ul>
+  </nav>
 </div>
 </body>
 </html>
