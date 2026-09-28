@@ -135,7 +135,7 @@ ul{list-style:none;}
 
 /* ===== Features ===== */
 .detail-features{padding:60px 0;background:#fafbfd;}
-.feature-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+.feature-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:20px;}
 .feature-card{
   background:#fff;border:1px solid var(--line);border-radius:16px;
   padding:30px 24px;text-align:center;
@@ -313,9 +313,14 @@ footer a:hover{color:var(--blue);}
   <div class="container">
     <div class="sec-head">
       <h2>対応内容</h2>
-      <p>3つの軸で、暮らしとビジネスのICTをサポートします</p>
+      <p>機器の販売から設定・運用まで、暮らしとビジネスのICTをまるごとサポートします</p>
     </div>
     <div class="feature-grid">
+      <div class="feature-card">
+        <div class="ic"><img src="assets/line-icon-printer.png" alt="" width="107" height="106" loading="lazy" decoding="async"></div>
+        <h3>PC・サーバー・ネットワーク機器販売</h3>
+        <p>パソコン・サーバー・ネットワーク機器・周辺機器の販売。設置・設定までまとめて対応します</p>
+      </div>
       <div class="feature-card">
         <div class="ic"><img src="assets/line-icon-laptop.png" alt="" width="105" height="97" loading="lazy" decoding="async"></div>
         <h3>パソコン・スマートホームサポート＋AI活用</h3>
@@ -343,6 +348,11 @@ footer a:hover{color:var(--blue);}
       <p>ご家庭のICTサポートから、企業のDX・AI導入まで対応<br>表示価格はすべて税込です</p>
     </div>
     <div class="price-table">
+      <div class="price-table-row">
+        <div class="pt-icon"><img src="assets/line-icon-printer.png" alt="" width="107" height="106" loading="lazy" decoding="async"></div>
+        <div class="pt-name">PC・サーバー・ネットワーク機器販売<small>パソコン・サーバー・ネットワーク機器・周辺機器の販売。設置・設定までまとめて承ります</small><small class="pt-eg">ご利用の環境と用途を伺い、必要な構成をお見積りします</small></div>
+        <div class="pt-price quote">要見積</div>
+      </div>
       <div class="price-table-row">
         <div class="pt-icon"><img src="assets/icon-wifi-label.png" alt="" width="90" height="77" loading="lazy" decoding="async"></div>
         <div class="pt-name">Wi-Fiルーター設定・PC/スマホ初期設定・メール等<small>インターネット接続設定/変更サポート・Wi-Fi設定/機種変更/速度改善・PCスマホ各種設定/操作サポートなど</small></div>
@@ -386,7 +396,7 @@ footer a:hover{color:var(--blue);}
     </div>
     <div class="price-note">
       <p>※表示価格はすべて<b>税込</b>です。記載の金額には、作業にあたる技術料が含まれます。</p>
-      <p>※次の費用は別途申し受けます：<b>部材費・機器代・出張費</b>、および修理など記載の作業範囲を超える作業。</p>
+      <p>※<b>サポート作業</b>の料金には、次の費用は含まれません：<b>部材費・機器代・出張費</b>、および修理など記載の作業範囲を超える作業。<br>（機器販売の商品代金は、お見積りでご提示する金額に含まれます）</p>
       <p class="pn-strong">追加費用が発生する場合は、<b>必ず事前にお見積りをご提示し、ご了承いただいてから</b>作業に着手します。
         お客様の承諾なく費用を追加することはありません。</p>
       <p>作業内容・台数・所要時間によって金額は変わります。まずはお気軽にご相談ください。</p>
@@ -572,6 +582,21 @@ footer a:hover{color:var(--blue);}
     "@type": "OfferCatalog",
     "name": "ICTサポート 料金一覧",
     "itemListElement": [
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Product",
+          "name": "PC・サーバー・ネットワーク機器販売",
+          "description": "パソコン・サーバー・ネットワーク機器・周辺機器の販売。設置・設定までまとめて対応します。"
+        },
+        "availability": "https://schema.org/InStock",
+        "priceSpecification": {
+          "@type": "PriceSpecification",
+          "priceCurrency": "JPY",
+          "valueAddedTaxIncluded": true,
+          "description": "ご利用の環境と用途を伺い、必要な構成をお見積りします。"
+        }
+      },
       {
         "@type": "Offer",
         "itemOffered": {
