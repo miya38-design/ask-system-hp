@@ -39,6 +39,7 @@ function line_api(string $url, array $payload, ?string &$err = null): bool
             CURLOPT_POSTFIELDS     => $json,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_TIMEOUT        => 10,
+            CURLOPT_CONNECTTIMEOUT => 5,   // 接続不能時にワーカーを10秒占有しない
         ]);
         $res  = curl_exec($ch);
         $code = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);

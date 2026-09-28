@@ -6,10 +6,45 @@ require_once __DIR__ . '/db.php';
 /** JSONレスポンスを返して終了 */
 function json_out($data, int $status = 200): void
 {
+    // json_out_and_continue() の後処理中に例外が起きても、送信済みのレスポンスに
+    // 追記しない（呼び出し側の catch から再度ここへ来ることがある）
+    if (!empty($GLOBALS['ada_response_sent'])) {
+        exit;
+    }
     http_response_code($status);
     header('Content-Type: application/json; charset=utf-8');
     echo json_encode($data, JSON_UNESCAPED_UNICODE);
     exit;
+}
+
+/**
+ * JSONレスポンスを返したうえで、処理は続行する。
+ *
+ * 入退室スキャンのように「記録はもう終わっているのに、後処理（LINE通知）の
+ * 完了を待たせている」処理で使う。LINE APIの往復は数百msかかり、遅い時は
+ * curlのタイムアウト(10秒)まで待つため、受付端末の体感が大きく悪化する。
+ * PHP-FPM では fastcgi_finish_request() で接続を切ってから後処理へ進める。
+ */
+function json_out_and_continue($data): void
+{
+    $body = json_encode($data, JSON_UNESCAPED_UNICODE);
+    $GLOBALS['ada_response_sent'] = true;
+    http_response_code(200);
+    header('Content-Type: application/json; charset=utf-8');
+    header('Content-Length: ' . strlen($body));
+    header('Connection: close');
+    echo $body;
+
+    // 後処理中にクライアントが切断しても最後まで走らせる
+    ignore_user_abort(true);
+
+    if (function_exists('fastcgi_finish_request')) {
+        fastcgi_finish_request();
+        return;
+    }
+    // FPM以外でも、出力バッファを吐き出して可能な範囲で先に返す
+    while (ob_get_level() > 0) { ob_end_flush(); }
+    flush();
 }
 
 /** リクエストボディ(JSON)を配列で取得 */

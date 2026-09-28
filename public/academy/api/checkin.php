@@ -57,20 +57,27 @@ try {
                 }
             }
 
-            // 保護者へLINE通知
             $hhmm = date('H:i', strtotime($now));
             $verb = $type === 'in' ? '入室' : '退室';
+
+            // 記録はここまでで完了。受付端末を待たせないよう、先に結果を返してから
+            // LINE通知を送る（LINE APIの往復は数百ms〜、遅い時はタイムアウトまでかかる）
+            json_out_and_continue(['ok' => true, 'student' => $stu['display_name'], 'type' => $type, 'time' => $hhmm]);
+
+            // --- ここから先はレスポンス送信後の後処理 ---
             if (!empty($stu['parent_id'])) {
-                $pp = $pdo->prepare('SELECT line_user_id FROM users WHERE id = ?');
-                $pp->execute([(int)$stu['parent_id']]);
-                $lineId = (string)($pp->fetchColumn() ?: '');
-                if ($lineId !== '') {
-                    ada_notify($lineId, "【ASKデジタルアカデミー】\n{$stu['display_name']}さんが{$verb}しました（{$hhmm}）", 'checkin_' . $type, $sid);
+                try {
+                    $pp = $pdo->prepare('SELECT line_user_id FROM users WHERE id = ?');
+                    $pp->execute([(int)$stu['parent_id']]);
+                    $lineId = (string)($pp->fetchColumn() ?: '');
+                    if ($lineId !== '') {
+                        ada_notify($lineId, "【ASKデジタルアカデミー】\n{$stu['display_name']}さんが{$verb}しました（{$hhmm}）", 'checkin_' . $type, $sid);
+                    }
+                } catch (Throwable $e) {
+                    // 通知の失敗で記録は巻き戻さない。notification_logs 側に残る
                 }
             }
-
-            json_out(['ok' => true, 'student' => $stu['display_name'], 'type' => $type, 'time' => $hhmm]);
-            break;
+            exit;
 
         case 'my_qr':
             require_role($me, 'student');
