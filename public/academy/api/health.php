@@ -12,6 +12,10 @@ $out = [
     'ok'   => true,
     'php'  => PHP_VERSION,
     'time' => date('c'),
+    // 入退室スキャンは fastcgi_finish_request() で「先に応答 → 後でLINE通知」を
+    // 行う。使えない構成では通知の完了を待つ旧来の挙動に戻るため、ここで見る。
+    'sapi' => PHP_SAPI,
+    'early_response' => function_exists('fastcgi_finish_request'),
     'db'   => null,
 ];
 
