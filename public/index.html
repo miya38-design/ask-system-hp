@@ -308,6 +308,19 @@ ul{list-style:none;}
 .voice-card .who img{width:54px;height:54px;border-radius:50%;object-fit:cover;background:#eef2f7;}
 .voice-card p{font-size:17px;color:#3b4554;line-height:1.7;}
 .voice-card .meta{font-size:15px;color:var(--muted);text-align:right;}
+/* 導入実績。発注者名は出さず、分野と内容だけを示す */
+.track{
+  margin-top:16px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:22px 24px;
+}
+.track h3{font-size:19px;font-weight:900;color:var(--blue-dark);margin-bottom:14px;}
+.track .cols{display:grid;grid-template-columns:1fr 1fr;gap:18px 28px;}
+.track .cat{font-size:15px;font-weight:900;color:var(--blue);letter-spacing:.04em;margin-bottom:8px;}
+.track ul{list-style:none;display:flex;flex-direction:column;gap:7px;}
+.track li{font-size:16px;color:#3b4554;line-height:1.65;padding-left:16px;position:relative;}
+.track li::before{
+  content:"";position:absolute;left:0;top:.62em;width:7px;height:7px;border-radius:50%;background:var(--blue);
+}
+.track .note{margin-top:14px;font-size:14px;color:var(--muted);line-height:1.6;}
 
 /* ===== FAQ ===== */
 .faq{padding:48px 0;background:#fafbfd;}
@@ -510,6 +523,8 @@ footer a:hover{color:var(--blue);}
   .problems ul.checks{grid-template-columns:1fr 1fr;}
   .services .grid,.results .grid,.reasons .grid,.pricing .grid,.bottom .grid,.contact .grid{grid-template-columns:1fr;}
   .results .grid{gap:14px;}
+  .track .cols{grid-template-columns:1fr;}
+  .track{padding:18px;}
   .floating-cta{display:none;}
   .svc-card{grid-template-columns:1fr;}
   .reason{grid-template-columns:90px 1fr;}
@@ -739,6 +754,31 @@ footer a:hover{color:var(--blue);}
         <div class="meta">（30代 女性）</div>
       </div>
     </div>
+
+    <div class="track">
+      <h3>主な導入実績</h3>
+      <div class="cols">
+        <div>
+          <div class="cat">公共・教育分野</div>
+          <ul>
+            <li>自治体立 小中学校の校務用パソコン 売買・更新業務（複数年度にわたり受注）</li>
+            <li>小中学校 ICT機器の保守・サポート業務（月額契約）</li>
+            <li>教育委員会の校内ネットワーク・無線LAN 整備とトータルサポート</li>
+            <li>官公庁・自治体の一般競争入札への参加・受注</li>
+          </ul>
+        </div>
+        <div>
+          <div class="cat">法人・個人</div>
+          <ul>
+            <li>事業所のネットワーク構築、サーバー・PC・周辺機器の導入</li>
+            <li>業務のDX化・生成AI活用の導入支援</li>
+            <li>ご家庭のパソコン・Wi-Fi・スマートホームのサポート</li>
+            <li>地域密着20年以上・累計5,000件以上の対応</li>
+          </ul>
+        </div>
+      </div>
+      <p class="note">※公共案件は一般競争入札により受注したものです。入札結果および契約は発注者が公表しています。発注者名の掲載は差し控えています。</p>
+    </div>
   </div>
 </section>
 
@@ -854,6 +894,14 @@ footer a:hover{color:var(--blue);}
         <details>
           <summary>問い合わせはいつでもできますか？</summary>
           <p class="a">LINE・お問い合わせフォーム・メールは24時間受け付けています。お電話の受付時間は9:00〜18:00（年中無休）です。フォームからのお問い合わせには2営業日以内にご返信します。</p>
+        </details>
+        <details>
+          <summary>法人や自治体の案件にも対応していますか？</summary>
+          <p class="a">はい。自治体立の小中学校の校務用パソコン売買・更新業務を複数年度にわたり受注し、ICT機器の保守・サポート業務、教育委員会の校内ネットワーク・無線LAN整備も手がけています。いずれも一般競争入札により受注したものです。法人のお客様には、事業所のネットワーク構築、サーバー・PC・周辺機器の導入、業務のDX化や生成AI活用の導入支援まで対応しています。</p>
+        </details>
+        <details>
+          <summary>水俣市以外の企業や団体でも依頼できますか？</summary>
+          <p class="a">はい。熊本県の八代市・芦北町・津奈木町、鹿児島県の出水市まで訪問で対応しています。上記以外の地域についてもご相談ください。打ち合わせや運用支援はオンラインでも承っています。</p>
         </details>
     </div>
   </div>
@@ -1091,6 +1139,22 @@ footer a:hover{color:var(--blue);}
         "@type": "Answer",
         "text": "LINE・お問い合わせフォーム・メールは24時間受け付けています。お電話の受付時間は9:00〜18:00（年中無休）です。フォームからのお問い合わせには2営業日以内にご返信します。"
       }
+    },
+    {
+      "@type": "Question",
+      "name": "法人や自治体の案件にも対応していますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "はい。自治体立の小中学校の校務用パソコン売買・更新業務を複数年度にわたり受注し、ICT機器の保守・サポート業務、教育委員会の校内ネットワーク・無線LAN整備も手がけています。いずれも一般競争入札により受注したものです。法人のお客様には、事業所のネットワーク構築、サーバー・PC・周辺機器の導入、業務のDX化や生成AI活用の導入支援まで対応しています。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "水俣市以外の企業や団体でも依頼できますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "はい。熊本県の八代市・芦北町・津奈木町、鹿児島県の出水市まで訪問で対応しています。上記以外の地域についてもご相談ください。打ち合わせや運用支援はオンラインでも承っています。"
+      }
     }
   ]
 }
@@ -1108,7 +1172,7 @@ footer a:hover{color:var(--blue);}
   "url": "https://asksystem.jp/",
   "logo": "https://asksystem.jp/assets/logo-ask.png",
   "image": "https://asksystem.jp/assets/ogp.jpg",
-  "description": "熊本県水俣市を拠点に、パソコン・Wi-Fi・ネットワークの設定やトラブル対応から、DX化・AI導入支援、ホームページ制作、機器販売まで行うICTサポート事業者です。ご家庭・個人のお困りごとから企業のIT課題まで対応します。",
+  "description": "熊本県水俣市を拠点に、パソコン・Wi-Fi・ネットワークの設定やトラブル対応から、DX化・AI導入支援、ホームページ制作、PC・サーバー等の機器販売まで行うICTサポート事業者です。ご家庭・個人のお困りごとから、法人のIT課題、自治体・教育機関のICT基盤構築までを一貫して担います。",
   "telephone": "+81-966-63-4253",
   "email": "info@ask-system.net",
   "founder": {
@@ -1214,7 +1278,27 @@ footer a:hover{color:var(--blue);}
         "name": "PC・サーバー・ネットワーク機器販売"
       }
     }
-  ]
+  ],
+  "knowsAbout": [
+    "パソコン修理",
+    "パソコン設定",
+    "Wi-Fi設定",
+    "ネットワーク構築",
+    "サーバー構築",
+    "スマートホーム",
+    "DX推進",
+    "生成AI導入支援",
+    "ホームページ制作",
+    "SNS運用",
+    "ライブ配信",
+    "PC・サーバー・ネットワーク機器販売",
+    "校内ネットワーク・無線LAN整備",
+    "学校ICT機器の保守・サポート",
+    "建設業電子納品",
+    "プライバシーマーク取得支援",
+    "ICT教育"
+  ],
+  "slogan": "ICTで地域の可能性を広げる。"
 }
 </script>
 <script type="application/ld+json">
