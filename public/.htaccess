@@ -17,6 +17,19 @@
   Header always set Permissions-Policy "geolocation=(), microphone=(), payment=(), usb=()"
 </IfModule>
 
+# www.asksystem.jp へのアクセスを asksystem.jp へ 301 で寄せる。
+# Google が /privacy と /ict-support を www 側のURLでインデックスしてしまっているため、
+# 正規URL（canonical と同じ非www）へ集約する。
+#
+# 【前提】現在 www の A レコードは別サーバー(118.27.122.112)を指しており、
+# 証明書も一致しないため、このリダイレクトはまだ実行されない。
+# お名前.com の DNS で www の A レコードを 118.27.122.214 に変更すると有効になる。
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{HTTP_HOST} ^www\.asksystem\.jp$ [NC]
+  RewriteRule ^(.*)$ https://asksystem.jp/$1 [R=301,L]
+</IfModule>
+
 # .htaccess 自体をブラウザから読めないようにする（Apache 既定でも禁止されている）
 <Files ".htaccess">
   <IfModule mod_authz_core.c>
