@@ -44,6 +44,8 @@ jobs:
 
           # Upload (lftp can exit non-zero on benign verbose/delete messages; we
           # judge success separately by verifying a key file below).
+          # Excluded paths are neither uploaded nor deleted. tsunagi-meter/ is a
+          # separate app uploaded by hand; without the exclude, --delete wipes it.
           set +e
           lftp -c "
             $SETTINGS
@@ -51,6 +53,7 @@ jobs:
             mirror --reverse --delete --parallel=2 \
               --exclude-glob config.php \
               --exclude-glob .ftp-deploy-sync-state.json \
+              --exclude-glob tsunagi-meter/ \
               ./public/ \"$TARGET\";
           " > lftp.out 2>&1
           echo "===== lftp output ====="
