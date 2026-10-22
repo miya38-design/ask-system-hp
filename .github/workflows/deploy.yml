@@ -32,16 +32,16 @@ jobs:
           printf 'machine %s login %s password %s\n' "$FTP_SERVER" "$FTP_USERNAME" "$FTP_PASSWORD" > "$HOME/.netrc"
           chmod 600 "$HOME/.netrc"
 
-          # Transfers to this server keep ending early. On 2026-10-22 company.html
-          # was left at 0 bytes, and index.html at exactly 65536; the server serves
-          # a short file with a 200, so a visitor just gets a blank or half page.
+          # A transfer to this server can end early: on 2026-10-22 company.html was
+          # left at 0 bytes and stayed that way until the next deploy. The server
+          # returns 200 for a short file, so the visitor just gets a blank page.
           #
           # use-temp-file is what stops that reaching visitors: the upload goes to a
           # temporary name and is renamed over the live file only once it completes,
           # so a broken transfer leaves the previous copy in place instead of a
           # truncated one. clobber overwrites rather than trying to resume, which is
           # what corrupts a file that is already short. Transfers run one at a time;
-          # --parallel=2 was in use when both truncations happened.
+          # --parallel=2 was in use when it happened.
           SETTINGS="set ftp:ssl-allow true; set ftp:ssl-force true; set ftp:ssl-protect-data true; set ssl:verify-certificate no; set ftp:passive-mode true; set net:max-retries 5; set net:timeout 30; set net:reconnect-interval-base 5; set xfer:clobber on; set xfer:use-temp-file true; set xfer:temp-file-name .in.*.tmp;"
 
           # Excluded paths are neither uploaded nor deleted. tsunagi-meter/ and
