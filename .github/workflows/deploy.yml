@@ -61,7 +61,23 @@ jobs:
           echo "===== lftp output ====="
           cat lftp.out || true
 
-          # Verify deployment by confirming index.html exists at the target.
+          # Second pass. A transfer can end early and leave a file truncated --
+          # company.html was served as 0 bytes on 2026-10-22 this way -- and the
+          # server still answers 200 for it, so nothing downstream notices.
+          # mirror compares size as well as time, so a short file is sent again.
+          lftp -c "
+            $SETTINGS
+            open -p $PORT \"$FTP_SERVER\";
+            mirror --reverse --delete \
+              --exclude-glob config.php \
+              --exclude-glob .ftp-deploy-sync-state.json \
+              --exclude-glob tsunagi-meter/ \
+              --exclude-glob linebot/ \
+              ./public/ \"$TARGET\";
+          " > lftp2.out 2>&1
+          echo "===== lftp output (second pass) ====="
+          cat lftp2.out || true
+
           if lftp -c "$SETTINGS open -p $PORT \"$FTP_SERVER\"; cls \"$TARGET/index.html\";" > /dev/null 2>&1; then
             ok=1
           else
@@ -75,4 +91,29 @@ jobs:
             tail -n 25 lftp.out | while IFS= read -r l; do [ -n "$l" ] && echo "::error::${l}"; done
             exit 1
           fi
-          echo "Deploy verified: https://$DOMAIN/ is updated."
+          echo "Upload finished for https://$DOMAIN/"
+
+      - name: Check every page is served at its full length
+        run: |
+          set -u
+          DOMAIN="asksystem.jp"
+          # Confirming a file exists is not enough: a truncated upload is still a
+          # file, and the server returns 200 with Content-Length: 0. Compare the
+          # served length against the repository instead.
+          # The query string is there to miss the nginx cache and reach the origin.
+          fail=0
+          while IFS= read -r f; do
+            rel="${f#public/}"
+            loc=$(wc -c < "$f" | tr -d " ")
+            rem=$(curl -sS -o /dev/null -w "%{size_download}" --max-time 30                   "https://$DOMAIN/$rel?cb=${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" || echo ERR)
+            if [ "$loc" != "$rem" ]; then
+              echo "::error::/$rel is $rem bytes, expected $loc"
+              fail=$((fail+1))
+            fi
+          done < <(find public -type f \( -name "*.html" -o -name "*.xml" -o -name "*.txt" \) ! -path "*/api/*")
+
+          if [ "$fail" -ne 0 ]; then
+            echo "$fail file(s) were not served intact. Re-run this workflow to upload them again."
+            exit 1
+          fi
+          echo "Deploy verified: every page is served at its full length."
