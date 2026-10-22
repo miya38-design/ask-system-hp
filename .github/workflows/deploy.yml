@@ -31,7 +31,23 @@ jobs:
           umask 077
           printf 'machine %s login %s password %s\n' "$FTP_SERVER" "$FTP_USERNAME" "$FTP_PASSWORD" > "$HOME/.netrc"
           chmod 600 "$HOME/.netrc"
-          SETTINGS="set ftp:ssl-allow true; set ftp:ssl-force true; set ftp:ssl-protect-data true; set ssl:verify-certificate no; set ftp:passive-mode true; set net:max-retries 2; set net:timeout 25;"
+
+          # Transfers to this server keep ending early. On 2026-10-22 company.html
+          # was left at 0 bytes, and index.html at exactly 65536; the server serves
+          # a short file with a 200, so a visitor just gets a blank or half page.
+          #
+          # use-temp-file is what stops that reaching visitors: the upload goes to a
+          # temporary name and is renamed over the live file only once it completes,
+          # so a broken transfer leaves the previous copy in place instead of a
+          # truncated one. clobber overwrites rather than trying to resume, which is
+          # what corrupts a file that is already short. Transfers run one at a time;
+          # --parallel=2 was in use when both truncations happened.
+          SETTINGS="set ftp:ssl-allow true; set ftp:ssl-force true; set ftp:ssl-protect-data true; set ssl:verify-certificate no; set ftp:passive-mode true; set net:max-retries 5; set net:timeout 30; set net:reconnect-interval-base 5; set xfer:clobber on; set xfer:use-temp-file true; set xfer:temp-file-name .in.*.tmp;"
+
+          # Excluded paths are neither uploaded nor deleted. tsunagi-meter/ and
+          # linebot/ (the internal LINE bot's webhook) are separate apps uploaded
+          # by hand; without the exclude, --delete wipes them.
+          EXCLUDES="--exclude-glob config.php --exclude-glob .ftp-deploy-sync-state.json --exclude-glob tsunagi-meter/ --exclude-glob linebot/"
 
           # Detect the real document root: <domain>/public_html if present, else <domain>/
           lftp -c "$SETTINGS open -p $PORT \"$FTP_SERVER\"; cls -1 \"$DOMAIN/\";" > list.txt 2>/dev/null || true
@@ -42,78 +58,68 @@ jobs:
           fi
           echo "Deploy target: '$TARGET'"
 
-          # Upload (lftp can exit non-zero on benign verbose/delete messages; we
-          # judge success separately by verifying a key file below).
-          # Excluded paths are neither uploaded nor deleted. tsunagi-meter/ and
-          # linebot/ (the internal LINE bot's webhook) are separate apps uploaded
-          # by hand; without the exclude, --delete wipes them.
+          # lftp can exit non-zero on benign verbose/delete messages, so success is
+          # judged below by what the site actually serves, not by this exit code.
           set +e
           lftp -c "
             $SETTINGS
             open -p $PORT \"$FTP_SERVER\";
-            mirror --reverse --delete --parallel=2 \
-              --exclude-glob config.php \
-              --exclude-glob .ftp-deploy-sync-state.json \
-              --exclude-glob tsunagi-meter/ \
-              --exclude-glob linebot/ \
-              ./public/ \"$TARGET\";
+            mirror --reverse --delete $EXCLUDES ./public/ \"$TARGET\";
           " > lftp.out 2>&1
           echo "===== lftp output ====="
           cat lftp.out || true
 
-          # Second pass. A transfer can end early and leave a file truncated --
-          # company.html was served as 0 bytes on 2026-10-22 this way -- and the
-          # server still answers 200 for it, so nothing downstream notices.
-          # mirror compares size as well as time, so a short file is sent again.
-          lftp -c "
-            $SETTINGS
-            open -p $PORT \"$FTP_SERVER\";
-            mirror --reverse --delete \
-              --exclude-glob config.php \
-              --exclude-glob .ftp-deploy-sync-state.json \
-              --exclude-glob tsunagi-meter/ \
-              --exclude-glob linebot/ \
-              ./public/ \"$TARGET\";
-          " > lftp2.out 2>&1
-          echo "===== lftp output (second pass) ====="
-          cat lftp2.out || true
+          # Compare what the site serves against the repository. Checking that a
+          # file exists is not enough -- a truncated upload is still a file. The
+          # query string is there to miss the nginx cache and reach the origin.
+          list_short_files() {
+            tag="$1"
+            : > short.txt
+            while IFS= read -r f; do
+              rel="${f#public/}"
+              loc=$(wc -c < "$f" | tr -d " ")
+              rem=$(curl -sS -o /dev/null -w "%{size_download}" --max-time 30 "https://$DOMAIN/$rel?cb=${GITHUB_RUN_ID}-${tag}" || echo ERR)
+              if [ "$loc" != "$rem" ]; then
+                # To stderr: the caller captures stdout, which carries only the count.
+                echo "  short: /$rel  served=$rem expected=$loc" >&2
+                echo "$rel" >> short.txt
+              fi
+            done < <(find public -type f \( -name "*.html" -o -name "*.xml" -o -name "*.txt" \) ! -path "*/api/*")
+            wc -l < short.txt | tr -d " "
+          }
 
-          if lftp -c "$SETTINGS open -p $PORT \"$FTP_SERVER\"; cls \"$TARGET/index.html\";" > /dev/null 2>&1; then
-            ok=1
-          else
-            ok=0
+          # Send the short ones again, one at a time, and look once more. Three
+          # rounds: a single flaky transfer should not need the whole run repeating.
+          attempt=1
+          while [ "$attempt" -le 3 ]; do
+            echo "===== verify pass $attempt ====="
+            n=$(list_short_files "$attempt")
+            if [ "$n" -eq 0 ]; then
+              break
+            fi
+            echo "$n file(s) short; uploading them again"
+            while IFS= read -r rel; do
+              d=$(dirname "$rel")
+              [ "$d" = "." ] && d=""
+              lftp -c "$SETTINGS open -p $PORT \"$FTP_SERVER\"; put -O \"$TARGET/$d\" \"public/$rel\";" >> lftp.repair.out 2>&1
+            done < short.txt
+            attempt=$((attempt + 1))
+          done
+
+          # The loop re-uploads and then moves on, so the last round's repair has
+          # not been looked at yet. Check once more before calling it a failure.
+          if [ "$n" -ne 0 ]; then
+            echo "===== final verify ====="
+            n=$(list_short_files final)
           fi
           set -e
           rm -f "$HOME/.netrc"
 
-          if [ "$ok" -ne 1 ]; then
-            echo "Deployment verification failed (index.html not found at $TARGET)."
-            tail -n 25 lftp.out | while IFS= read -r l; do [ -n "$l" ] && echo "::error::${l}"; done
-            exit 1
-          fi
-          echo "Upload finished for https://$DOMAIN/"
-
-      - name: Check every page is served at its full length
-        run: |
-          set -u
-          DOMAIN="asksystem.jp"
-          # Confirming a file exists is not enough: a truncated upload is still a
-          # file, and the server returns 200 with Content-Length: 0. Compare the
-          # served length against the repository instead.
-          # The query string is there to miss the nginx cache and reach the origin.
-          fail=0
-          while IFS= read -r f; do
-            rel="${f#public/}"
-            loc=$(wc -c < "$f" | tr -d " ")
-            rem=$(curl -sS -o /dev/null -w "%{size_download}" --max-time 30                   "https://$DOMAIN/$rel?cb=${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" || echo ERR)
-            if [ "$loc" != "$rem" ]; then
-              echo "::error::/$rel is $rem bytes, expected $loc"
-              fail=$((fail+1))
-            fi
-          done < <(find public -type f \( -name "*.html" -o -name "*.xml" -o -name "*.txt" \) ! -path "*/api/*")
-
-          if [ "$fail" -ne 0 ]; then
-            echo "$fail file(s) were not served intact. Re-run this workflow to upload them again."
+          if [ "$n" -ne 0 ]; then
+            echo "===== repair output ====="
+            cat lftp.repair.out || true
+            while IFS= read -r rel; do echo "::error::/$rel is not served at its full length"; done < short.txt
+            echo "Deploy failed: $n file(s) are still short after 3 attempts."
             exit 1
           fi
           echo "Deploy verified: every page is served at its full length."
